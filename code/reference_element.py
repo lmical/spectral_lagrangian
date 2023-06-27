@@ -140,7 +140,7 @@ def basis_functions(type_basis,degree):
 
     phi=np.array([])
 
-    if type_basis=="PGL":
+    if type_basis=="PGLB":
 
         if degree==0: #---0---#
 
@@ -296,7 +296,7 @@ def derivative_basis_functions(type_basis,degree):
 
     dphi=np.array([])
 
-    if type_basis=="PGL":
+    if type_basis=="PGLB":
 
         if degree==0: #---0---#
 
