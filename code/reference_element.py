@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import quadr
-
+from mpmath import mp
 
 
 
@@ -41,7 +41,7 @@ def get_nodes(n_points,nodes_type):
 #==============================================================
 #Function to get the evaluation of Lagrange polynomials associated to certain nodes
 #in certain points x
-#In, particular
+#In, particular the evaluations of l_k are given
 #==============================================================
 def lagrange_basis(nodes,x,k):
     #INPUT
@@ -57,6 +57,38 @@ def lagrange_basis(nodes,x,k):
         tmp=[(xi-nodes[j])/(nodes[k]-nodes[j])  for j in range(len(nodes)) if j!=k]
         y[ix]=np.prod(tmp)
     return y
+#==============================================================
+#
+#
+#
+#==============================================================
+#Function to get the derivative of Lagrange polynomials associated to certain nodes
+#in certain points x
+#In, particular the evaluations of d l_k are given
+#==============================================================
+# NB: Derivatives compute in multiple precision and then turned into float
+#==============================================================
+def lagrange_deriv(nodes,x,k):
+    f=mp.mpf(0) 
+    for j in range(len(nodes)):
+        p=mp.mpf(1)
+        if k!=j:
+            for l in range(len(nodes)):
+                if l!=k and l!=j: 
+                    p=p*(x-nodes[l])/(nodes[k]-nodes[l])
+            f = f + p/(nodes[k]-nodes[j])
+    f=convert_vector_mp_2_np(f)
+    return f
+#==============================================================
+#
+#
+#
+#==============================================================
+def convert_vector_mp_2_np(v):
+    vnp = np.zeros(len(v))
+    for i in range(len(v)):
+        vnp[i]=float(v[i])
+    return vnp
 #==============================================================
 #
 #
