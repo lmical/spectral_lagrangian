@@ -435,9 +435,43 @@ def derivative_basis_functions(type_basis,degree):
     	quit()
     	
     return dphi
+#==============================================================
+#
+#
+#
+#==============================================================
+# #TEST: compare basis functions and derivative to hard-coded
+#==============================================================
+# print("Test basis functions")   
+# x=np.linspace(0,1,100)
+# for degree in range(5):
+#     phi=basis_functions("PGLB",degree)
+#     nodes,w=get_nodes(degree+1,"gaussLobatto")
+#     for indi in range(len(nodes)):
+#         y=phi[indi](x)
+#         z=lagrange_basis(nodes,x,indi)
+#         plt.plot(x,y)
+#         plt.plot(x,z)
+#         print("degree",degree,"basis",indi,"error in comparison",np.linalg.norm(y-z))
+#         if (np.linalg.norm(y-z)>1e-14):    
+#             print("Problem",degree,indi)
+#             quit()
+#         plt.grid()
+#         plt.show()
 
-
-
-
-
-
+# print("Test derivative basis functions")   
+# x=np.linspace(0,1,100)
+# for degree in range(5):
+#     dphi=derivative_basis_functions("PGLB",degree)
+#     nodes,w=get_nodes(degree+1,"gaussLobatto")
+#     for indi in range(len(nodes)):
+#         y=dphi[indi](x)
+#         z=lagrange_deriv(nodes,x,indi)
+#         plt.plot(x,y)
+#         plt.plot(x,z)
+#         print("degree",degree,"basis",indi,"error in comparison",np.linalg.norm(y-z))
+#         if (np.linalg.norm(y-z)>1e-13):    
+#             print("Problem",degree,indi)
+#             quit()
+#         plt.grid()
+#         plt.show()
