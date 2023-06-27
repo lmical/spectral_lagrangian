@@ -75,40 +75,48 @@ print("------------------------------------------")
 #==============================================================
 print("------------------------------------------")
 print("Getting GLB nodes, weights and derivatives in the nodes")
-#H of degree M   discontinuous psi
-#v of degree M+1 continuous    phi
+#H of degree order_space-1   discontinuous psi
+#v of degree order_space     continuous    phi
 
-M=order_space-1    
+degree_H=order_space-1
+degree_v=order_space
 
+N_local_nodes_H=degree_H+1
+N_local_nodes_v=degree_v+1
 
+local_nodes_H, w_H = reference_element.get_nodes(N_local_nodes_H,"gaussLobatto")
+local_nodes_v, w_v = reference_element.get_nodes(N_local_nodes_v,"gaussLobatto")
 
+#Local derivatives at the nodes
+local_derivatives_H=np.zeros((N_local_nodes_H,N_local_nodes_H))
+for indi in range(N_local_nodes_H):
+    local_derivatives_H[indi,:] = reference_element.lagrange_deriv(local_nodes_H,local_nodes_H,indi)
 
-
-
-xi,w=reference_element.get_nodes(3,"gaussLobatto")
-print(reference_element.get_nodes(3,"gaussLobatto"))
-print(xi,w)
-print(reference_element.lagrange_basis(xi,xi,0))
-print(reference_element.lagrange_basis(xi,xi,1))
-print(reference_element.lagrange_basis(xi,xi,2))
-
-
-
-quit()
-
-degree_H = order_space-1
-degree_v = degree_H+1
-
-phiH     = reference_element.basis_functions(type_H,degree_H)
-psiv     = reference_element.basis_functions(type_v,degree_v)
-
-#VECTORIZE
-x=np.linspace(0,1,100)
-y=psiv[3](x)
-plt.plot(x,y)
-plt.grid()
-plt.show()
+local_derivatives_v=np.zeros((N_local_nodes_v,N_local_nodes_v))
+for indi in range(N_local_nodes_v):
+    local_derivatives_v[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_v,indi)
 
 
-print("Initialization of the quadrature points")
+
+#---------------------------------------------------------------
+print("order space", order_space)
+
+print("degree H",degree_H, "which should be equal to", order_space-1)
+print("degree v",degree_v, "which should be equal to",degree_H+1)
+
+print("N local nodes H",N_local_nodes_H, "which should be equal to", degree_H+1)
+print("N local nodes H",N_local_nodes_v, "which should be equal to", degree_v+1)
+
+print("local nodes H",local_nodes_H)
+print("local weights H",w_H)
+
+print("local nodes v",local_nodes_v)
+print("local weights v",w_v)
+
+print("local derivatives H at the nodes")
+print(local_derivatives_H)
+
+print("local derivatives v at the nodes")
+print(local_derivatives_v)
+#---------------------------------------------------------------
 
