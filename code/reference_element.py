@@ -22,7 +22,7 @@ def get_nodes(n_points,nodes_type):
     if n_points==1:
         nodes=np.zeros(1)
         w=np.zeros(1)
-        nodes[0]=1.
+        nodes[0]=0.5
         w[0]=1.
         return nodes, w
 
@@ -440,6 +440,89 @@ def derivative_basis_functions(type_basis,degree):
 #
 #
 #==============================================================
+# GLB nodes and weights
+#==============================================================
+def GLB_nodes_weights(n_points):
+    """
+    INPUT:
+    n_points
+    OUTPUT:
+    nodes
+    weights
+    """
+
+    nodes = np.zeros(n_points)
+    w     = np.zeros(n_points)
+    if n_points==1:
+
+        nodes[0] = 0.5
+        w[0]     = 1.
+
+    elif n_points==2:
+
+        nodes[0] = 0
+        w[0]     = 0.5	
+        
+        nodes[1] = 1.
+        w[1]     =  0.5
+
+    elif n_points==3:
+
+        nodes[0] = 0.
+        w[0]     = 1./6.
+
+        nodes[1] = 0.5
+        w[1]     = 2./3.
+ 
+        nodes[2] = 1.
+        w[2]     = 1./6.
+
+    elif n_points==4:
+
+
+       s=0.5-np.sqrt(5)/10
+
+       nodes[0] = 0.
+       w[0]     = 1./12
+
+
+       nodes[1] = s
+       w[1]     = 5/12
+
+       nodes[2] = 1. -s
+       w[2]     = 5./12.
+
+       nodes[3] = 1.
+       w[3]     = 1./12.
+
+
+    elif n_points==5:
+
+       s=0.5-np.sqrt(21.)/14.
+
+       nodes[0] = 0.
+       w[0]     = 1./20.
+
+
+       nodes[1] = s
+       w[1]     = 49./180.
+
+       nodes[2] = 0.5
+       w[2]     = 16./45.
+
+       nodes[3] = 1. -s
+       w[3]     = 49./180.
+
+       nodes[4] = 1.
+       w[4]     = 1./20.
+
+    else:
+        print("Erroe in GLB_nodes_weights, n_points not available",n_points)
+        quit()
+    return nodes,w
+
+
+#==============================================================
 # #TEST: compare basis functions and derivative to hard-coded
 #==============================================================
 # print("Test basis functions")   
@@ -475,3 +558,17 @@ def derivative_basis_functions(type_basis,degree):
 #             quit()
 #         plt.grid()
 #         plt.show()
+
+print("Test GLB quadrature")   
+for degree in range(5):
+    x,y=GLB_nodes_weights(degree+1)
+    nodes,w=get_nodes(degree+1,"gaussLobatto")
+    for indi in range(len(nodes)):
+        print("degree",degree,"node",indi,"error in comparison",np.linalg.norm(x-nodes)+np.linalg.norm(y-w))
+        if (np.linalg.norm(x-nodes)+np.linalg.norm(y-w)>1e-14):    
+            print("Problem",degree,indi)
+            print("nodes",x)
+            print("nodes",nodes)
+            print("weights",y)
+            print("weights",w)
+            quit()
