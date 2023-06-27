@@ -55,7 +55,7 @@ def lagrange_basis(nodes,x,k):
      y,     vector of evaluations of l_k in the abscissae in x
     """
 
-    y=np.zeros(x.size)
+    y=np.zeros(len(x))
     for ix, xi in enumerate(x):
         tmp=[(xi-nodes[j])/(nodes[k]-nodes[j])  for j in range(len(nodes)) if j!=k]
         y[ix]=np.prod(tmp)
@@ -84,17 +84,20 @@ def lagrange_deriv(nodes,x,k):
     # Added to deal with P0
     if len(nodes)==1:
 	    return np.zeros(len(x))
-
-    f=mp.mpf(0) 
-    for j in range(len(nodes)):
-        p=mp.mpf(1)
-        if k!=j:
-            for l in range(len(nodes)):
-                if l!=k and l!=j: 
-                    p=p*(x-nodes[l])/(nodes[k]-nodes[l])
-            f = f + p/(nodes[k]-nodes[j])
-    f=convert_vector_mp_2_np(f)
-    return f
+    
+    y=np.zeros(len(x))
+    for indi in range(len(x)):
+        f=mp.mpf(0) 
+        for j in range(len(nodes)):
+            p=mp.mpf(1)
+            if k!=j:
+                for l in range(len(nodes)):
+                    if l!=k and l!=j: 
+                        p=p*(x[indi]-nodes[l])/(nodes[k]-nodes[l])
+                f = f + p/(nodes[k]-nodes[j])
+        f=float(f)
+        y[indi]=f
+    return y
 #==============================================================
 #
 #
@@ -317,7 +320,7 @@ def derivative_basis_functions(type_basis,degree):
             dphi1=np.vectorize(dphi1)
             dphi=np.append(dphi,dphi1)
 
-        elif degree==2: #0---2---1#
+        elif degree==2: #0---1---2#
 
             #x1=xi     barycentric coordinate of the right node
             #x2=1-xi   barycentric coordinate of the left node
@@ -329,17 +332,17 @@ def derivative_basis_functions(type_basis,degree):
             dphi0=np.vectorize(dphi0)
             dphi=np.append(dphi,dphi0)
 
-            def phi1(xi):
+            def dphi1(xi):
             	x1=xi
             	x2=1-xi
-            	return 4*x1-1
+            	return 4-8*x1
             dphi1=np.vectorize(dphi1)
-            phi=np.append(phi,dphi1)
+            dphi=np.append(dphi,dphi1)
 
             def dphi2(xi):
             	x1=xi
             	x2=1-xi
-            	return 4-8*x1
+            	return 4*x1-1
             dphi2=np.vectorize(dphi2)
             dphi=np.append(dphi,dphi2)
 
@@ -361,14 +364,14 @@ def derivative_basis_functions(type_basis,degree):
             def dphi1(xi):
             	x1=xi
             	x2=1-xi
-            	return -(- alpha**2 + alpha + 3*x1**2 - 2*x1)/(alpha*(alpha - 1))
+            	return (2*alpha*x1 - 4*x1 - alpha + 3*x1**2 + 1)/(alpha*(2*alpha**2 - 3*alpha + 1))
             dphi1=np.vectorize(dphi1)
             dphi=np.append(dphi,dphi1)
 
             def dphi2(xi):
             	x1=xi
             	x2=1-xi
-            	return (2*alpha*x1 - 4*x1 - alpha + 3*x(1)**2 + 1)/(alpha*(2*alpha**2 - 3*alpha + 1))
+            	return -(alpha - 2*x1 - 2*alpha*x1 + 3*x1**2)/(alpha*(2*alpha**2 - 3*alpha + 1))
             dphi2=np.vectorize(dphi2)
             dphi=np.append(dphi,dphi2)
 
@@ -376,7 +379,7 @@ def derivative_basis_functions(type_basis,degree):
             def dphi3(xi):
             	x1=xi
             	x2=1-xi
-            	return -(alpha - 2*x1 - 2*alpha*x1 + 3*x1**2)/(alpha*(2*alpha**2 - 3*alpha + 1))
+            	return -(- alpha**2 + alpha + 3*x1**2 - 2*x1)/(alpha*(alpha - 1))
             dphi3=np.vectorize(dphi3)
             dphi=np.append(dphi,dphi3)
 
@@ -398,14 +401,14 @@ def derivative_basis_functions(type_basis,degree):
             def dphi1(xi):
             	x1=xi
             	x2=1-xi
-            	return -(- 4*alpha**2*x1 + alpha**2 + 4*alpha*x1 - alpha + 8*x1**3 - 9*x1**2 + 2*x1)/(alpha*(alpha - 1))
+            	return (alpha + 8*x1 - 6*alpha*x1 + 6*alpha*x1**2 - 15*x1**2 + 8*x1**3 - 1)/(alpha*(2*alpha - 1)**2*(alpha - 1))
             dphi1=np.vectorize(dphi1)
             dphi=np.append(dphi,dphi1)
 
             def dphi2(xi):
             	x1=xi
             	x2=1-xi
-            	return (alpha + 8*x1 - 6*alpha*x1 + 6*alpha*x1**2 - 15*x1**2 + 8*x1**3 - 1)/(alpha*(2*alpha - 1)**2*(alpha - 1))
+            	return (16*(2*x1 - 1)*(- alpha**2 + alpha + 2*x1**2 - 2*x1))/(2*alpha - 1)**2
             dphi2=np.vectorize(dphi2)
             dphi=np.append(dphi,dphi2)
 
@@ -413,14 +416,14 @@ def derivative_basis_functions(type_basis,degree):
             def dphi3(xi):
             	x1=xi
             	x2=1-xi
-            	return (16*(2*x1 - 1)*(- alpha**2 + alpha + 2*x1**2 - 2*x1))/(2*alpha - 1)**2
+            	return -(alpha - 2*x1 - 6*alpha*x1 + 6*alpha*x1**2 + 9*x1**2 - 8*x1**3)/(alpha*(2*alpha - 1)**2*(alpha - 1))
             dphi3=np.vectorize(dphi3)
             dphi=np.append(dphi,dphi3)
 
             def dphi4(xi):
             	x1=xi
             	x2=1-xi
-            	return -(alpha - 2*x1 - 6*alpha*x1 + 6*alpha*x1**2 + 9*x1**2 - 8*x1**3)/(alpha*(2*alpha - 1)**2*(alpha - 1))
+            	return -(- 4*alpha**2*x1 + alpha**2 + 4*alpha*x1 - alpha + 8*x1**3 - 9*x1**2 + 2*x1)/(alpha*(alpha - 1))
             dphi4=np.vectorize(dphi4)
             dphi=np.append(dphi,dphi4)
         else:
