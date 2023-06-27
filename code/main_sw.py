@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import reference_element
+import quadr
 
 
 #==============================================================
@@ -11,15 +12,20 @@ N_el               = 100              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
-type_H             = "PGL"            #Type of basis functions H
-type_v             = "PGL"            #Type of basis functions v
-#Quadratures, for the moment I'm just going to assume to work with "PGL" and mass lumping
+
+#--------------------------------------------------------------
+#NB: PGLB basis functions are assumed,
+#with associated quadrature providing HO mass lumping
+#--------------------------------------------------------------
+#type_H             = "PGLB"            #Type of basis functions H
+#type_v             = "PGLB"            #Type of basis functions v
+#Quadratures, for the moment I'm just going to assume to work with "PGLB" and mass lumping
 #...this means that the quadratures are fixed once the order in space is fixed
 #...however, one may want to change them in the future
-#quadrature_type_H  = "PGL"            #Quadrature for H
-#quadrature_type_v  = "PGL"            #Quadrature for v
-#quadrature_type_HO = "PGL"            #Quadrature for exact integration
-
+#quadrature_type_H  = "PGLB"            #Quadrature for H
+#quadrature_type_v  = "PGLB"            #Quadrature for v
+#quadrature_type_HO = "PGLB"            #Quadrature for exact integration
+#--------------------------------------------------------------
 
 #Time
 time_scheme        = "DeC"             #Time scheme
@@ -34,34 +40,27 @@ N_max_iter         = 10000             #Maximal number of iterations
 scheme             = "Galerkin"
 LaxFriedrichs      = False
 jump               = "jc"
-
 #==============================================================
 #
 #
 #
 #==============================================================
-#IF SPECIFIED FROM COMMAND LINE REPLACE THE INPUT PARAMETERS
+# IF SPECIFIED FROM COMMAND LINE REPLACE THE INPUT PARAMETERS
 #==============================================================
-print("Starting simulation")
-print("Test:", test)
-print("Number of elements:", N_el)
-print("Order space:", order_space) 
-print("...with basis functions for H and v:", type_H, type_v)
-print("Time scheme: ", time_scheme)
-#...
+# ...
 #==============================================================
 #
 #
 #
 #==============================================================
-#PRINT INFORMATION ON THE SIMULATIONS
+# PRINT INFORMATION ON THE SIMULATIONS
 #==============================================================
 print("------------------------------------------")
 print("Starting simulation")
 print("Test:", test)
 print("Number of elements:", N_el)
 print("Order space:", order_space) 
-print("...with basis functions for H and v:", type_H, type_v)
+#print("...with basis functions for H and v:", type_H, type_v)
 print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
@@ -75,10 +74,28 @@ print("------------------------------------------")
 #
 #==============================================================
 print("------------------------------------------")
-print("Initialization of the basis functions in the reference element")
-#M   discontinuous psi
-#M+1 continuous    phi
-    
+print("Getting GLB nodes, weights and derivatives in the nodes")
+#H of degree M   discontinuous psi
+#v of degree M+1 continuous    phi
+
+M=order_space-1    
+
+
+
+
+
+
+xi,w=reference_element.get_nodes(3,"gaussLobatto")
+print(reference_element.get_nodes(3,"gaussLobatto"))
+print(xi,w)
+print(reference_element.lagrange_basis(xi,xi,0))
+print(reference_element.lagrange_basis(xi,xi,1))
+print(reference_element.lagrange_basis(xi,xi,2))
+
+
+
+quit()
+
 degree_H = order_space-1
 degree_v = degree_H+1
 

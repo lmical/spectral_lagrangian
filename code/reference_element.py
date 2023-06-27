@@ -1,8 +1,83 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import quadr
 
 
-#basis functions
+
+
+#==============================================================
+# Function to get the (GLB) nodes and weights, w, in the reference interval [0,1]
+#==============================================================
+def get_nodes(n_points,nodes_type):
+    #INPUT
+    # n_points
+    # nodes_type
+    #OUTPUT
+    # nodes,  quadrature nodes in [0,1] 
+    # w,      weights
+
+    # Added to deal with P0
+    if n_points==1:
+        nodes=np.zeros(1)
+        w=np.zeros(1)
+        nodes[0]=1.
+        w[0]=1.
+        return nodes, w
+
+    # Standard routine
+    if nodes_type=="equispaced":
+        nodes,w = quadr.equispaced(n_points)
+    #elif nodes_type == "gaussLegendre": #Removed because not needed
+    #    nodes,w = leggauss(order)
+    elif nodes_type == "gaussLobatto":
+        nodes, w = quadr.lglnodes(n_points-1,10**-15)
+    nodes=nodes*0.5+0.5
+    w = w*0.5
+    return nodes, w
+#==============================================================
+#
+#
+#
+#==============================================================
+#Function to get the evaluation of Lagrange polynomials associated to certain nodes
+#in certain points x
+#In, particular
+#==============================================================
+def lagrange_basis(nodes,x,k):
+    #INPUT
+    # nodes, nodal points
+    # x,     vector where to evaluate the Lagrangian function l_k
+    # k,     index of the Lagrangian function to be avaluated
+    #OUTPUT
+    # y,     vector of evaluations of l_k in the abscissae in x
+
+
+    y=np.zeros(x.size)
+    for ix, xi in enumerate(x):
+        tmp=[(xi-nodes[j])/(nodes[k]-nodes[j])  for j in range(len(nodes)) if j!=k]
+        y[ix]=np.prod(tmp)
+    return y
+#==============================================================
+#
+#
+#
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+# FUNCTIONS FROM HERE ON USED JUST FOR VERIFICATION
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+#==============================================================
+#
+#
+#
+#==============================================================
+# basis functions
+#==============================================================
 def basis_functions(type_basis,degree):
     #INPUT:
     #type_basis
