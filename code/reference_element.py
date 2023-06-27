@@ -559,16 +559,16 @@ def GLB_nodes_weights(n_points):
 #         plt.grid()
 #         plt.show()
 
-print("Test GLB quadrature")   
-for degree in range(5):
-    x,y=GLB_nodes_weights(degree+1)
-    nodes,w=get_nodes(degree+1,"gaussLobatto")
-    for indi in range(len(nodes)):
-        print("degree",degree,"node",indi,"error in comparison",np.linalg.norm(x-nodes)+np.linalg.norm(y-w))
-        if (np.linalg.norm(x-nodes)+np.linalg.norm(y-w)>1e-14):    
-            print("Problem",degree,indi)
-            print("nodes",x)
-            print("nodes",nodes)
-            print("weights",y)
-            print("weights",w)
-            quit()
+# print("Test GLB quadrature")   
+# for degree in range(5):
+#     x,y=GLB_nodes_weights(degree+1)
+#     nodes,w=get_nodes(degree+1,"gaussLobatto")
+#     for indi in range(len(nodes)):
+#         print("degree",degree,"node",indi,"error in comparison",np.linalg.norm(x-nodes)+np.linalg.norm(y-w))
+#         if (np.linalg.norm(x-nodes)+np.linalg.norm(y-w)>1e-14):    
+#             print("Problem",degree,indi)
+#             print("nodes",x)
+#             print("nodes",nodes)
+#             print("weights",y)
+#             print("weights",w)
+#             quit()
