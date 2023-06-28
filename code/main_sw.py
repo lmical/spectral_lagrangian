@@ -152,6 +152,7 @@ dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto"
 # print("Theta matrix")
 # print(dec.theta)
 # print("NB: The matrix must be transposed")
+# quit()
 #--------------------------------------------------------------
 #==============================================================
 #
@@ -177,11 +178,16 @@ print("Initializing vector v_field[glob_indi_v]")
 v_field = np.zeros((N_global_nodes_v))
 
 #The kinetic field is global, hence, it is useful to have some connectivity structures
+#Local         -> Global
+#(inde,l_indi) -> g_ind
 print("Initializing matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H")
 print("content=Global index associated to the local node loc_indi_v in the element inde")
 M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
-print("Initializing Matrix M_Global_to_Local[glob_indi_v,0:1], rows=global index glob_indi_v, column_0=element containing it, column_1=corresponding local index loc_indi_v in the element")
-M_Global_to_Local=np.zeros((N_global_nodes_v,2))
+#Global       -> Local
+#g_indi       -> [(inde,l_indi),...,(inde,l_indi)]
+print("Initializing vector v_Global_to_Local[glob_indi_v]")
+print("content=vector of vectors of the type [inde,loc_indi_v], inde=element containing the global DoF, loc_indi_v=local index in the element")
+v_Global_to_Local=np.zeros((N_global_nodes_v))
 
 #NB: I wait for the definition of the faces because I want to know if there are periodic BCs
 
@@ -203,8 +209,9 @@ M_Global_to_Local=np.zeros((N_global_nodes_v,2))
 # print()
 # print("Total DoFs v",N_global_nodes_v)
 # print("Size of M_Local_to_Global",M_Local_to_Global.shape)
-# print("Size of M_Local_to_Global",M_Global_to_Local.shape)
+# print("Size of v_Local_to_Global",len(v_Global_to_Local))
 # print()
+# quit()
 #--------------------------------------------------------------
 #==============================================================
 #
@@ -215,8 +222,15 @@ print("------------------------------------------")
 print("Getting test information")
 DATA=test_dependent.DATA_CLASS(test)
 #--------------------------------------------------------------
-print("test",DATA.test)
-print("xL",DATA.xL)
-print("xR",DATA.xR)
-print("periodicity",DATA.periodic)
+# print("test",DATA.test)
+# print("xL",DATA.xL)
+# print("xR",DATA.xR)
+# print("periodicity",DATA.periodic)
 #--------------------------------------------------------------
+#==============================================================
+#
+#
+#
+#==============================================================
+print("------------------------------------------")
+print("Fill initialized variables")
