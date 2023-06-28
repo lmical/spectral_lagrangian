@@ -165,6 +165,8 @@ print("Initializing matrix x_H[inde,loc_indi_H], rows=elements, columns=loc_indi
 x_H     = np.zeros((N_el,N_local_nodes_H))
 print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
 H_field = np.zeros((N_el,N_local_nodes_H))
+print("Initializing matrix B_field[inde,loc_indi_H], with the same convention")
+B_field = np.zeros((N_el,N_local_nodes_H))
 
 #Kinetic field
 N_global_nodes_v=degree_v*N_el+1
@@ -203,3 +205,10 @@ M_Global_to_Local=np.zeros((N_global_nodes_v,2))
 # print("Size of M_Local_to_Global",M_Global_to_Local.shape)
 # print()
 #---------------------------------------------------------------
+#==============================================================
+#
+#
+#
+#==============================================================
+print("------------------------------------------")
+print("Getting test information")
