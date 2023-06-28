@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import reference_element
 import quadr
 import DeC
+import test_dependent
 
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = 0                #Test
+test               = "Sod"            #Test: "Sod"
 N_el               = 100              #Number of elements
 
 #Space
@@ -95,7 +96,7 @@ for indi in range(N_local_nodes_H):
 local_derivatives_v=np.zeros((N_local_nodes_v,N_local_nodes_v))
 for indi in range(N_local_nodes_v):
     local_derivatives_v[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_v,indi)
-#---------------------------------------------------------------
+#--------------------------------------------------------------
 # print("order space", order_space)
 
 # print("degree H",degree_H, "which should be equal to", order_space-1)
@@ -115,7 +116,7 @@ for indi in range(N_local_nodes_v):
 
 # print("local derivatives v at the nodes")
 # print(local_derivatives_v)
-#---------------------------------------------------------------
+#--------------------------------------------------------------
 #==============================================================
 #
 #
@@ -144,14 +145,14 @@ M_subtimenodes=subtimesteps("gaussLobatto",order_time)
 # NB: with theta transposed
 dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto")
 
-#---------------------------------------------------------------
+#--------------------------------------------------------------
 # print("Number of iterations", dec.n_iter,"which should be", order_time)
 # print("Total number of subtimenodes", dec.n_subNodes,"which should be", M_subtimenodes+1,"and",dec.M_sub+1)
 # print("Beta vector",dec.beta)
 # print("Theta matrix")
 # print(dec.theta)
 # print("NB: The matrix must be transposed")
-#---------------------------------------------------------------
+#--------------------------------------------------------------
 #==============================================================
 #
 #
@@ -176,16 +177,16 @@ print("Initializing vector v_field[glob_indi_v]")
 v_field = np.zeros((N_global_nodes_v))
 
 #The kinetic field is global, hence, it is useful to have some connectivity structures
-
-
-
 print("Initializing matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H")
 print("content=Global index associated to the local node loc_indi_v in the element inde")
 M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
 print("Initializing Matrix M_Global_to_Local[glob_indi_v,0:1], rows=global index glob_indi_v, column_0=element containing it, column_1=corresponding local index loc_indi_v in the element")
 M_Global_to_Local=np.zeros((N_global_nodes_v,2))
 
-#---------------------------------------------------------------
+#NB: I wait for the definition of the faces because I want to know if there are periodic BCs
+
+
+#--------------------------------------------------------------
 # print()
 # print("Number of elements", N_el)
 # print("Local DoFs H", N_local_nodes_H)
@@ -204,7 +205,7 @@ M_Global_to_Local=np.zeros((N_global_nodes_v,2))
 # print("Size of M_Local_to_Global",M_Local_to_Global.shape)
 # print("Size of M_Local_to_Global",M_Global_to_Local.shape)
 # print()
-#---------------------------------------------------------------
+#--------------------------------------------------------------
 #==============================================================
 #
 #
@@ -212,3 +213,10 @@ M_Global_to_Local=np.zeros((N_global_nodes_v,2))
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
+DATA=test_dependent.DATA_CLASS(test)
+#--------------------------------------------------------------
+print("test",DATA.test)
+print("xL",DATA.xL)
+print("xR",DATA.xR)
+print("periodicity",DATA.periodic)
+#--------------------------------------------------------------
