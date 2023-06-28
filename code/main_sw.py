@@ -216,7 +216,17 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     for inde in range(N_el):
         x_H[inde,:]=x_interfaces[inde]+dx*local_nodes_H
 
+    indi_g=0 #counter
+    x_v[0]=DATA.xL
+    for inde in range(N_el):
+        for indi_l in range(1,len(local_nodes_v)):
+            indi_g=indi_g+1
+            x_v[indi_g]=x_interfaces[inde]+dx*local_nodes_v[indi_l]
+
+
+
     print(x_H)
+    print(x_v)
     quit()
 
     print("Filling x_H")
