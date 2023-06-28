@@ -157,3 +157,49 @@ dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto"
 #
 #
 #==============================================================
+print("------------------------------------------")
+print("Mesh and fields initialization")
+
+#Thermodynamic field
+print("Initializing matrix x_H[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
+x_H     = np.zeros((N_el,N_local_nodes_H))
+print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
+H_field = np.zeros((N_el,N_local_nodes_H))
+
+#Kinetic field
+N_global_nodes_v=degree_v*N_el+1
+print("Initializing vector x_v[glob_indi_v]")
+x_v     = np.zeros((N_global_nodes_v))
+print("Initializing vector v_field[glob_indi_v]")
+v_field = np.zeros((N_global_nodes_v))
+
+#The kinetic field is global, hence, it is useful to have some connectivity structures
+
+
+
+print("Initializing matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H")
+print("content=Global index associated to the local node loc_indi_v in the element inde")
+M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
+print("Initializing Matrix M_Global_to_Local[glob_indi_v,0:1], rows=global index glob_indi_v, column_0=element containing it, column_1=corresponding local index loc_indi_v in the element")
+M_Global_to_Local=np.zeros((N_global_nodes_v,2))
+
+#---------------------------------------------------------------
+# print()
+# print("Number of elements", N_el)
+# print("Local DoFs H", N_local_nodes_H)
+# print("Local DoFs v", N_local_nodes_v)
+# print()
+# print("Order space",order_space)
+# print("Degree H"   ,degree_H)
+# print("Degree v"   ,degree_v)
+# print()
+# print("Size of x_H"      ,x_H.shape)
+# print("Size of H_field"  ,H_field.shape)
+# print("Length of x_v"    ,len(x_v))
+# print("Length of v_field",len(v_field))
+# print()
+# print("Total DoFs v",N_global_nodes_v)
+# print("Size of M_Local_to_Global",M_Local_to_Global.shape)
+# print("Size of M_Local_to_Global",M_Global_to_Local.shape)
+# print()
+#---------------------------------------------------------------
