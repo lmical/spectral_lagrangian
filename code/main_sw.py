@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import reference_element
 import quadr
-
+import DeC
 
 #==============================================================
 #INPUT PARAMETERS
@@ -95,28 +95,65 @@ for indi in range(N_local_nodes_H):
 local_derivatives_v=np.zeros((N_local_nodes_v,N_local_nodes_v))
 for indi in range(N_local_nodes_v):
     local_derivatives_v[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_v,indi)
+#---------------------------------------------------------------
+# print("order space", order_space)
+
+# print("degree H",degree_H, "which should be equal to", order_space-1)
+# print("degree v",degree_v, "which should be equal to",degree_H+1)
+
+# print("N local nodes H",N_local_nodes_H, "which should be equal to", degree_H+1)
+# print("N local nodes H",N_local_nodes_v, "which should be equal to", degree_v+1)
+
+# print("local nodes H",local_nodes_H)
+# print("local weights H",w_H)
+
+# print("local nodes v",local_nodes_v)
+# print("local weights v",w_v)
+
+# print("local derivatives H at the nodes")
+# print(local_derivatives_H)
+
+# print("local derivatives v at the nodes")
+# print(local_derivatives_v)
+#---------------------------------------------------------------
+#==============================================================
+#
+#
+#
+#==============================================================
+print("------------------------------------------")
+print("Getting DeC structures")
 
 
+def subtimesteps(subtimenodes_types,order):
+    """
+    INPUT:
+    subtimenodes_types,  distribution of subtimenodes
+    order
+    OUTPUT:
+    M_subtimenodes, number of subtimenodes-1    
+    """
+    if subtimenodes_types == "equispaced":
+        return order-1
+    elif subtimenodes_types=="gaussLobatto":
+        return int((order+1)//2)
+
+# Getting M_subtimenodes, i.e., number of subtimenodes - 1
+M_subtimenodes=subtimesteps("gaussLobatto",order_time)
+# Getting DeC structures
+# NB: with theta transposed
+dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto")
 
 #---------------------------------------------------------------
-print("order space", order_space)
-
-print("degree H",degree_H, "which should be equal to", order_space-1)
-print("degree v",degree_v, "which should be equal to",degree_H+1)
-
-print("N local nodes H",N_local_nodes_H, "which should be equal to", degree_H+1)
-print("N local nodes H",N_local_nodes_v, "which should be equal to", degree_v+1)
-
-print("local nodes H",local_nodes_H)
-print("local weights H",w_H)
-
-print("local nodes v",local_nodes_v)
-print("local weights v",w_v)
-
-print("local derivatives H at the nodes")
-print(local_derivatives_H)
-
-print("local derivatives v at the nodes")
-print(local_derivatives_v)
+# print("Number of iterations", dec.n_iter,"which should be", order_time)
+# print("Total number of subtimenodes", dec.n_subNodes,"which should be", M_subtimenodes+1,"and",dec.M_sub+1)
+# print("Beta vector",dec.beta)
+# print("Theta matrix")
+# print(dec.theta)
+# print("NB: The matrix must be transposed")
 #---------------------------------------------------------------
-
+#==============================================================
+#
+#
+#
+#==============================================================
