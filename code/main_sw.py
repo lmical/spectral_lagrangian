@@ -9,7 +9,7 @@ import test_dependent
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 100              #Number of elements
+N_el               = 10              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
@@ -155,69 +155,6 @@ dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto"
 # quit()
 #--------------------------------------------------------------
 #==============================================================
-#
-#
-#
-#==============================================================
-print("------------------------------------------")
-print("Mesh and fields initialization")
-
-#Thermodynamic field
-print("Initializing matrix x_H[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
-x_H     = np.zeros((N_el,N_local_nodes_H))
-print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
-H_field = np.zeros((N_el,N_local_nodes_H))
-print("Initializing matrix B_field[inde,loc_indi_H], with the same convention")
-B_field = np.zeros((N_el,N_local_nodes_H))
-
-#Kinetic field
-N_global_nodes_v=degree_v*N_el+1
-print("Initializing vector x_v[glob_indi_v]")
-x_v     = np.zeros((N_global_nodes_v))
-print("Initializing vector v_field[glob_indi_v]")
-v_field = np.zeros((N_global_nodes_v))
-
-#The kinetic field is global, hence, it is useful to have some connectivity structures
-#Local         -> Global
-#(inde,l_indi) -> g_ind
-print("Initializing matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H")
-print("content=Global index associated to the local node loc_indi_v in the element inde")
-M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
-#Global       -> Local
-#g_indi       -> [(inde,l_indi),...,(inde,l_indi)]
-print("Initializing vector v_Global_to_Local[glob_indi_v]")
-print("content=vector of vectors of the type [inde,loc_indi_v], inde=element containing the global DoF, loc_indi_v=local index in the element")
-v_Global_to_Local=np.zeros((N_global_nodes_v))
-
-#NB: I wait for the definition of the faces because I want to know if there are periodic BCs
-
-
-#--------------------------------------------------------------
-# print()
-# print("Number of elements", N_el)
-# print("Local DoFs H", N_local_nodes_H)
-# print("Local DoFs v", N_local_nodes_v)
-# print()
-# print("Order space",order_space)
-# print("Degree H"   ,degree_H)
-# print("Degree v"   ,degree_v)
-# print()
-# print("Size of x_H"      ,x_H.shape)
-# print("Size of H_field"  ,H_field.shape)
-# print("Length of x_v"    ,len(x_v))
-# print("Length of v_field",len(v_field))
-# print()
-# print("Total DoFs v",N_global_nodes_v)
-# print("Size of M_Local_to_Global",M_Local_to_Global.shape)
-# print("Size of v_Local_to_Global",len(v_Global_to_Local))
-# print()
-# quit()
-#--------------------------------------------------------------
-#==============================================================
-#
-#
-#
-#==============================================================
 print("------------------------------------------")
 print("Getting test information")
 DATA=test_dependent.DATA_CLASS(test)
@@ -226,6 +163,7 @@ DATA=test_dependent.DATA_CLASS(test)
 # print("xL",DATA.xL)
 # print("xR",DATA.xR)
 # print("periodicity",DATA.periodic)
+# quit()
 #--------------------------------------------------------------
 #==============================================================
 #
@@ -233,4 +171,105 @@ DATA=test_dependent.DATA_CLASS(test)
 #
 #==============================================================
 print("------------------------------------------")
-print("Fill initialized variables")
+print("Mesh and fields initialization")
+
+
+def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
+
+    #Reconstruct some informations from the inputs
+    N_local_nodes_H  = len(local_nodes_H)
+    N_local_nodes_v  = len(local_nodes_v)
+ 
+    degree_H         = N_local_nodes_H-1
+    degree_v         = N_local_nodes_v-1
+     
+    N_global_nodes_v = degree_v*N_el+1
+
+
+    # Thermodynamic field
+    # Matrix x_H[inde,loc_indi_H], rows=elements, columns=loc_indi_H
+    x_H     = np.zeros((N_el,N_local_nodes_H))
+
+    # Kinetic field
+    N_global_nodes_v=degree_v*N_el+1
+    # Vector x_v[glob_indi_v]
+    x_v     = np.zeros((N_global_nodes_v))
+
+    # The kinetic field is global, hence, it is useful to have some connectivity structures
+    # Local         -> Global
+    # (inde,l_indi) -> g_ind
+    # Matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H
+    # content = Global index associated to the local node loc_indi_v in the element inde
+    M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
+    # Global       -> Local
+    # g_indi       -> [(inde,l_indi),...,(inde,l_indi)]
+    # vector v_Global_to_Local[glob_indi_v]
+    # content=vector of vectors of the type [inde,loc_indi_v], inde=element containing the global DoF, loc_indi_v=local index in the element
+    v_Global_to_Local=np.zeros((N_global_nodes_v))
+
+
+    #NB: I always assume the DoFs orderd by increasing abscissa, locally and globally
+
+    x_interfaces=np.linspace(DATA.xL,DATA.xR,N_el+1)
+    dx=x_interfaces[1]-x_interfaces[0]
+
+    for inde in range(N_el):
+        x_H[inde,:]=x_interfaces[inde]+dx*local_nodes_H
+
+    print(x_H)
+    quit()
+
+    print("Filling x_H")
+
+
+
+
+
+
+
+
+
+    print("Inside build_mesh")
+    print(local_nodes_H)
+    print(local_nodes_v)
+    print(degree_H)
+    print(degree_v)
+    print(N_global_nodes_v)
+
+
+
+
+    return x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v
+
+x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v = build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
+
+
+#--------------------------------------------------------------
+print()
+print("Order space",order_space)
+print("Degree H"   ,degree_H)
+print("Degree v"   ,degree_v)
+print()
+print("Number of elements", N_el)
+print("Local DoFs H", N_local_nodes_H)
+print("Local DoFs v", N_local_nodes_v)
+print()
+print("Size of x_H"      ,x_H.shape)
+# print("Size of H_field"  ,H_field.shape)
+print("Length of x_v"    ,len(x_v))
+# print("Length of v_field",len(v_field))
+print()
+print("Total DoFs v",N_global_nodes_v)
+print("Size of M_Local_to_Global",M_Local_to_Global.shape)
+print("Size of v_Local_to_Global",len(v_Global_to_Local))
+print()
+quit()
+#--------------------------------------------------------------
+#==============================================================
+
+print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
+H_field = np.zeros((N_el,N_local_nodes_H))
+print("Initializing matrix B_field[inde,loc_indi_H], with the same convention")
+B_field = np.zeros((N_el,N_local_nodes_H))
+print("Initializing vector v_field[glob_indi_v]")
+v_field = np.zeros((N_global_nodes_v))
