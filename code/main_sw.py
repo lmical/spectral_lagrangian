@@ -97,6 +97,40 @@ for indi in range(N_local_nodes_H):
 local_derivatives_v=np.zeros((N_local_nodes_v,N_local_nodes_v))
 for indi in range(N_local_nodes_v):
     local_derivatives_v[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_v,indi)
+
+
+
+
+#--------------------------------------------------------------
+#I don't know if they are needed, I compute them
+
+#Local_values_H_in_v
+local_values_H_in_v=np.zeros((N_local_nodes_H,N_local_nodes_v)) #psi_H(x_v)
+for indi in range(N_local_nodes_H):
+    local_values_H_in_v[indi,:] = reference_element.lagrange_basis(local_nodes_H,local_nodes_v,indi)
+
+
+#Local_values_v_in_H
+local_values_v_in_H=np.zeros((N_local_nodes_v,N_local_nodes_H)) #phi_v(x_H)
+for indi in range(N_local_nodes_v):
+    local_values_v_in_H[indi,:] = reference_element.lagrange_basis(local_nodes_v,local_nodes_H,indi)
+
+
+
+#Local_derivatives_H_in_v
+local_derivatives_H_in_v=np.zeros((N_local_nodes_H,N_local_nodes_v)) #d psi_H(x_v)
+for indi in range(N_local_nodes_H):
+    local_derivatives_H_in_v[indi,:] = reference_element.lagrange_deriv(local_nodes_H,local_nodes_v,indi)
+
+
+#Local_derivatives_v_in_H
+local_derivatives_v_in_H=np.zeros((N_local_nodes_v,N_local_nodes_H)) #d phi_v(x_H)
+for indi in range(N_local_nodes_v):
+    local_derivatives_v_in_H[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_H,indi)
+#--------------------------------------------------------------
+
+
+
 #--------------------------------------------------------------
 # print("order space", order_space)
 
