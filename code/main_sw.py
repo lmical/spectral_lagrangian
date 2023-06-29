@@ -10,7 +10,7 @@ import mesh
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 10              #Number of elements
+N_el               = 30              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
@@ -235,14 +235,7 @@ DATA=test_dependent.DATA_CLASS(test)
 #==============================================================
 print("------------------------------------------")
 print("Mesh initialization")
-
-
-
 x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh.build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
-
-
-
-
 #----------------------------------------------
 # print("Local nodes H", local_nodes_H)
 # print("Local nodes v", local_nodes_v)
@@ -251,26 +244,82 @@ x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh
 # print("Total DoFs v", N_global_nodes_v)
 # print("x_H",x_H)
 # print("x_v",x_v)
-# print(M_Local_to_Global)
+# print("Local to Global",M_Local_to_Global)
 # for indi_g in range(N_global_nodes_v):
 #     print("DoF",indi_g)
 #     print("Contained by",v_Global_to_Local[indi_g].N_el_containing_node, "elements")
 #     print("...and these are",v_Global_to_Local[indi_g].vec_el)
 #     print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
 #     print()
+# print(M_faces)
 #----------------------------------------------
 #==============================================================
+print("------------------------------------------")
+print("Variables initialization")
+
+def Analytical_State(DATA,x,t):
+    if DATA.test=="Sod":
+        v=0.
+        if x<=0.5:
+            H=1.
+        else:
+            H=0.5
+    else:
+        print("Error in function Analytical_State, test not available")
+        quit()
+    
+    return H,v
+
+def Bathymetry(x):
+    if DATA.test=="Sod":
+        B=0.
+    else:
+        print("Error in function Bathymetry, test not available")
+        quit()
+    return B
+
+
+def Derivative_Bathymetry(x):
+    if DATA.test=="Sod":
+        dB=0.
+    else:
+        print("Error in function Derivative_Bathymetry, test not available")
+        quit()
+    return dB
+
+
+def IC(x_H,x_v,DATA,t):
+    # Matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H
+    H_field = np.zeros(x_H.shape)
+    # Matrix B_field[inde,loc_indi_H], with the same convention
+    B_field = np.zeros(x_H.shape)
+    # v_field[glob_indi_v]
+    v_field = np.zeros((len(x_v)))
+
+    N_el, local_nodes_H = x_H.shape
+    if DATA.test=="Sod":
+        for inde in range(N_el):
+            for indi_l in range(local_nodes_H):
+                vec=Analytical_State(DATA,x_H[inde,indi_l],0)
+                H_field[inde,indi_l] = vec[0]
+                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l])
+        v_field[:]=0.
+    else:
+        print("Error in function IC, test not available")
+        quit()
+    return H_field, B_field, v_field
+
+H_field, B_field, v_field = IC(x_H, x_v, DATA,0)
 
 
 
-quit()
+
+plt.plot(x_v,v_field)
+plt.show()
 
 
 
-
-print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
-H_field = np.zeros((N_el,N_local_nodes_H))
-print("Initializing matrix B_field[inde,loc_indi_H], with the same convention")
-B_field = np.zeros((N_el,N_local_nodes_H))
-print("Initializing vector v_field[glob_indi_v]")
-v_field = np.zeros((N_global_nodes_v))
+for inde in range(N_el):
+    print(x_H[inde,:])
+    plt.plot(x_H[inde,:],H_field[inde,:])
+plt.show()
