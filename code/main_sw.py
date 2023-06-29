@@ -4,12 +4,13 @@ import reference_element
 import quadr
 import DeC
 import test_dependent
+import mesh
 
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 300              #Number of elements
+N_el               = 3              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
@@ -172,204 +173,39 @@ DATA=test_dependent.DATA_CLASS(test)
 #
 #==============================================================
 print("------------------------------------------")
-print("Mesh and fields initialization")
+print("Mesh initialization")
 
 
-class node_Global_to_Local_class:
-    def __init__(self):
-        self.N_el_containing_node = 0            #Number of elements containing the DoF
-        self.vec_el               = np.array([]) #Indices of the elements containing the DoF
-        self.vec_indi_l           = np.array([]) #Local indices of the DoF in the elements
 
-def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
-
-    #Reconstruct some informations from the inputs
-    N_local_nodes_H  = len(local_nodes_H)
-    N_local_nodes_v  = len(local_nodes_v)
- 
-    degree_H         = N_local_nodes_H-1
-    degree_v         = N_local_nodes_v-1
-     
-    N_global_nodes_v = degree_v*N_el+1
-
-    #---------------------------------------
-    #Initializing the variables
-    #---------------------------------------
-
-    # Thermodynamic field
-    # Matrix x_H[inde,loc_indi_H], rows=elements, columns=loc_indi_H
-    x_H     = np.zeros((N_el,N_local_nodes_H))
-
-    # Kinetic field
-    N_global_nodes_v=degree_v*N_el+1
-    # Vector x_v[glob_indi_v]
-    x_v     = np.zeros((N_global_nodes_v))
-
-    # The kinetic field is global, hence, it is useful to have some connectivity structures
-
-    # Local         -> Global
-    # (inde,l_indi) -> g_indi
-    # Matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H
-    # content = Global index associated to the local node loc_indi_v in the element inde
-    M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
-
-    # Global       -> Local
-    # g_indi       -> [(inde,l_indi),...,(inde,l_indi)]
-    # vector v_Global_to_Local[glob_indi_v]
-    # content=vector of vectors of the type [inde,loc_indi_v], inde=element containing the global DoF, loc_indi_v=local index in the element
-    v_Global_to_Local=np.array([])
-
-
-    #NB: I always assume the DoFs orderd by increasing abscissa, locally and globally
-    
-    #---------------------------------------
-    #Filling the variables
-    #---------------------------------------
-
-    x_interfaces=np.linspace(DATA.xL,DATA.xR,N_el+1)
-    dx=x_interfaces[1]-x_interfaces[0]
-
-    for inde in range(N_el):
-        x_H[inde,:]=x_interfaces[inde]+dx*local_nodes_H
-
-    indi_g=0 #counter on the global nodes
-    x_v[0]=DATA.xL
-    for inde in range(N_el):
-
-        for indi_l in range(1,len(local_nodes_v)): #Loop on the local DoFs excluding the first one
-            indi_g=indi_g+1
-            x_v[indi_g]=x_interfaces[inde]+dx*local_nodes_v[indi_l]
-
-    indi_g=0 #counter on the global nodes
-    for inde in range(N_el):
-
-        for indi_l in range(len(local_nodes_v)): #Loop on the local DoFs
-
-            M_Local_to_Global[inde,indi_l]=indi_g
-            indi_g=indi_g+1
-
-        indi_g=indi_g-1 #To start, in the next element, with the last DoF of the current element
-
-
-    #First node
-    DoF=node_Global_to_Local_class()
-    DoF.N_el_containing_node = 1
-
-    DoF.vec_el        = np.append(DoF.vec_el,0)
-    DoF.vec_indi_l    = np.append(DoF.vec_indi_l,0)
-    v_Global_to_Local = np.append(v_Global_to_Local,DoF) 
-
-    inde=0 #counter on the elements
-    indi_l=1 #counter on the local index #NB: starting from 1 because starting from local DoFs
-
-    for indi_g in range(1,N_global_nodes_v-1): #Loop on the internal nodes only
-
-        DoF = node_Global_to_Local_class()
-
-        DoF.N_el_containing_node = 1
-        DoF.vec_el               = np.append(DoF.vec_el,inde)
-        DoF.vec_indi_l           = np.append(DoF.vec_indi_l,indi_l)
-
-        if indi_l<N_local_nodes_v-1: #Only one element containing the DoF
-            v_Global_to_Local        = np.append(v_Global_to_Local,DoF) 
-        else:
-            DoF.N_el_containing_node = DoF.N_el_containing_node+1
-            DoF.vec_el               = np.append(DoF.vec_el,inde+1)
-            DoF.vec_indi_l           = np.append(DoF.vec_indi_l,0)
-            v_Global_to_Local        = np.append(v_Global_to_Local,DoF) 
-
-        indi_l=indi_l+1
-
-        if indi_l==N_local_nodes_v:
-            indi_l=1        
-            inde=inde+1        
-            
+x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v = mesh.build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
 
 
 
 
-    #Last node
-    DoF=node_Global_to_Local_class()
-    DoF.N_el_containing_node = 1
-
-
-    DoF.vec_el        = np.append(DoF.vec_el,N_el-1)
-    DoF.vec_indi_l    = np.append(DoF.vec_indi_l,N_local_nodes_v-1)
-    v_Global_to_Local = np.append(v_Global_to_Local,DoF) 
-                
-
-    if DATA.periodic==True:
-        v_Global_to_Local[0].N_el_containing_node=2
-        v_Global_to_Local[0].vec_el=np.array([N_el-1,0])
-        v_Global_to_Local[0].vec_indi_l=np.array([N_local_nodes_v-1,0])
-
-
-        v_Global_to_Local[N_global_nodes_v-1].N_el_containing_node=2
-        v_Global_to_Local[N_global_nodes_v-1].vec_el=np.array([N_el-1,0])
-        v_Global_to_Local[N_global_nodes_v-1].vec_indi_l=np.array([N_local_nodes_v-1,0])
-
-
-
-
-    #-----------------------------------------------
-    # print("Inside build_mesh")
-    # print(local_nodes_H)
-    # print(local_nodes_v)
-    # print(degree_H)
-    # print(degree_v)
-    # print(N_global_nodes_v)
-    # print(x_H)
-    # print(x_v)
-    # print(M_Local_to_Global)
-    #-----------------------------------------------
-    # for indi_g in range(N_global_nodes_v):
-    #     print("DoF",indi_g)
-    #     print("Contained by",v_Global_to_Local[indi_g].N_el_containing_node, "elements")
-    #     print("...and these are",v_Global_to_Local[indi_g].vec_el)
-    #     print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
-    #     print()
-    #     quit()
-    #-----------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v
-
-x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v = build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
-
-
-#--------------------------------------------------------------
-print()
-print("Order space",order_space)
-print("Degree H"   ,degree_H)
-print("Degree v"   ,degree_v)
-print()
-print("Number of elements", N_el)
-print("Local DoFs H", N_local_nodes_H)
-print("Local DoFs v", N_local_nodes_v)
-print()
-print("Size of x_H"      ,x_H.shape)
-# print("Size of H_field"  ,H_field.shape)
-print("Length of x_v"    ,len(x_v))
-# print("Length of v_field",len(v_field))
-print()
-print("Total DoFs v",N_global_nodes_v)
-print("Size of M_Local_to_Global",M_Local_to_Global.shape)
-print("Size of v_Local_to_Global",len(v_Global_to_Local))
-print()
-quit()
-#--------------------------------------------------------------
+#----------------------------------------------
+# print("Local nodes H", local_nodes_H)
+# print("Local nodes v", local_nodes_v)
+# print("degree H", degree_H)
+# print("degree v", degree_v)
+# print("Total DoFs v", N_global_nodes_v)
+# print("x_H",x_H)
+# print("x_v",x_v)
+# print(M_Local_to_Global)
+# for indi_g in range(N_global_nodes_v):
+#     print("DoF",indi_g)
+#     print("Contained by",v_Global_to_Local[indi_g].N_el_containing_node, "elements")
+#     print("...and these are",v_Global_to_Local[indi_g].vec_el)
+#     print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
+#     print()
+#----------------------------------------------
 #==============================================================
+
+
+
+
+
+quit()
+
 
 print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
 H_field = np.zeros((N_el,N_local_nodes_H))
