@@ -9,10 +9,10 @@ import test_dependent
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 3              #Number of elements
+N_el               = 300              #Number of elements
 
 #Space
-order_space        = 1                #Order in space
+order_space        = 3                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -298,6 +298,19 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     v_Global_to_Local = np.append(v_Global_to_Local,DoF) 
                 
 
+    if DATA.periodic==True:
+        v_Global_to_Local[0].N_el_containing_node=2
+        v_Global_to_Local[0].vec_el=np.array([N_el-1,0])
+        v_Global_to_Local[0].vec_indi_l=np.array([N_local_nodes_v-1,0])
+
+
+        v_Global_to_Local[N_global_nodes_v-1].N_el_containing_node=2
+        v_Global_to_Local[N_global_nodes_v-1].vec_el=np.array([N_el-1,0])
+        v_Global_to_Local[N_global_nodes_v-1].vec_indi_l=np.array([N_local_nodes_v-1,0])
+
+
+
+
     #-----------------------------------------------
     # print("Inside build_mesh")
     # print(local_nodes_H)
@@ -315,6 +328,7 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     #     print("...and these are",v_Global_to_Local[indi_g].vec_el)
     #     print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
     #     print()
+    #     quit()
     #-----------------------------------------------
 
 
