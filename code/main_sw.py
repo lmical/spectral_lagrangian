@@ -127,7 +127,7 @@ for indi in range(N_local_nodes_H):
 local_derivatives_v_in_H=np.zeros((N_local_nodes_v,N_local_nodes_H)) #d phi_v(x_H)
 for indi in range(N_local_nodes_v):
     local_derivatives_v_in_H[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_H,indi)
-#--------------------------------------------------------------
+
 
 
 
@@ -153,6 +153,33 @@ for indi in range(N_local_nodes_v):
 # print(local_derivatives_v)
 # quit()
 #--------------------------------------------------------------
+# psi=reference_element.basis_functions("PGLB",degree_H)
+# for indi in range(len(local_nodes_H)):
+#     if np.linalg.norm(psi[indi](local_nodes_v)-local_values_H_in_v[indi,:])>1e-14:
+#         print("Problem")
+#         quit()
+
+# phi=reference_element.basis_functions("PGLB",degree_v)
+# for indi in range(len(local_nodes_v)):
+#     if np.linalg.norm(phi[indi](local_nodes_H)-local_values_v_in_H[indi,:])>1e-14:
+#         print("Problem")
+#         quit()
+
+
+# dpsi=reference_element.derivative_basis_functions("PGLB",degree_H)
+# for indi in range(len(local_nodes_H)):
+#     if np.linalg.norm(dpsi[indi](local_nodes_v)-local_derivatives_H_in_v[indi,:])>1e-14:
+#         print("Problem")
+#         quit()
+
+# dphi=reference_element.derivative_basis_functions("PGLB",degree_v)
+# for indi in range(len(local_nodes_v)):
+#     if np.linalg.norm(dphi[indi](local_nodes_H)-local_derivatives_v_in_H[indi,:])>1e-14:
+#         print("Problem")
+#         quit()
+#--------------------------------------------------------------
+
+
 #==============================================================
 #
 #
