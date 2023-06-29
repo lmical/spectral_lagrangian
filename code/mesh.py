@@ -134,7 +134,25 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
         v_Global_to_Local[N_global_nodes_v-1].vec_indi_l=np.array([N_local_nodes_v-1,0])
 
 
+    # M_faces[indf,:]
+    # M_faces[indf,0] -> left  element
+    # M_faces[indf,1] -> right element
+    M_faces=np.zeros((N_el+1,2))
 
+    #Content is -1 if no element is present
+    M_faces[0,0]    = -1 
+    M_faces[0,1]    = 0 
+    
+    M_faces[N_el,1] = -1
+    M_faces[N_el,0] = N_el-1
+
+    for indf in range(1,N_el):
+        M_faces[indf,0] = indf-1
+        M_faces[indf,1] = indf
+
+    if DATA.periodic==True:
+        M_faces[0,0]    = N_el-1 
+        M_faces[N_el,1] = 0
 
     #-----------------------------------------------
     # print("Inside build_mesh")
@@ -155,6 +173,7 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     #     print()
     #     quit()
     #-----------------------------------------------
+    # print(M_faces)
+    #-----------------------------------------------
 
-
-    return x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v
+    return x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces

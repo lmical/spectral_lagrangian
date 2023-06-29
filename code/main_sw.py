@@ -10,7 +10,7 @@ import mesh
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 3              #Number of elements
+N_el               = 10              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
@@ -238,7 +238,7 @@ print("Mesh initialization")
 
 
 
-x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v = mesh.build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
+x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh.build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
 
 
 
@@ -263,9 +263,9 @@ x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v = mesh.build_me
 
 
 
-
-
 quit()
+
+
 
 
 print("Initializing matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H")
