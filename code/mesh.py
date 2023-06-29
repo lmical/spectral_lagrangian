@@ -3,8 +3,8 @@ import numpy as np
 class node_Global_to_Local_class:
     def __init__(self):
         self.N_el_containing_node = 0            #Number of elements containing the DoF
-        self.vec_el               = np.array([]) #Indices of the elements containing the DoF
-        self.vec_indi_l           = np.array([]) #Local indices of the DoF in the elements
+        self.vec_el               = np.array([],dtype=int) #Indices of the elements containing the DoF
+        self.vec_indi_l           = np.array([],dtype=int) #Local indices of the DoF in the elements
 
 def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
 
@@ -36,7 +36,7 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     # (inde,l_indi) -> g_indi
     # Matrix M_Local_to_Global[inde,loc_indi_v], rows=elements, columns=loc_indi_H
     # content = Global index associated to the local node loc_indi_v in the element inde
-    M_Local_to_Global=np.zeros((N_el,N_local_nodes_v))
+    M_Local_to_Global=np.zeros((N_el,N_local_nodes_v),dtype=int)
 
     # Global       -> Local
     # g_indi       -> [(inde,l_indi),...,(inde,l_indi)]
@@ -137,7 +137,7 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
     # M_faces[indf,:]
     # M_faces[indf,0] -> left  element
     # M_faces[indf,1] -> right element
-    M_faces=np.zeros((N_el+1,2))
+    M_faces=np.zeros((N_el+1,2),dtype=int)
 
     #Content is -1 if no element is present
     M_faces[0,0]    = -1 
