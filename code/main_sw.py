@@ -10,7 +10,7 @@ import mesh
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 30              #Number of elements
+N_el               = 100              #Number of elements
 
 #Space
 order_space        = 3                #Order in space
@@ -256,70 +256,11 @@ x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh
 #==============================================================
 print("------------------------------------------")
 print("Variables initialization")
-
-def Analytical_State(DATA,x,t):
-    if DATA.test=="Sod":
-        v=0.
-        if x<=0.5:
-            H=1.
-        else:
-            H=0.5
-    else:
-        print("Error in function Analytical_State, test not available")
-        quit()
-    
-    return H,v
-
-def Bathymetry(x):
-    if DATA.test=="Sod":
-        B=0.
-    else:
-        print("Error in function Bathymetry, test not available")
-        quit()
-    return B
-
-
-def Derivative_Bathymetry(x):
-    if DATA.test=="Sod":
-        dB=0.
-    else:
-        print("Error in function Derivative_Bathymetry, test not available")
-        quit()
-    return dB
-
-
-def IC(x_H,x_v,DATA,t):
-    # Matrix H_field[inde,loc_indi_H], rows=elements, columns=loc_indi_H
-    H_field = np.zeros(x_H.shape)
-    # Matrix B_field[inde,loc_indi_H], with the same convention
-    B_field = np.zeros(x_H.shape)
-    # v_field[glob_indi_v]
-    v_field = np.zeros((len(x_v)))
-
-    N_el, local_nodes_H = x_H.shape
-    if DATA.test=="Sod":
-        for inde in range(N_el):
-            for indi_l in range(local_nodes_H):
-                vec=Analytical_State(DATA,x_H[inde,indi_l],0)
-                H_field[inde,indi_l] = vec[0]
-                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l])
-        v_field[:]=0.
-    else:
-        print("Error in function IC, test not available")
-        quit()
-    return H_field, B_field, v_field
-
-H_field, B_field, v_field = IC(x_H, x_v, DATA,0)
-
-
-
-
-plt.plot(x_v,v_field)
-plt.show()
-
-
-
-for inde in range(N_el):
-    print(x_H[inde,:])
-    plt.plot(x_H[inde,:],H_field[inde,:])
-plt.show()
+H_field, B_field, v_field = test_dependent.IC(x_H, x_v, 0, DATA)
+#----------------------------------------------
+# plt.plot(x_v,v_field)
+# plt.show()
+# for inde in range(N_el):
+#     plt.plot(x_H[inde,:],H_field[inde,:])
+# plt.show()
+#----------------------------------------------
