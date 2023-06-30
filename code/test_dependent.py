@@ -6,6 +6,7 @@ import numpy as np
 # xR,       right boundary
 # T,        final time
 # periodic, periodicity of the mesh
+# gravity
 #==============================================================
 class DATA_CLASS:
     def __init__(self,test):
@@ -18,6 +19,8 @@ class DATA_CLASS:
             self.T=0.231
             # Periodicity of the mesh
             self.periodic=False
+            # gravity
+            self.g=9.81
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
