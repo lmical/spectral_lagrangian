@@ -151,3 +151,81 @@ def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
             M_v[global_indices_v[indi]]=M_v[global_indices_v[indi]]+M_v_in_K[indi] 
     
     return M_v
+#==============================================================
+#
+#
+#
+#==============================================================
+# Local computation of the space residuals v
+# NB: there must be a global assembling later
+#==============================================================
+def Space_Residuals_v_K(w_v,in_v_local_derivatives_H,H_local,B_local):
+    """
+    Computation of
+    w_i^K sum_{x_j_H in K} (H_j+B_j) grad_xi psi_j(xi_i)
+    """
+
+    N_local_nodes_v=len(w_v)
+    phi_i_v_in_K=np.zeros(N_local_nodes_v)
+    for indi in range(N_local_nodes_v):
+        d_H_B=sum(in_v_local_derivatives_H[indi,:]*(H_local+B_local))
+        phi_i_v_in_K[indi]=w_v[indi]*d_H_B
+    
+    return phi_i_v_in_K
+#==============================================================
+#
+#
+#
+#==============================================================
+# Space residuals v
+# NB: Uses Space_residuals_v_K
+#==============================================================
+def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global):
+    """
+    With the assumed lumping, the space residuals read
+    phi_i=sum_{K in K_i} sum_{x_j_H in K} w_i^K grad_xi psi_j(xi_i)
+    # NB: According to my computations, the Jacobian should go away
+    """
+
+    N_local_nodes_H=H_field.shape[1]
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+    N_global_nodes_v=(N_local_nodes_v-1)*N_el+1
+
+    #In local_derivatives_H_in_v we have
+    #Rows basis functions
+    #Columns x_j_v
+    #I transpose it to have in each row a specifc x_i_v and in the columns the basis functions
+    in_v_local_derivatives_H=local_derivatives_H_in_v.transpose()
+    #----------------------------------------------
+    # This should be 0
+    # for indi in range(N_local_nodes_v):
+    #     print(sum(in_v_local_derivatives_H[indi,:]))
+    # print(in_v_local_derivatives_H)
+    # quit()
+    #----------------------------------------------
+
+
+    phi_v=np.zeros(N_global_nodes_v)
+
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+ 
+        H_local=H_field[inde,:]
+        B_local=B_field[inde,:]
+
+        # Computation of
+        # w_i^K sum_{x_j_H in K} (H_j+B_j) grad_xi psi_j(xi_i)
+
+        phi_i_v_in_K=Space_Residuals_v_K(w_v,in_v_local_derivatives_H,H_local,B_local)
+
+        #Assembling
+        for indi in range(N_local_nodes_v):
+            
+            #-------------------------------------------------------
+            #NB: This is what is in phi_i_v_in_K[indi] 
+            #d_H_and_B=sum(in_v_local_derivatives_v[indi,:]*x_v_local)
+            #w_v[indi]*d_H_and_B
+            #-------------------------------------------------------
+            phi_v[global_indices_v[indi]]=phi_v[global_indices_v[indi]]+phi_i_v_in_K[indi] 
+    
+    return phi_v

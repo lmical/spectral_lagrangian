@@ -284,11 +284,12 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 #
 #==============================================================
 # Testing some structures
-#M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v)
-#print(M_v)
-
-# Space residuals
-
+# M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v)
+# print(M_v)
+#----------------------------------------------
+# phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
+# print(phi_v)
+#----------------------------------------------
 
 # Stabilization
 
