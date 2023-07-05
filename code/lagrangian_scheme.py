@@ -229,3 +229,48 @@ def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_t
             phi_v[global_indices_v[indi]]=phi_v[global_indices_v[indi]]+phi_i_v_in_K[indi] 
     
     return phi_v
+#==============================================================
+#
+#
+#
+#==============================================================
+# Local computation for the Lax-Friedrichs stabilization
+# NB: Uses Lax_Friedrichs_K
+#==============================================================
+def Lax_Friedrichs_K(v_local):
+    """
+    Computation
+    phi^K_i=alpha (c_i-cbar_K)
+    """
+    #N_local_nodes_v=len(v_local)
+    alpha=np.max(np.absolute(v_local))
+    vbar=np.average(v_local)
+    ST_i_K=alpha*(v_local-vbar)
+    return ST_i_K
+#==============================================================
+#
+#
+#
+#==============================================================
+# Lax-Friedrichs stabilization
+# NB: Uses Lax_Friedrichs_K
+#==============================================================
+def Lax_Friedrichs(v_field,M_Local_to_Global):
+    """
+    Computation
+    phi_i=sum_{K in K_i} alpha (c_i-cbar_K)
+    """
+
+    N_global_nodes_v=len(v_field)
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+
+    ST_i=np.zeros(N_global_nodes_v)
+
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+        v_local=v_field[global_indices_v]
+        ST_i_K=Lax_Friedrichs_K(v_local)        
+        for indi in range(N_local_nodes_v):
+            ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
+
+    return ST_i

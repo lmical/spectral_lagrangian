@@ -14,7 +14,7 @@ test               = "Sod"            #Test: "Sod"
 N_el               = 10               #Number of elements
 
 #Space
-order_space        = 3                #Order in space
+order_space        = 1                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -290,6 +290,12 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 # phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
 # print(phi_v)
 #----------------------------------------------
+
+
+
+ST_i=Lax_Friedrichs(v_field,M_Local_to_Global)
+print(ST_i)
+
 
 # Stabilization
 
