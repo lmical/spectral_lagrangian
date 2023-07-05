@@ -14,7 +14,7 @@ test               = "Sod"            #Test: "Sod"
 N_el               = 100               #Number of elements
 
 #Space
-order_space        = 4                #Order in space
+order_space        = 3                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -263,6 +263,7 @@ H_field, B_field, v_field = test_dependent.IC(x_H, x_v, 0, DATA)
 # Hhat_i = H_i(0)*det J(x_i,0)
 # J(xi,0) = grad_xi x (xi,0) = sum_j x_j(0) grad_xi phi_j (xi)
 Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+
 #----------------------------------------------
 # plt.plot(x_v,v_field)
 # plt.show()
@@ -270,6 +271,10 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 #     plt.plot(x_H[inde,:],H_field[inde,:])
 # plt.show()
 #----------------------------------------------
+# H_field_test=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# if (np.linalg.norm(H_field-H_field_test)>1e-14):
+#     print("I'm in main. Problem in strong_mass_conservation")
+#     quit()
 #==============================================================
 # Computation of the lumped mass matrix
 # NB: It is time-dependent because of the lumping
