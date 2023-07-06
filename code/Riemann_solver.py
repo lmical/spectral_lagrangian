@@ -48,7 +48,7 @@ def shallow_water_hll(q_l, q_r, grav=9.81):
 # Modification from: A simple well-balanced and positive numerical scheme for the shallow-water system 
 # NB: Riemann solver in conserved variables
 #==============================================================
-def shallow_water_hll(q_l, q_r, b_l, b_r, grav=9.81):
+def shallow_water_hll_WB(q_l, q_r, b_l, b_r, grav=9.81):
     """
     HLLE approximate solver for the shallow water equations.
     With a WB modification

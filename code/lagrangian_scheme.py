@@ -1,4 +1,5 @@
 import numpy as np
+import Riemann_solver
 
 #==============================================================
 # Obtaining Hhat_field at the beginning of the simulation for string mass conservation
@@ -158,6 +159,7 @@ def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
 #==============================================================
 # Local computation of the space residuals v
 # NB: there must be a global assembling later
+# NB: To be multiplied by g
 #==============================================================
 def Space_Residuals_v_K(w_v,in_v_local_derivatives_H,H_local,B_local):
     """
@@ -179,12 +181,15 @@ def Space_Residuals_v_K(w_v,in_v_local_derivatives_H,H_local,B_local):
 #==============================================================
 # Space residuals v
 # NB: Uses Space_residuals_v_K
+# NB: To be multiplied by g
 #==============================================================
 def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global):
     """
     With the assumed lumping, the space residuals read
     phi_i=sum_{K in K_i} sum_{x_j_H in K} w_i^K grad_xi psi_j(xi_i)
     # NB: According to my computations, the Jacobian should go away
+    # NB: To be multiplied by g
+    # NB: One must add some boundary terms to guarantee coupling
     """
 
     N_local_nodes_H=H_field.shape[1]
@@ -229,6 +234,68 @@ def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_t
             phi_v[global_indices_v[indi]]=phi_v[global_indices_v[indi]]+phi_i_v_in_K[indi] 
     
     return phi_v
+#==============================================================
+# Coupling terms in the space residuals v
+# NB: To be multiplied by g
+#==============================================================
+def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, DATA):
+    """
+    # Coupling boundary terms to guarantee coupling
+    CT_phi_i^K=int_{partial K} (etahat-eta|_K) 
+    """
+
+    N_local_nodes_H=H_field.shape[1]
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+    N_global_nodes_v=(N_local_nodes_v-1)*N_el+1
+
+
+
+    CT_phi_v=np.zeros(N_global_nodes_v)
+
+    #Loop on the internal elements
+    for inde in range(N_el):
+
+        global_indices_v=M_Local_to_Global[inde,:]
+
+        H_local=H_field[inde,:]
+        B_local=B_field[inde,:]
+
+        #In the first cell we skip the left RP
+        if inde==0:
+            pass
+        else:
+            #Riemann Problem Left
+            H_outside = H_field[inde-1,-1]                       #Last from the left cell
+            H_inside  = H_field[inde,0]                          #First from the current cell
+            B_outside = B_field[inde-1,-1]                       #Last from the left cell
+            B_inside  = B_field[inde,0]                          #First from the current cell
+            v_both    = v_field[global_indices_v[0]]             #v_continuous from first node of the current cell
+            q_outside = np.array([H_outside,H_outside*v_both])   #L state
+            q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
+
+            #Add contribution
+            CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]+ ( (Hhat+Bhat)-(H_inside+B_inside) )
+
+        #In the lasst cell we skip the right RP
+        if inde==N_el-1:
+            pass
+        else:
+            #Riemann Problem Right
+            H_outside = H_field[inde+1,0]                        #First from the right cell
+            H_inside  = H_field[inde,-1]                         #Last from the current cell
+            B_outside = B_field[inde+1,0]                        #First from the right cell
+            B_inside  = B_field[inde,-1]                         #Last from the current cell
+            v_both    = v_field[global_indices_v[-1]]            #v_continuous from last node of the current cell
+            q_outside = np.array([H_outside,H_outside*v_both])   #L state
+            q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
+
+            #Add contribution
+            CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) )
+
+    
+    return CT_phi_v
 #==============================================================
 #
 #
