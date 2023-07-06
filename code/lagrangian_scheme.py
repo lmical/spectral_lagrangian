@@ -257,8 +257,6 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 
         global_indices_v=M_Local_to_Global[inde,:]
 
-        H_local=H_field[inde,:]
-        B_local=B_field[inde,:]
 
         #In the first cell we skip the left RP
         if inde==0:
@@ -341,3 +339,42 @@ def Lax_Friedrichs(v_field,M_Local_to_Global):
             ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
     return ST_i
+#==============================================================
+#
+#
+#
+#==============================================================
+# Computation of the time step
+#==============================================================
+def Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v):
+    """
+    Computation of the time step
+    NB: I divide by (2*degree_v+1) to compute the CFL
+    """
+    N_local_nodes_H=H_field.shape[1]
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+    N_global_nodes_v=(N_local_nodes_v-1)*N_el+1
+
+    dt_max=DATA.T
+    for inde in range(N_el):
+        H_local=H_field[inde,:]
+        global_indices_v=M_Local_to_Global[inde,:]
+        v_local=v_field[global_indices_v]
+        x_local=x_v[global_indices_v]
+
+        max_sound_speed=0
+        max_H=0
+        max_abs_v=0
+        for indi in range(N_local_nodes_H):
+            max_H=max(max_H,H_local[indi])
+        for indi in range(N_local_nodes_v):
+            max_abs_v=max(max_abs_v,abs(v_local[indi]))
+
+        max_sound_speed=np.sqrt(DATA.g*max_H)
+        dx=x_local[-1]-x_local[0]
+
+        dt_max=min(dt_max,dx/(max_sound_speed+max_abs_v))
+
+    dt_max=dt_max/(2*degree_v+1)*CFL
+
+    return dt_max
