@@ -11,7 +11,7 @@ import lagrangian_scheme
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod"
-N_el               = 10               #Number of elements
+N_el               = 100               #Number of elements
 
 #Space
 order_space        = 1                #Order in space
@@ -290,15 +290,57 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 # phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
 # print(phi_v)
 #----------------------------------------------
+# ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global)
+# print(ST_i)
+#----------------------------------------------
+# CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, DATA)
+# print(CT_phi_v)
+#==============================================================
+#
+#
+#
+#==============================================================
+print("------------------------------------------")
+print("Timestepping loop")
+t=0     #Time
+indt=0  #Counter
+while(t<DATA.T):
+    #Computation of the time step
+    dt=DATA.T-t
+    dt_max=lagrangian_scheme.Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL)
+    dt=min(dt,dt_max)
 
 
-
-ST_i=Lax_Friedrichs(v_field,M_Local_to_Global)
-print(ST_i)
-
-
-# Stabilization
+    x_v_old=x_v
+    H_field_old=H_field
+    v_field_old=v_field
 
 
+    #Update
+    #x
+    x_v=x_v_old+dt*v_field
+    #v
+    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v_old,M_Local_to_Global,local_derivatives_v)
+    phi_v=lagrangian_scheme.Space_Residuals_v(H_field_old, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
+    CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field_old, B_field, v_field_old, M_Local_to_Global, M_faces, DATA)
+    ST_i=lagrangian_scheme.Lax_Friedrichs(v_field_old,M_Local_to_Global)
+    v_field=v_field_old+dt*DATA.g*(phi_v+CT_phi_v+ST_i)/M_v
+    #H
+    H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+    indt=indt+1
+    t=t+dt
+    print(indt,t)
 
+    v_field[0]=0
+    v_field[-1]=0
+    x_v[0]=0
+    x_v[-1]=1
+    H_field[0]=1
+    H_field[-1]=0.5
+        
+    if (indt%freq==0):
+        #print(x_v)
+        print(H_field)
 
+        # plt.plot(x_v,v_field)
+        # plt.show()

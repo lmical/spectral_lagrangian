@@ -346,7 +346,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global):
 #==============================================================
 # Computation of the time step
 #==============================================================
-def Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v):
+def Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL):
     """
     Computation of the time step
     NB: I divide by (2*degree_v+1) to compute the CFL
