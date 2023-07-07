@@ -378,3 +378,31 @@ def Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL):
     dt_max=dt_max/(2*degree_v+1)*CFL
 
     return dt_max
+#==============================================================
+#
+#
+#
+#==============================================================
+# Getting location of the x_H DoF from the x_v field
+#==============================================================
+def get_x_H(x_v,local_values_v_in_H,M_Local_to_Global):
+    """
+    Getting location of the x_H DoF from the x_v field
+    """
+    N_global_nodes_v=len(x_v)
+    N_local_nodes_v, N_local_nodes_H = local_values_v_in_H.shape
+    N_el=int((N_global_nodes_v-1)/(N_local_nodes_v-1))
+
+    x_H=np.zeros((N_el,N_local_nodes_H))
+
+    in_H_local_values_v=local_values_v_in_H.transpose()
+
+    for inde in range(N_el):    
+
+        global_indices_v=M_Local_to_Global[inde,:]
+        x_local=x_v[global_indices_v]
+
+        for indi in range(N_local_nodes_H):
+            x_H[inde,indi]=sum(x_local*in_H_local_values_v[indi,:])
+
+    return x_H
