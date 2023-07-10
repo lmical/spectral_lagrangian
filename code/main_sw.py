@@ -6,15 +6,16 @@ import DeC
 import test_dependent
 import mesh
 import lagrangian_scheme
+import visualization
 
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
 test               = "Sod"            #Test: "Sod", "Sod_smooth"
-N_el               = 100               #Number of elements
+N_el               = 50               #Number of elements
 
 #Space
-order_space        = 5                #Order in space
+order_space        = 2                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -34,7 +35,7 @@ order_space        = 5                #Order in space
 time_scheme        = "DeC"             #Time scheme
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
-CFL                = 0.1               #CFL
+CFL                = 0.5               #CFL
 freq               = 100                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
@@ -45,7 +46,10 @@ LaxFriedrichs      = False
 jump               = "jc"
 
 #Folder where to store
-folder="Figures"
+folder             = "Figures"
+printing           = True
+plotting           = False
+
 
 #==============================================================
 #
@@ -311,17 +315,24 @@ print("------------------------------------------")
 print("Timestepping loop")
 t=0     #Time
 indt=0  #Counter
+
+#Printing and plotting IC
+if printing==True:
+    visualization.printing_function(indt,t,H_field,v_field)
+if plotting==True:
+    x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
+    visualization.plotting_function(indt,t,x_H,H_field,x_v,v_field)
+
 while(t<DATA.T):
     #Computation of the time step
     dt=DATA.T-t
     dt_max=lagrangian_scheme.Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL)
     dt=min(dt,dt_max)
 
-
+    #Store solution in the previous time step
     x_v_old=x_v
     H_field_old=H_field
     v_field_old=v_field
-
 
     #Update
     #x
@@ -332,11 +343,12 @@ while(t<DATA.T):
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field_old, B_field, v_field_old, M_Local_to_Global, M_faces, DATA)
     ST_i=lagrangian_scheme.Lax_Friedrichs(v_field_old,M_Local_to_Global,H_field_old,x_v_old)
     v_field=v_field_old+dt*(-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i)/M_v
-    # v_field=v_field_old+dt*(-DATA.g*phi_v-ST_i)/M_v+dt*DATA.g*CT_phi_v
-    #H
+    #H, with strong mass conservation
     H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
-    t=t+dt
-    #print(indt,t)
+    #BC
+
+
+
 
     v_field[0]=0
     v_field[-1]=0
@@ -346,80 +358,45 @@ while(t<DATA.T):
     H_field[-1,-1]=0.2
         
 
-    x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
 
-
-    #THE PROBLEM IS NOT SMC
-    if(1==0):
-        print()
-        print("Timestep", indt,t)
-        for inde in range(N_el):
-            global_indices_v=M_Local_to_Global[inde,:]
-            x_v_local=x_v[global_indices_v]
-            x_v_local_old=x_v_old[global_indices_v]
-            #print(H_field_old[inde,0]*(x_v_local_old[-1]-x_v_local_old[0])-H_field[inde,0]*(x_v_local[-1]-x_v_local[0]))        
-            if (abs(H_field_old[inde,0]*(x_v_local_old[-1]-x_v_local_old[0])-H_field[inde,0]*(x_v_local[-1]-x_v_local[0])))>1e-13:
-                print("Problem SMC")
-                quit()
-
-
-    # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-
-    #THE PROBLEM IS NOT IN THE SPACE RESIDUALS
-    if(1==0):
-        for indi in range(N_global_nodes_v):
-            if phi_v[indi]!=0:
-                print("Problem in space residuals")
-                quit()
-
-    # print(x_H)
-    # print(H_field)
-    if(1==0):
-        if (indt%freq==0):
-
-            for inde in range(N_el):
-                # print(x_H[inde,:])
-                # print(H_field[inde,:])
-                #print(x_H[inde,0]*(x_v[2*inde+1]-x_v[2*inde]),x_v[2*inde+1],x_v[2*inde])
-
-
-                plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
-
-            plt.show()
-
-
-    # # if indt==3:
-    # #     quit()
-    # if (indt%freq==0):
-    # #     #print(x_v)
-    # #     #print(H_field)
-
-    # #     # plt.plot(x_v,v_field)
-
-    #     for inde in range(N_el):
-    #         plt.plot(x_H[inde,:],H_field[inde,:], marker="o")
-    #     plt.show()
-
-    #     print(H_field)
-
+    #t
+    t=t+dt
     indt=indt+1
 
+    #Only every freq timesteps
+    if (indt%freq==0):
+        #Printing and plotting IC
+        if printing==True:
+            visualization.printing_function(indt,t,H_field,v_field)
+        if plotting==True:
+            x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
+            visualization.plotting_function(indt,t,x_H,H_field,x_v,v_field)
 
+
+
+
+#Final print
+if printing==True:
+    visualization.printing_function(indt,t,H_field,v_field)
+
+
+#Final plot to save
 plt.figure()
 plt.title("H")
 for inde in range(N_el):
-    # print(x_H[inde,:])
-    # print(H_field[inde,:])
-    #print(x_H[inde,0]*(x_v[2*inde+1]-x_v[2*inde]),x_v[2*inde+1],x_v[2*inde])
     plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
-plt.legend()
+#plt.legend()
 plt.xlabel("x")
 #plt.ylabel("y")
 plt.grid()
 plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
-
 plt.show()
 
 
 plt.plot(x_v,v_field)
 plt.show()
+
+print(test,"N_el",N_el,"order_space",order_space,"CFL",CFL)
+print("Maxima",np.max(H_field),np.max(v_field))
+print("Minima",np.min(H_field),np.min(v_field))
+print("Average",np.average(H_field),np.average(v_field))

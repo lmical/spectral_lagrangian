@@ -26,7 +26,6 @@ def get_Hhat_on_reference_element(H_field,x_v,local_derivatives_v_in_H,M_Local_t
         for indi in range(local_nodes_H):
             # d_xi x(xi,0)
             d_xi_x=sum(in_H_local_derivatives_v[indi,:]*x_v_local)
-            #print(inde,indi,sum(in_H_local_derivatives_v[indi,:]*x_v_local))
             Hhat_field[inde,indi] = H_field[inde,indi]*d_xi_x
 
     #----------------------------------
@@ -65,7 +64,6 @@ def strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_
         for indi in range(local_nodes_H):
             # d_xi x(xi,0)
             d_xi_x=sum(in_H_local_derivatives_v[indi,:]*x_v_local)
-            #print(inde,indi,sum(in_H_local_derivatives_v[indi,:]*x_v_local))
             H_field[inde,indi] = Hhat_field[inde,indi]/d_xi_x
 
 
@@ -143,32 +141,11 @@ def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
         global_indices_v=M_Local_to_Global[inde,:]
         x_v_local=x_v[global_indices_v]
 
-        # print(inde,x_v_local)
-
-        M=np.zeros((2,2))
-
-
-        for indi in range(2):
-            M[indi,indi]=w_v[indi]*sum(x_v_local*in_v_local_derivatives_v[indi,:])
-
 
         # Computation of
         # w_i^K det J(x_i,t)|_Khat
         # J(xi,t) = grad_xi x (xi,t) = sum_j x_j(t) grad_xi phi_j (xi)
         M_v_in_K=Lumped_Mass_Matrix_K(w_v,in_v_local_derivatives_v,x_v_local)
-
-
-        if(1==0):
-            if np.linalg.norm(np.diagonal(M)-M_v_in_K)>1e-14:
-                print(np.diagonal(M))
-                print(M_v_in_K)
-                print("Problem is local matrix")
-                quit()
-
-
-        # print(np.diagonal(M)-M_v_in_K)
-
-        # quit()
 
 
         #Assembling
@@ -181,10 +158,6 @@ def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
             #-------------------------------------------------------
             M_v[global_indices_v[indi]]=M_v[global_indices_v[indi]]+M_v_in_K[indi] 
     
-            # print(global_indices_v[indi])
-
-    # print(M_v)
-    # quit()
 
     return M_v
 #==============================================================
@@ -312,13 +285,11 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 
 
             #Add contribution
-            CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #NB: - because of normal
+            CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #IMPORTANT: - sign because of normal
 
         #In the lasst cell we skip the right RP
         
         if inde==N_el-1:
-            #print(inde,"Here once")
-            #quit()
             pass
         else:
             #Riemann Problem Right
@@ -327,7 +298,6 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             B_outside = B_field[inde+1,0]                        #First from the right cell
             B_inside  = B_field[inde,-1]                         #Last from the current cell
             v_both    = v_field[global_indices_v[-1]]            #v_continuous from last node of the current cell
-            #print(global_indices_v[-1])
             q_outside = np.array([H_outside,H_outside*v_both])   #L state
             q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
             Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
@@ -339,11 +309,6 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             #Add contribution
             CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
 
-    # for inde in range(N_el):
-    #     global_indices_v=M_Local_to_Global[inde,:]
-    #     for indi in range(N_local_nodes_v):
-    #         print(inde,indi,CT_phi_v[M_Local_to_Global[inde,indi]])
-    # quit()
 
     return CT_phi_v
 #==============================================================
@@ -362,10 +327,6 @@ def Lax_Friedrichs_K(v_local,Hmax):
     #N_local_nodes_v=len(v_local)
     alpha=np.max(np.absolute(v_local)+1e-6)+np.sqrt(9.81*Hmax)
     vbar=np.average(v_local)
-    # if (vbar!=0):
-    #     print(vbar)
-    #     print(v_local)
-    #     print(alpha)
     ST_i_K=alpha*(v_local-vbar)
     return ST_i_K
 #==============================================================
@@ -394,7 +355,6 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v):
         global_indices_v=M_Local_to_Global[inde,:]
         v_local=v_field[global_indices_v]
         ST_i_K=Lax_Friedrichs_K(v_local,Hmax)
-        # ST_i_K=ST_i_K*(x_v[global_indices_v[-1]]-x_v[global_indices_v[0]])
         for indi in range(N_local_nodes_v):
             ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
