@@ -16,7 +16,7 @@ test               = "Sod"            #Test: "Sod", "Sod_smooth"
 N_el               = 50               #Number of elements
 
 #Space
-order_space        = 2                #Order in space
+order_space        = 3                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -33,7 +33,7 @@ order_space        = 2                #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "Euler"             #Time scheme #"Euler" "DeC"
+time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
@@ -339,7 +339,9 @@ while(t<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v=time_stepping.Euler(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA)
+        H_field, v_field, x_v=time_stepping.Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA)
+    elif time_scheme=="DeC":
+        H_field, v_field, x_v=time_stepping.DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA, dec)
     else:
         print("Time scheme not available")
         quit()
