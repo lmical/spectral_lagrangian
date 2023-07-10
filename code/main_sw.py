@@ -10,11 +10,11 @@ import lagrangian_scheme
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"            #Test: "Sod"
+test               = "Sod"            #Test: "Sod", "Sod_smooth"
 N_el               = 100               #Number of elements
 
 #Space
-order_space        = 1                #Order in space
+order_space        = 5                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -34,8 +34,8 @@ order_space        = 1                #Order in space
 time_scheme        = "DeC"             #Time scheme
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
-CFL                = 0.4               #CFL
-freq               = 10                #Frequency for saving the solution
+CFL                = 0.1               #CFL
+freq               = 100                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
@@ -43,6 +43,10 @@ N_max_iter         = 10000             #Maximal number of iterations
 scheme             = "Galerkin"
 LaxFriedrichs      = False
 jump               = "jc"
+
+#Folder where to store
+folder="Figures"
+
 #==============================================================
 #
 #
@@ -295,6 +299,9 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 #----------------------------------------------
 # CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, DATA)
 # print(CT_phi_v)
+#----------------------------------------------
+# x_H = lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
+# print(x_H)
 #==============================================================
 #
 #
@@ -323,24 +330,96 @@ while(t<DATA.T):
     M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v_old,M_Local_to_Global,local_derivatives_v)
     phi_v=lagrangian_scheme.Space_Residuals_v(H_field_old, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field_old, B_field, v_field_old, M_Local_to_Global, M_faces, DATA)
-    ST_i=lagrangian_scheme.Lax_Friedrichs(v_field_old,M_Local_to_Global)
-    v_field=v_field_old+dt*DATA.g*(phi_v+CT_phi_v+ST_i)/M_v
+    ST_i=lagrangian_scheme.Lax_Friedrichs(v_field_old,M_Local_to_Global,H_field_old,x_v_old)
+    v_field=v_field_old+dt*(-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i)/M_v
+    # v_field=v_field_old+dt*(-DATA.g*phi_v-ST_i)/M_v+dt*DATA.g*CT_phi_v
     #H
     H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
-    indt=indt+1
     t=t+dt
-    print(indt,t)
+    #print(indt,t)
 
     v_field[0]=0
     v_field[-1]=0
     x_v[0]=0
     x_v[-1]=1
-    H_field[0]=1
-    H_field[-1]=0.5
+    H_field[0,0]=1
+    H_field[-1,-1]=0.2
         
-    if (indt%freq==0):
-        #print(x_v)
-        print(H_field)
 
-        # plt.plot(x_v,v_field)
-        # plt.show()
+    x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
+
+
+    #THE PROBLEM IS NOT SMC
+    if(1==0):
+        print()
+        print("Timestep", indt,t)
+        for inde in range(N_el):
+            global_indices_v=M_Local_to_Global[inde,:]
+            x_v_local=x_v[global_indices_v]
+            x_v_local_old=x_v_old[global_indices_v]
+            #print(H_field_old[inde,0]*(x_v_local_old[-1]-x_v_local_old[0])-H_field[inde,0]*(x_v_local[-1]-x_v_local[0]))        
+            if (abs(H_field_old[inde,0]*(x_v_local_old[-1]-x_v_local_old[0])-H_field[inde,0]*(x_v_local[-1]-x_v_local[0])))>1e-13:
+                print("Problem SMC")
+                quit()
+
+
+    # print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
+    #THE PROBLEM IS NOT IN THE SPACE RESIDUALS
+    if(1==0):
+        for indi in range(N_global_nodes_v):
+            if phi_v[indi]!=0:
+                print("Problem in space residuals")
+                quit()
+
+    # print(x_H)
+    # print(H_field)
+    if(1==0):
+        if (indt%freq==0):
+
+            for inde in range(N_el):
+                # print(x_H[inde,:])
+                # print(H_field[inde,:])
+                #print(x_H[inde,0]*(x_v[2*inde+1]-x_v[2*inde]),x_v[2*inde+1],x_v[2*inde])
+
+
+                plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+
+            plt.show()
+
+
+    # # if indt==3:
+    # #     quit()
+    # if (indt%freq==0):
+    # #     #print(x_v)
+    # #     #print(H_field)
+
+    # #     # plt.plot(x_v,v_field)
+
+    #     for inde in range(N_el):
+    #         plt.plot(x_H[inde,:],H_field[inde,:], marker="o")
+    #     plt.show()
+
+    #     print(H_field)
+
+    indt=indt+1
+
+
+plt.figure()
+plt.title("H")
+for inde in range(N_el):
+    # print(x_H[inde,:])
+    # print(H_field[inde,:])
+    #print(x_H[inde,0]*(x_v[2*inde+1]-x_v[2*inde]),x_v[2*inde+1],x_v[2*inde])
+    plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+plt.legend()
+plt.xlabel("x")
+#plt.ylabel("y")
+plt.grid()
+plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
+
+plt.show()
+
+
+plt.plot(x_v,v_field)
+plt.show()

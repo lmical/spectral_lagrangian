@@ -11,12 +11,12 @@ import numpy as np
 class DATA_CLASS:
     def __init__(self,test):
         self.test = test
-        if test=="Sod": #Sod
+        if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema
             self.xL=0
             self.xR=1
             # Final time
-            self.T=0.231
+            self.T=0.1
             # Periodicity of the mesh
             self.periodic=False
             # gravity
@@ -38,7 +38,17 @@ def Analytical_State(x,t,DATA):
         if x<=0.5:
             H=1.
         else:
-            H=0.5
+            H=0.2
+    elif DATA.test=="Sod_smooth":
+        v=0.
+        r0=0.45
+        r1=0.55
+        if x<=r0:
+            H=1.
+        elif x>r0 and x<r1:
+            H=0.2+0.8*np.exp(1. - 1./(1.-((x-r0)/(r1-r0))**2))    
+        else:
+            H=0.2
     else:
         print("Error in function Analytical_State, test not available")
         quit()
@@ -52,7 +62,7 @@ def Analytical_State(x,t,DATA):
 # Bathymetry in a point x
 #==============================================================
 def Bathymetry(x,DATA):
-    if DATA.test=="Sod":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
         B=0.
     else:
         print("Error in function Bathymetry, test not available")
@@ -91,7 +101,7 @@ def IC(x_H,x_v,t,DATA):
     v_field = np.zeros((len(x_v)))
 
     N_el, local_nodes_H = x_H.shape
-    if DATA.test=="Sod":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
         for inde in range(N_el):
             for indi_l in range(local_nodes_H):
                 vec=Analytical_State(x_H[inde,indi_l],0,DATA)
