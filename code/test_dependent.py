@@ -112,3 +112,22 @@ def IC(x_H,x_v,t,DATA):
         print("Error in function IC, test not available")
         quit()
     return H_field, B_field, v_field
+#==============================================================
+#
+#
+#
+#==============================================================
+# Boundary condition
+#==============================================================
+def BC(H_field,v_field,B_field,x_v,DATA):
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
+        v_field[0]=0
+        v_field[-1]=0
+        x_v[0]=0
+        x_v[-1]=1
+        H_field[0,0]=1
+        H_field[-1,-1]=0.2
+    else:
+        print("Error in function BCs, test not available")
+        quit()
+    return H_field,v_field,x_v

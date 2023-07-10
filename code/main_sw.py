@@ -47,7 +47,7 @@ jump               = "jc"
 
 #Folder where to store
 folder             = "Figures"
-printing           = True
+printing           = False
 plotting           = False
 
 
@@ -346,17 +346,7 @@ while(t<DATA.T):
     #H, with strong mass conservation
     H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
     #BC
-
-
-
-
-    v_field[0]=0
-    v_field[-1]=0
-    x_v[0]=0
-    x_v[-1]=1
-    H_field[0,0]=1
-    H_field[-1,-1]=0.2
-        
+    H_field,v_field,x_v=test_dependent.BC(H_field,v_field,B_field,x_v,DATA)
 
 
     #t
@@ -389,7 +379,7 @@ for inde in range(N_el):
 plt.xlabel("x")
 #plt.ylabel("y")
 plt.grid()
-plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
+# plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
 plt.show()
 
 
