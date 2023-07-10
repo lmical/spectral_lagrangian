@@ -7,6 +7,7 @@ import test_dependent
 import mesh
 import lagrangian_scheme
 import visualization
+import time_stepping
 
 #==============================================================
 #INPUT PARAMETERS
@@ -32,11 +33,11 @@ order_space        = 2                #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "DeC"             #Time scheme
+time_scheme        = "Euler"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 100                #Frequency for saving the solution
+freq               = 50                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
@@ -47,7 +48,7 @@ jump               = "jc"
 
 #Folder where to store
 folder             = "Figures"
-printing           = False
+printing           = True
 plotting           = False
 
 
@@ -194,38 +195,39 @@ for indi in range(N_local_nodes_v):
 #
 #
 #==============================================================
-print("------------------------------------------")
-print("Getting DeC structures")
+if time_scheme=="DeC":
+    print("------------------------------------------")
+    print("Getting DeC structures")
 
 
-def subtimesteps(subtimenodes_types,order):
-    """
-    INPUT:
-    subtimenodes_types,  distribution of subtimenodes
-    order
-    OUTPUT:
-    M_subtimenodes, number of subtimenodes-1    
-    """
-    if subtimenodes_types == "equispaced":
-        return order-1
-    elif subtimenodes_types=="gaussLobatto":
-        return int((order+1)//2)
+    def subtimesteps(subtimenodes_types,order):
+        """
+        INPUT:
+        subtimenodes_types,  distribution of subtimenodes
+        order
+        OUTPUT:
+        M_subtimenodes, number of subtimenodes-1    
+        """
+        if subtimenodes_types == "equispaced":
+            return order-1
+        elif subtimenodes_types=="gaussLobatto":
+            return int((order+1)//2)
 
-# Getting M_subtimenodes, i.e., number of subtimenodes - 1
-M_subtimenodes=subtimesteps("gaussLobatto",order_time)
-# Getting DeC structures
-# NB: with theta transposed
-dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto")
+    # Getting M_subtimenodes, i.e., number of subtimenodes - 1
+    M_subtimenodes=subtimesteps("gaussLobatto",order_time)
+    # Getting DeC structures
+    # NB: with theta transposed
+    dec = DeC.DeC(M_sub=M_subtimenodes, n_iter=order_time, nodes_type="gaussLobatto")
 
-#--------------------------------------------------------------
-# print("Number of iterations", dec.n_iter,"which should be", order_time)
-# print("Total number of subtimenodes", dec.n_subNodes,"which should be", M_subtimenodes+1,"and",dec.M_sub+1)
-# print("Beta vector",dec.beta)
-# print("Theta matrix")
-# print(dec.theta)
-# print("NB: The matrix must be transposed")
-# quit()
-#--------------------------------------------------------------
+    #--------------------------------------------------------------
+    # print("Number of iterations", dec.n_iter,"which should be", order_time)
+    # print("Total number of subtimenodes", dec.n_subNodes,"which should be", M_subtimenodes+1,"and",dec.M_sub+1)
+    # print("Beta vector",dec.beta)
+    # print("Theta matrix")
+    # print(dec.theta)
+    # print("NB: The matrix must be transposed")
+    # quit()
+    #--------------------------------------------------------------
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
@@ -333,20 +335,15 @@ while(t<DATA.T):
     x_v_old=x_v
     H_field_old=H_field
     v_field_old=v_field
+    B_field_old=B_field
 
-    #Update
-    #x
-    x_v=x_v_old+dt*v_field
-    #v
-    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v_old,M_Local_to_Global,local_derivatives_v)
-    phi_v=lagrangian_scheme.Space_Residuals_v(H_field_old, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
-    CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field_old, B_field, v_field_old, M_Local_to_Global, M_faces, DATA)
-    ST_i=lagrangian_scheme.Lax_Friedrichs(v_field_old,M_Local_to_Global,H_field_old,x_v_old)
-    v_field=v_field_old+dt*(-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i)/M_v
-    #H, with strong mass conservation
-    H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
-    #BC
-    H_field,v_field,x_v=test_dependent.BC(H_field,v_field,B_field,x_v,DATA)
+
+    if time_scheme=="Euler":
+        H_field, v_field, x_v=time_stepping.Euler(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA)
+    else:
+        print("Time scheme not available")
+        quit()
+
 
 
     #t
