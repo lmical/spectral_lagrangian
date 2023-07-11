@@ -16,7 +16,7 @@ test               = "Sod"            #Test: "Sod", "Sod_smooth"
 N_el               = 50               #Number of elements
 
 #Space
-order_space        = 3                #Order in space
+order_space        = 2                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -370,20 +370,21 @@ if printing==True:
 
 
 #Final plot to save
-plt.figure()
-plt.title("H")
-for inde in range(N_el):
-    plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
-#plt.legend()
-plt.xlabel("x")
-#plt.ylabel("y")
-plt.grid()
-# plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
-plt.show()
+if plotting==True:
+    plt.figure()
+    plt.title("H")
+    for inde in range(N_el):
+        plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+    #plt.legend()
+    plt.xlabel("x")
+    #plt.ylabel("y")
+    plt.grid()
+    # plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
+    plt.show()
 
 
-plt.plot(x_v,v_field)
-plt.show()
+    plt.plot(x_v,v_field)
+    plt.show()
 
 print(test,"N_el",N_el,"order_space",order_space,"CFL",CFL)
 print("Maxima",np.max(H_field),np.max(v_field))
