@@ -1,0 +1,95 @@
+# FICHIER DE CREATION D'OBJETS ET D'UN EXECUTABLE
+#     RANGEMENT PAR ORDRE ALPHABETIQUE
+#
+# VERSION DEBBUGGEUR -db
+# VERSION OPTIMISEUR   
+F90=gfortran 
+OBJDIR = obj1D
+MODDIR = mod1D
+BINDIR = bin1D
+SRC = ../Src1D
+
+FFLAGS = -DLINUX -J$(MODDIR)  -cpp -c $(OPT) -ffree-line-length-none
+LDFLAGS= -J$(MODDIR)  -cpp $(OPT)  -ffree-line-length-none
+
+INIT= init_bc_scalar
+MODEL_VAR= variable_def_scalar
+UTIL=utils_scalar
+PREPROCESSING=preprocessing1d
+POSTPROCESSING=postprocessing_scalar
+
+#INIT= init_bc_wave_1D
+#MODEL_VAR= variable_def_wave_1D
+
+#INIT= init_bc_scalar_1D
+#MODEL_VAR= variable_def_scalar_1D
+
+OBJS = $(addprefix $(OBJDIR)/, elements_1D.o  param2d.o $(MODEL_VAR).o  aretes.o scheme.o overloading.o  Model.o geometry.o algebra.o $(UTIL).o $(POSTPROCESSING).o timestepping.o $(INIT).o precision.o $(PREPROCESSING).o)
+
+
+dec: $(MODDIR) $(OBJDIR) $(BINDIR) $(OBJS) $(SRC)/main_dec.f90 
+	$(F90) $(LDFLAGS) -o $(BINDIR)/main_dec.out $(SRC)/main_dec.f90 $(OBJS)
+
+$(MODDIR): 
+	mkdir -p $(MODDIR)
+
+$(OBJDIR):	
+	mkdir -p $(OBJDIR)
+
+$(BINDIR):	
+	mkdir -p $(BINDIR)	
+
+
+$(OBJDIR)/Model.o: $(SRC)/Model.f90 $(OBJDIR)/param2d.o $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/Model.o $(SRC)/Model.f90
+
+$(OBJDIR)/aretes.o: $(SRC)/aretes.f90 $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/aretes.o $(SRC)/aretes.f90
+
+$(OBJDIR)/overloading.o: $(SRC)/overloading.f90 $(OBJDIR)/$(MODEL_VAR).o $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/overloading.o $(SRC)/overloading.f90
+
+$(OBJDIR)/param2d.o: $(SRC)/param2d.f90 $(OBJDIR)/$(MODEL_VAR).o $(OBJDIR)/elements_1D.o $(OBJDIR)/aretes.o $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/param2d.o $(SRC)/param2d.f90
+
+$(OBJDIR)/geometry.o: $(SRC)/param2d.f90 $(OBJDIR)/elements_1D.o $(OBJDIR)/$(INIT).o $(SRC)/geometry.f90 $(OBJDIR)/precision.o
+	 $(F90) $(FFLAGS) -o $(OBJDIR)/geometry.o $(SRC)/geometry.f90
+
+$(OBJDIR)/algebra.o: $(SRC)/algebra.f90 $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/algebra.o $(SRC)/algebra.f90
+
+$(OBJDIR)/elements_1D.o: $(SRC)/elements_1D.f90 $(OBJDIR)/$(MODEL_VAR).o $(OBJDIR)/algebra.o $(OBJDIR)/overloading.o $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/elements_1D.o $(SRC)/elements_1D.f90
+
+$(OBJDIR)/$(MODEL_VAR).o: $(OBJDIR)/algebra.o $(SRC)/$(MODEL_VAR).f90  $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/$(MODEL_VAR).o $(SRC)/$(MODEL_VAR).f90
+
+$(OBJDIR)/scheme.o: $(SRC)/scheme.f90  $(OBJDIR)/$(MODEL_VAR).o $(OBJDIR)/elements_1D.o $(OBJDIR)/overloading.o $(OBJDIR)/aretes.o $(OBJDIR)/Model.o $(OBJDIR)/precision.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/scheme.o $(SRC)/scheme.f90
+
+$(OBJDIR)/$(UTIL).o:$(SRC)/$(UTIL).f90 $(OBJDIR)/precision.o $(OBJDIR)/param2d.o $(OBJDIR)/algebra.o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/$(UTIL).o $(SRC)/$(UTIL).f90
+
+$(OBJDIR)/$(INIT).o: $(SRC)/$(INIT).f90 $(OBJDIR)/param2d.o $(OBJDIR)/overloading.o $(OBJDIR)/$(UTIL).o $(OBJDIR)/precision.o $(OBJDIR)/$(UTIL).o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/$(INIT).o $(SRC)/$(INIT).f90
+
+$(OBJDIR)/timestepping.o: $(SRC)/timestepping.f90 $(OBJDIR)/overloading.o $(OBJDIR)/elements_1D.o $(OBJDIR)/$(MODEL_VAR).o $(OBJDIR)/param2d.o $(OBJDIR)/scheme.o $(OBJDIR)/Model.o $(OBJDIR)/precision.o $(OBJDIR)/$(UTIL).o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/timestepping.o $(SRC)/timestepping.f90
+
+$(OBJDIR)/$(POSTPROCESSING).o: $(SRC)/$(POSTPROCESSING).f90 $(OBJDIR)/param2d.o $(OBJDIR)/$(UTIL).o $(OBJDIR)/Model.o $(OBJDIR)/precision.o $(OBJDIR)/$(PREPROCESSING).o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/$(POSTPROCESSING).o $(SRC)/$(POSTPROCESSING).f90
+	
+$(OBJDIR)/precision.o: $(SRC)/precision.f90
+		       $(F90) $(FFLAGS) -o $(OBJDIR)/precision.o $(SRC)/precision.f90
+		      
+$(OBJDIR)/$(PREPROCESSING).o: $(SRC)/$(PREPROCESSING).f90 $(OBJDIR)/precision.o $(OBJDIR)/param2d.o $(OBJDIR)/overloading.o $(OBJDIR)/Model.o $(OBJDIR)/$(UTIL).o
+	$(F90) $(FFLAGS) -o $(OBJDIR)/$(PREPROCESSING).o $(SRC)/$(PREPROCESSING).f90
+		    
+
+
+clean:	
+	rm -rf $(OBJDIR)
+	rm -rf $(MODDIR)
+	rm -rf $(BINDIR)
+	rm $(SRC)/*.f90~ 
+	rm *.mod
