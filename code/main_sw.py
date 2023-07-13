@@ -12,7 +12,7 @@ import time_stepping
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"            #Test: "Sod", "Sod_smooth"
+test               = "Sod"            #Test: "Sod", "Sod_smooth", "Smooth_periodic"
 N_el               = 50               #Number of elements
 
 #Space
@@ -33,11 +33,11 @@ order_space        = 2                #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
+time_scheme        = "Euler"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 50                #Frequency for saving the solution
+freq               = 100                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
@@ -370,7 +370,7 @@ if printing==True:
 
 
 #Final plot to save
-if plotting==True:
+if plotting==False:
     plt.figure()
     plt.title("H")
     for inde in range(N_el):

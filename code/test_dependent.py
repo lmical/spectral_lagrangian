@@ -21,6 +21,16 @@ class DATA_CLASS:
             self.periodic=False
             # gravity
             self.g=9.81
+        elif test=="Smooth_periodic": #Sod
+            # Extrema
+            self.xL=0
+            self.xR=1
+            # Final time
+            self.T=0.1
+            # Periodicity of the mesh
+            self.periodic=True
+            # gravity
+            self.g=9.81
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
@@ -49,6 +59,9 @@ def Analytical_State(x,t,DATA):
             H=0.2+0.8*np.exp(1. - 1./(1.-((x-r0)/(r1-r0))**2))    
         else:
             H=0.2
+    elif DATA.test=="Smooth_periodic":
+        H=2+np.cos(2*np.pi*x)
+        v=1.
     else:
         print("Error in function Analytical_State, test not available")
         quit()
@@ -62,7 +75,7 @@ def Analytical_State(x,t,DATA):
 # Bathymetry in a point x
 #==============================================================
 def Bathymetry(x,DATA):
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
         B=0.
     else:
         print("Error in function Bathymetry, test not available")
@@ -76,7 +89,7 @@ def Bathymetry(x,DATA):
 # Derivative of the bathymetry in a point x
 #==============================================================
 def Derivative_Bathymetry(x,DATA):
-    if DATA.test=="Sod":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
         dB=0.
     else:
         print("Error in function Derivative_Bathymetry, test not available")
@@ -108,6 +121,13 @@ def IC(x_H,x_v,t,DATA):
                 H_field[inde,indi_l] = vec[0]
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
         v_field[:]=0.
+    elif DATA.test=="Smooth_periodic":
+        for inde in range(N_el):
+            for indi_l in range(local_nodes_H):
+                vec=Analytical_State(x_H[inde,indi_l],0,DATA)
+                H_field[inde,indi_l] = vec[0]
+                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
+        v_field[:]=1.
     else:
         print("Error in function IC, test not available")
         quit()
@@ -119,15 +139,21 @@ def IC(x_H,x_v,t,DATA):
 #==============================================================
 # Boundary condition
 #==============================================================
-def BC(H_field,v_field,B_field,x_v,DATA):
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
-        v_field[0]=0
-        v_field[-1]=0
-        x_v[0]=0
-        x_v[-1]=1
-        H_field[0,0]=1
-        H_field[-1,-1]=0.2
+def BC_state(DATA,x,H_other_side, B_other_side, v_other_side,boundary):
+    if DATA.periodic==True:
+        H=H_other_side
+        B=B_other_side
+        v=v_other_side
+    elif DATA.test=="Sod" or DATA.test=="Sod_smooth":
+        if boundary=="L":
+            H=1.
+            B=0.
+            v=0.
+        else:
+            H=0.2
+            B=0.
+            v=0.
     else:
-        print("Error in function BCs, test not available")
+        print("Problems in BC_state, test not available")
         quit()
-    return H_field,v_field,x_v
+    return H,B,v

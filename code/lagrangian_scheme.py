@@ -1,5 +1,6 @@
 import numpy as np
 import Riemann_solver
+import test_dependent
 
 #==============================================================
 # Obtaining Hhat_field at the beginning of the simulation for string mass conservation
@@ -246,7 +247,7 @@ def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_t
 # Coupling terms in the space residuals v
 # NB: To be multiplied by g
 #==============================================================
-def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, DATA):
+def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA):
     """
     # Coupling boundary terms to guarantee coupling
     CT_phi_i^K=int_{partial K} (etahat-eta|_K) 
@@ -265,9 +266,16 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
         global_indices_v=M_Local_to_Global[inde,:]
 
 
-        #In the first cell we skip the left RP
-        if inde==0:
-            pass
+        if inde==0: #Care for the BC
+            #Riemann Problem Left
+            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA,x_v[0],H_field[-1,-1], B_field[-1,-1], v_field[-1],"L")
+            H_inside  = H_field[inde,0]                            #First from the current cell
+            B_inside  = B_field[inde,0]                            #First from the current cell
+            v_inside    = v_field[global_indices_v[0]]             #v_continuous from first node of the current cell
+            q_outside = np.array([H_outside,H_outside*v_outside])  #L state
+            q_inside  = np.array([H_inside ,H_inside *v_inside])   #R state
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
+            CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #IMPORTANT: - sign because of normal
         else:
             #Riemann Problem Left
             H_outside = H_field[inde-1,-1]                       #Last from the left cell
@@ -279,9 +287,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
             Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
 
-            if 1==1:
-                Bhat=0
-                Hhat, HUhat=Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
+            # if 1==1:
+            #     Bhat=0
+            #     Hhat, HUhat=Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
 
 
             #Add contribution
@@ -289,8 +297,16 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 
         #In the lasst cell we skip the right RP
         
-        if inde==N_el-1:
-            pass
+        if inde==N_el-1: #Care for the BC
+            #Riemann Problem Right
+            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA,x_v[-1],H_field[0,0], B_field[0,0], v_field[0],"R")
+            H_inside  = H_field[inde,-1]                          #Last from the current cell
+            B_inside  = B_field[inde,-1]                          #Last from the current cell
+            v_inside  = v_field[global_indices_v[-1]]             #v_continuous from last node of the current cell
+            q_outside = np.array([H_outside,H_outside*v_outside]) #L state
+            q_inside  = np.array([H_inside ,H_inside *v_inside])  #R state
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
+            CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
         else:
             #Riemann Problem Right
             H_outside = H_field[inde+1,0]                        #First from the right cell
@@ -302,9 +318,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
             Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
 
-            if 1==1:
-                Bhat=0
-                Hhat, HUhat=Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
+            # if 1==1:
+            #     Bhat=0
+            #     Hhat, HUhat=Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
 
             #Add contribution
             CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
