@@ -6,7 +6,7 @@
 0.2   theta2 parameter in Burman stabilization second derivative term 
 0.1    cfl 
 100000    ktmax
-0.1     tmax
+0.07     tmax
 100     ifre
 1234       test case SW
 .FALSE.   !MOOD
