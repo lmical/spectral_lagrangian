@@ -6,7 +6,7 @@ import os
 # INPUT
 #==============================================================
 test="Smooth_periodic"
-order=4
+order=6
 #==============================================================
 #
 #
@@ -107,8 +107,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
 
         #Opening the file to write the rates of convergence
         fid = open(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".tex",'w')
-        print("  N     L1 error x     Order x     L1 Error v     Order v")
-        fid.write("  N   & L1 error x  &  Order x & L1 Error v  &  Order v\\ \n")  
+        print("  N     error x     Order x     Error v     Order v")
+        fid.write("  N   & error x  &  Order x & Error v  &  Order v\\ \n")  
         for indi in range(len(errors)): #Process the files
             if indi>0:
                 order = np.array([-np.log(errors[indi,j]/errors[indi-1,j])/(np.log(2)) for j in range(2)])
