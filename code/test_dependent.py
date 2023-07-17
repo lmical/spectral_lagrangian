@@ -9,8 +9,24 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test):
-        self.test = test
+    def __init__(self,test,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,jump,folder,printing,plotting):
+
+        #Somhow it is better to store also the input paramters in DATA
+        self.test               = test
+        self.N_el               = N_el
+        self.order_space        = order_space
+        self.time_scheme        = time_scheme
+        self.order_time         = order_time
+        self.CFL                = CFL           
+        self.freq               = freq              
+        self.N_max_iter         = N_max_iter             
+        self.scheme             = scheme
+        self.LaxFriedrichs      = LaxFriedrichs
+        self.jump               = jump
+        self.folder             = folder
+        self.printing           = printing
+        self.plotting           = plotting
+
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema
             self.xL=0
@@ -26,7 +42,7 @@ class DATA_CLASS:
             self.xL=0
             self.xR=1
             # Final time
-            self.T=0.1
+            self.T=0.05
             # Periodicity of the mesh
             self.periodic=True
             # gravity

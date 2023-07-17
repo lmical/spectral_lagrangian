@@ -33,11 +33,11 @@ order_space        = 2                #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "Euler"             #Time scheme #"Euler" "DeC"
+time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 100                #Frequency for saving the solution
+freq               = 500                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
@@ -49,7 +49,7 @@ jump               = "jc"
 #Folder where to store
 folder             = "Figures"
 printing           = True
-plotting           = False
+plotting           = True
 
 
 #==============================================================
@@ -231,7 +231,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test)
+DATA=test_dependent.DATA_CLASS(test,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,jump,folder,printing,plotting)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)
@@ -370,7 +370,7 @@ if printing==True:
 
 
 #Final plot to save
-if plotting==False:
+if plotting==True:
     plt.figure()
     plt.title("H")
     for inde in range(N_el):
