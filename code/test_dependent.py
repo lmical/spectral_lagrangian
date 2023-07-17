@@ -42,7 +42,7 @@ class DATA_CLASS:
             self.xL=0
             self.xR=1
             # Final time
-            self.T=0.05
+            self.T=0.07
             # Periodicity of the mesh
             self.periodic=True
             # gravity

@@ -43,7 +43,10 @@ def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_
     M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v)
     phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA)
-    ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v)
+    if DATA.LaxFriedrichs==True:
+        ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v)
+    else:
+        ST_i=np.zeros(len(phi_v))
 
     if DATA.periodic==True:
         M_v[0]=M_v[0]+M_v[-1]

@@ -12,11 +12,11 @@ import time_stepping
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"            #Test: "Sod", "Sod_smooth", "Smooth_periodic"
+test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic"
 N_el               = 50               #Number of elements
 
 #Space
-order_space        = 2                #Order in space
+order_space        = 5                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
