@@ -13,7 +13,7 @@ import time_stepping
 #INPUT PARAMETERS
 #==============================================================
 test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic"
-N_el               = 400              #Number of elements
+N_el               = 50              #Number of elements
 
 #Space
 order_space        = 2                #Order in space
@@ -37,7 +37,7 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.4               #CFL
-freq               = 500                #Frequency for saving the solution
+freq               = 200                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
@@ -49,7 +49,7 @@ jump               = "jc"
 #Folder where to store
 folder             = "Figures"
 printing           = True
-plotting           = True
+plotting           = False
 storing            = True
 
 
@@ -363,15 +363,13 @@ while(t<DATA.T):
             visualization.plotting_function(indt,t,x_H,H_field,x_v,v_field)
 
 
-
-
 #Final print
 if printing==True:
     visualization.printing_function(indt,t,H_field,v_field)
 
 
 #Final plot to save
-if plotting==True:
+if storing==True:
     plt.figure()
     plt.title("H")
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)

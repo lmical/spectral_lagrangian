@@ -54,9 +54,9 @@ def plotting_function(indt,t,x_H,H_field,x_v,v_field):
 # Function to store in a file
 #==============================================================
 def storing(H_field, v_field, x_v, B_field, local_values_v_in_H, M_Local_to_Global, DATA):
-    f=open(DATA.folder+"/"+DATA.test+"/"+DATA.test+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+str(DATA.N_el)+"_CFL_"+str(DATA.CFL)+".dat","w+")
-    f.write("  indi    x_v    v\n")
+    f=open(DATA.folder+"/"+DATA.test+"/v_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+"{:05d}".format(DATA.N_el)+"_CFL_"+str(DATA.CFL)+".dat","w+")
+    f.write("  indi,    x_v,    v,\n")
     for indi in range(len(v_field)):
-        towrite=" "+str(indi+1)+"     "+format(x_v[indi], '.14f')+"    "+format(v_field[indi], '.14f')+"\n"
+        towrite=" "+str(indi)+",     "+format(x_v[indi], '.14f')+",    "+format(v_field[indi], '.14f')+",\n"
         f.write(towrite)
     f.close()
