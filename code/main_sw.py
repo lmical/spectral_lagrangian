@@ -13,10 +13,10 @@ import time_stepping
 #INPUT PARAMETERS
 #==============================================================
 test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic"
-N_el               = 50               #Number of elements
+N_el               = 400              #Number of elements
 
 #Space
-order_space        = 5                #Order in space
+order_space        = 2                #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -36,7 +36,7 @@ order_space        = 5                #Order in space
 time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
-CFL                = 0.5               #CFL
+CFL                = 0.4               #CFL
 freq               = 500                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
@@ -50,6 +50,7 @@ jump               = "jc"
 folder             = "Figures"
 printing           = True
 plotting           = True
+storing            = True
 
 
 #==============================================================
@@ -373,18 +374,25 @@ if printing==True:
 if plotting==True:
     plt.figure()
     plt.title("H")
+    x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     for inde in range(N_el):
         plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
     #plt.legend()
     plt.xlabel("x")
     #plt.ylabel("y")
     plt.grid()
-    # plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+".pdf", format="pdf", bbox_inches="tight")
+    plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+"_CFL_"+str(CFL)+".pdf", format="pdf", bbox_inches="tight")
     plt.show()
-
-
     plt.plot(x_v,v_field)
     plt.show()
+
+
+
+
+if storing==True:
+    visualization.storing(H_field, v_field, x_v, B_field, local_values_v_in_H, M_Local_to_Global, DATA)
+
+
 
 print(test,"N_el",N_el,"order_space",order_space,"CFL",CFL)
 print("Maxima",np.max(H_field),np.max(v_field))
