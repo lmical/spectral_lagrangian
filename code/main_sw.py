@@ -12,11 +12,13 @@ import time_stepping
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic"
-N_el               = 50              #Number of elements
+test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", "Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
+perturbation       = 0                         #Perturbation
+
+N_el               = 50                        #Number of elements
 
 #Space
-order_space        = 2                #Order in space
+order_space        = 2                         #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -36,20 +38,21 @@ order_space        = 2                #Order in space
 time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
-CFL                = 0.4               #CFL
-freq               = 200                #Frequency for saving the solution
+CFL                = 0.5               #CFL
+freq               = 1000                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = False
+LaxFriedrichs      = True
+WB                 = False
 jump               = "jc"
 
 #Folder where to store
 folder             = "Figures"
 printing           = True
-plotting           = False
+plotting           = True
 storing            = True
 
 
@@ -70,7 +73,7 @@ storing            = True
 #==============================================================
 print("------------------------------------------")
 print("Starting simulation")
-print("Test:", test)
+print("Test:", test, "with perturbation", perturbation)
 print("Number of elements:", N_el)
 print("Order space:", order_space) 
 #print("...with basis functions for H and v:", type_H, type_v)
@@ -78,6 +81,8 @@ print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
 print("CFL: ", CFL)
+print("Lax-Friedrichs: ", LaxFriedrichs)
+print("Well-balancing: ", WB)
 print("Frequency for storing the data: ", freq)
 print("Maximal number of iterations: ", N_max_iter)
 print("------------------------------------------")
@@ -232,7 +237,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,jump,folder,printing,plotting)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)
@@ -273,6 +278,7 @@ x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh
 print("------------------------------------------")
 print("Variables initialization")
 H_field, B_field, v_field = test_dependent.IC(x_H, x_v, 0, DATA)
+H_field, v_field, DATA = test_dependent.insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA)
 
 #Getting the field on the reference element for strong mass conservation
 # Hhat_i = H_i(0)*det J(x_i,0)
@@ -324,7 +330,7 @@ if printing==True:
     visualization.printing_function(indt,t,H_field,v_field)
 if plotting==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
-    visualization.plotting_function(indt,t,x_H,H_field,x_v,v_field)
+    visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field)
 
 while(t<DATA.T):
     #Computation of the time step
@@ -340,9 +346,9 @@ while(t<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v=time_stepping.Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
     elif time_scheme=="DeC":
-        H_field, v_field, x_v=time_stepping.DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA, dec)
+        H_field, v_field, x_v, B_field=time_stepping.DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec)
     else:
         print("Time scheme not available")
         quit()
@@ -360,7 +366,7 @@ while(t<DATA.T):
             visualization.printing_function(indt,t,H_field,v_field)
         if plotting==True:
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
-            visualization.plotting_function(indt,t,x_H,H_field,x_v,v_field)
+            visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field)
 
 
 #Final print
@@ -374,7 +380,7 @@ if storing==True:
     plt.title("H")
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     for inde in range(N_el):
-        plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+        plt.plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*")
     #plt.legend()
     plt.xlabel("x")
     #plt.ylabel("y")

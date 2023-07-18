@@ -9,10 +9,11 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,jump,folder,printing,plotting):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting):
 
         #Somhow it is better to store also the input paramters in DATA
         self.test               = test
+        self.perturbation       = perturbation
         self.N_el               = N_el
         self.order_space        = order_space
         self.time_scheme        = time_scheme
@@ -22,6 +23,7 @@ class DATA_CLASS:
         self.N_max_iter         = N_max_iter             
         self.scheme             = scheme
         self.LaxFriedrichs      = LaxFriedrichs
+        self.WB                 = WB
         self.jump               = jump
         self.folder             = folder
         self.printing           = printing
@@ -37,7 +39,7 @@ class DATA_CLASS:
             self.periodic=False
             # gravity
             self.g=9.81
-        elif test=="Smooth_periodic": #Sod
+        elif test=="Smooth_periodic": #Smooth for convergence analysis with experimental order of accuracy
             # Extrema
             self.xL=0
             self.xR=1
@@ -47,6 +49,17 @@ class DATA_CLASS:
             self.periodic=True
             # gravity
             self.g=9.81
+        elif test=="Lake_At_Rest_Smooth" or test=="Lake_At_Rest_Not_Smooth": #Lake at rest with smooth or non-smooth bathymetry
+            # Extrema
+            self.xL=0
+            self.xR=25
+            # Final time
+            self.T=10.
+            # Periodicity of the mesh
+            self.periodic=True
+            # gravity
+            self.g=9.81
+
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
@@ -78,6 +91,9 @@ def Analytical_State(x,t,DATA):
     elif DATA.test=="Smooth_periodic":
         H=2+np.cos(2*np.pi*x)
         v=1.
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth":
+        H=0.5-Bathymetry(x,DATA)
+        v=0.
     else:
         print("Error in function Analytical_State, test not available")
         quit()
@@ -93,6 +109,22 @@ def Analytical_State(x,t,DATA):
 def Bathymetry(x,DATA):
     if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
         B=0.
+    elif DATA.test=="Lake_At_Rest_Smooth":
+        x0=10.
+        r=5.
+        B=0.
+        if (x > x0-r) and (x < x0+r):
+            B=0.2*np.exp(1. - 1./(1.-((x-x0)/r)**2.))    
+        else:
+            B=0.
+    elif DATA.test=="Lake_At_Rest_Not_Smooth":
+        x0=10.
+        r=2.
+        B=0.
+        if (x > x0-r) and (x < x0+r):
+            B=0.2-0.05*(x-x0)**2    
+        else:
+            B=0.
     else:
         print("Error in function Bathymetry, test not available")
         quit()
@@ -107,6 +139,22 @@ def Bathymetry(x,DATA):
 def Derivative_Bathymetry(x,DATA):
     if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
         dB=0.
+    elif DATA.test=="Lake_At_Rest_Smooth":
+        x0=10.
+        r=5.
+        dB=0.
+        if (x > x0-r) and (x < x0+r):
+            dB = -0.2*np.exp(1.-1./(1.-((x-x0)/r)**2))* 2.*(x-x0)/r**2/((1.-((x-x0)/r)**2)**2)
+        else:
+            dB=0.
+    elif DATA.test=="Lake_At_Rest_Not_Smooth":
+        x0=10.
+        r=2.
+        dB=0.
+        if (x > x0-r) and (x < x0+r):
+            dB=-2*0.05*(x-x0)    
+        else:
+            dB=0.
     else:
         print("Error in function Derivative_Bathymetry, test not available")
         quit()
@@ -144,10 +192,73 @@ def IC(x_H,x_v,t,DATA):
                 H_field[inde,indi_l] = vec[0]
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
         v_field[:]=1.
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth":
+        for inde in range(N_el):
+            for indi_l in range(local_nodes_H):
+                vec=Analytical_State(x_H[inde,indi_l],0,DATA)
+                H_field[inde,indi_l] = vec[0]
+                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
+        v_field[:]=0.
     else:
-        print("Error in function IC, test not available")
+        print("Error in test_dependent module, in function function IC, test not available")
         quit()
     return H_field, B_field, v_field
+#==============================================================
+#
+#
+#
+#==============================================================
+# Smooth perturbation
+#==============================================================
+def smoot_perturbation(x,x0,r,A):
+    p=0.
+    if(x>x0-r and x<x0+r):
+        p=A*np.exp(1-1/(1-((x-x0)/r)**2))
+
+    return p
+#==============================================================
+#
+#
+#
+#==============================================================
+# Insert perturbation
+#==============================================================
+def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
+    """
+    Insert perturbation
+    """
+
+    N_el, local_nodes_H = x_H.shape
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
+        if DATA.perturbation!= 0:
+            print("No perturbation provided for such test",DATA.test)
+            quit()
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth":
+        for inde in range(N_el):
+            for indi in range(local_nodes_H):
+                if DATA.perturbation==0:
+                    pass
+                else:
+                    x0=6
+                    r=0.5
+                    DATA.T=1.5                    
+                    if DATA.perturbation==1:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,5*10**(-1))
+                    elif DATA.perturbation==2:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,5*10**(-2))
+                    elif DATA.perturbation==3:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,5*10**(-3))
+                    elif DATA.perturbation==4:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,5*10**(-4))
+                    elif DATA.perturbation==5:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,5*10**(-5))
+                    else:
+                        print("No perturbation",DATA.perturbation,"available for test",DATA.test)
+                        quit()
+    else:
+        print("Error in test_dependent module, in function function insert_perturbation, test not available")
+        quit()
+    return H_field, v_field, DATA
 #==============================================================
 #
 #

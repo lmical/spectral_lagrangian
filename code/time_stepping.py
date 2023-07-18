@@ -8,7 +8,7 @@ import DeC
 #==============================================================
 # Euler method
 #==============================================================
-def Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA):
+def Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA):
     #Update
     #x
     x_v=x_v_old+dt*v_field_old
@@ -16,8 +16,9 @@ def Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, 
     v_field=v_field_old+dt*rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
     #H, with strong mass conservation
     H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
-
-
+    #B
+    x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
+    B_field=lagrangian_scheme.get_B(x_H,DATA)
 
     #---------------------------------------------------------------------------------
     # Test, explicit computation of the rhs
@@ -31,7 +32,7 @@ def Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, 
     #     quit()
     #---------------------------------------------------------------------------------
 
-    return H_field, v_field, x_v
+    return H_field, v_field, x_v, B_field
 #==============================================================
 #
 #
@@ -70,7 +71,7 @@ def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_
 #==============================================================
 # DeC method
 #==============================================================
-def DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, M_faces, DATA,dec):
+def DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA,dec):
 
     #Initialization of the structures
     #p = previous iteration
@@ -135,19 +136,21 @@ def DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
                 v_a[:,m] = v_field_old[:] + dt*sum([dec.theta[r,m]*rhs_v[:,r] for r in range(dec.M_sub+1)])
                 x_v_a[:,m] = x_v_old[:]   + dt*sum([dec.theta[r,m]*rhs_x_v[:,r] for r in range(dec.M_sub+1)])
                 H_a[:,:,m]=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v_a[:,m],local_derivatives_v_in_H,M_Local_to_Global)
-                B_a[:,:,m]=B_p[:,:,m]
+                x_H=lagrangian_scheme.get_x_H(x_v_a[:,m],local_values_v_in_H,M_Local_to_Global)
+                B_a[:,:,m]=lagrangian_scheme.get_B(x_H,DATA)
         else:
             v_a[:,dec.M_sub]= v_field_old[:]+dt*sum([dec.theta[r,dec.M_sub]*rhs_v[:,r] for r in range(dec.M_sub+1)])
             x_v_a[:,dec.M_sub]= x_v_old[:]+dt*sum([dec.theta[r,dec.M_sub]*rhs_x_v[:,r] for r in range(dec.M_sub+1)])
             H_a[:,:,dec.M_sub]=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v_a[:,dec.M_sub],local_derivatives_v_in_H,M_Local_to_Global)
-            B_a[:,:,dec.M_sub]=B_p[:,:,dec.M_sub]
+            x_H=lagrangian_scheme.get_x_H(x_v_a[:,dec.M_sub],local_values_v_in_H,M_Local_to_Global)
+            B_a[:,:,dec.M_sub]=lagrangian_scheme.get_B(x_H,DATA)
 
     H_field = H_a[:,:,dec.M_sub]
     v_field = v_a[:,dec.M_sub]
     x_v     = x_v_a[:,dec.M_sub]
+    B_field = B_a[:,:,dec.M_sub]
 
-
-    return H_field, v_field, x_v
+    return H_field, v_field, x_v, B_field
 
 
 

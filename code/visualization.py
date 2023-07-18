@@ -23,14 +23,14 @@ def printing_function(indt,t,H_field,v_field):
 #==============================================================
 # Function to plot H_field, v_field
 #==============================================================
-def plotting_function(indt,t,x_H,H_field,x_v,v_field):
+def plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field):
     N_el, N_local_nodes_H = x_H.shape
 
     #H
     plt.figure()
-    plt.title("H")
+    plt.title("\eta")
     for inde in range(N_el):
-        plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+        plt.plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*")
     #plt.legend()
     plt.xlabel("x")
     #plt.ylabel("y")
