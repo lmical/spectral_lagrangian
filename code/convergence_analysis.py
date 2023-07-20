@@ -6,7 +6,7 @@ import os
 # INPUT
 #==============================================================
 test="Smooth_periodic"
-order=6
+order=7
 #==============================================================
 #
 #
@@ -136,7 +136,7 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         plt.xlabel("$N_{elements}$")
         plt.ylabel("$L^1$ error")
         plt.savefig(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"pdf", format="pdf", bbox_inches="tight")
-        plt.savefig(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"png",dpi=600)
-        plt.show()
+        # plt.savefig(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"png",dpi=600)
+        # plt.show()
 
 
