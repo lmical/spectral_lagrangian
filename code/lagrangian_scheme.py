@@ -478,18 +478,47 @@ def get_B(x_H,DATA):
 #==============================================================
 # Getting v at x_H 
 #==============================================================
-def get_v(v_field,x_H,local_values_v_in_H,M_Local_to_Global):
+def get_v_in_x_H(v_field,x_H,local_values_v_in_H,M_Local_to_Global):
     """
     Getting v on x_H 
     """
 
     N_el, N_local_nodes_H=x_H.shape
-    v_in_H=np.zeros((N_el,N_local_nodes_H))
+    v_in_x_H=np.zeros((N_el,N_local_nodes_H))
     in_H_local_values_v=local_values_v_in_H.transpose()
 
     for inde in range(N_el): 
         global_indices_v = M_Local_to_Global[inde,:]    
         v_local          = v_field[global_indices_v]
-        v_in_H[inde,:]   = in_H_local_values_v @ v_local
+        v_in_x_H[inde,:]   = in_H_local_values_v @ v_local
 
-    return v_in_H
+    return v_in_x_H
+#==============================================================
+#
+#
+#
+#==============================================================
+# Getting H at x_v
+#==============================================================
+def get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global):
+    """
+    Getting H on x_v 
+    """
+
+    N_global_nodes_v=len(x_v)
+    H_in_x_v=np.zeros((N_global_nodes_v))
+    in_v_local_values_H=local_values_H_in_v.transpose()
+    N_el, N_local_nodes_H=H_field.shape
+    N_local_nodes_v=N_local_nodes_H+1
+
+    for inde in range(N_el): 
+        H_local          = H_field[inde,:]
+        global_indices_v = M_Local_to_Global[inde,:]    
+        H_in_x_v[global_indices_v] = H_in_x_v[global_indices_v] + in_v_local_values_H @ H_local
+
+    #NB: The exterma have been counted twice
+    H_in_x_v[::(N_local_nodes_v-1)]=H_in_x_v[::(N_local_nodes_v-1)]/2
+    H_in_x_v[0]=H_in_x_v[0]*2
+    H_in_x_v[-1]=H_in_x_v[-1]*2
+
+    return H_in_x_v
