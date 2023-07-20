@@ -268,7 +268,7 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 
         if inde==0: #Care for the BC
             #Riemann Problem Left
-            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA,x_v[0],H_field[-1,-1], B_field[-1,-1], v_field[-1],"L")
+            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[0], H_field[0], B_field[0], v_field[0], H_field[-1,-1], B_field[-1,-1], v_field[-1],"L")
             H_inside  = H_field[inde,0]                            #First from the current cell
             B_inside  = B_field[inde,0]                            #First from the current cell
             v_inside    = v_field[global_indices_v[0]]             #v_continuous from first node of the current cell
@@ -302,7 +302,7 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
         
         if inde==N_el-1: #Care for the BC
             #Riemann Problem Right
-            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA,x_v[-1],H_field[0,0], B_field[0,0], v_field[0],"R")
+            H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[-1], H_field[-1,-1], B_field[-1,-1], v_field[-1] ,H_field[0,0], B_field[0,0], v_field[0],"R")
             H_inside  = H_field[inde,-1]                          #Last from the current cell
             B_inside  = B_field[inde,-1]                          #Last from the current cell
             v_inside  = v_field[global_indices_v[-1]]             #v_continuous from last node of the current cell

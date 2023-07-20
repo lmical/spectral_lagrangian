@@ -12,8 +12,12 @@ import time_stepping
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", "Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
-perturbation       = 0                         #Perturbation
+test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+                                                #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
+                                                #"Supercritical_Smooth", "Supercritical_Not_Smooth"
+
+
+perturbation       = 0                          #Perturbation
 
 N_el               = 50                        #Number of elements
 
@@ -39,7 +43,7 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 1000                #Frequency for saving the solution
+freq               = 500                #Frequency for saving the solution
 N_max_iter         = 10000             #Maximal number of iterations
 
 
