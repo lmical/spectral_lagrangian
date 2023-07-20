@@ -43,8 +43,8 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 500                #Frequency for saving the solution
-N_max_iter         = 10000             #Maximal number of iterations
+freq               = 200                #Frequency for saving the solution
+N_max_iter         = 100             #Maximal number of iterations
 
 
 #Space discretization
@@ -241,7 +241,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)
@@ -334,7 +334,8 @@ if printing==True:
     visualization.printing_function(indt,t,H_field,v_field)
 if plotting==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
-    visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field)
+    H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+    visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
 while(t<DATA.T):
     #Computation of the time step
@@ -370,7 +371,8 @@ while(t<DATA.T):
             visualization.printing_function(indt,t,H_field,v_field)
         if plotting==True:
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
-            visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field)
+            H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+            visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
 
 #Final print
@@ -380,19 +382,9 @@ if printing==True:
 
 #Final plot to save
 if storing==True:
-    plt.figure()
-    plt.title("H")
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
-    for inde in range(N_el):
-        plt.plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*")
-    #plt.legend()
-    plt.xlabel("x")
-    #plt.ylabel("y")
-    plt.grid()
-    plt.savefig(folder+"/"+test+"/"+test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+"_CFL_"+str(CFL)+".pdf", format="pdf", bbox_inches="tight")
-    plt.show()
-    plt.plot(x_v,v_field)
-    plt.show()
+    H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+    visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
 
 
 
@@ -406,3 +398,5 @@ print(test,"N_el",N_el,"order_space",order_space,"CFL",CFL)
 print("Maxima",np.max(H_field),np.max(v_field))
 print("Minima",np.min(H_field),np.min(v_field))
 print("Average",np.average(H_field),np.average(v_field))
+
+

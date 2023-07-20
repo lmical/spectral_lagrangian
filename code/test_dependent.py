@@ -9,7 +9,7 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing):
 
         #Somhow it is better to store also the input paramters in DATA
         self.test               = test
@@ -28,6 +28,7 @@ class DATA_CLASS:
         self.folder             = folder
         self.printing           = printing
         self.plotting           = plotting
+        self.storing            = storing
 
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema
