@@ -471,3 +471,25 @@ def get_B(x_H,DATA):
             B_field[inde,indi]=test_dependent.Bathymetry(x_H[inde,indi],DATA)
 
     return B_field
+#==============================================================
+#
+#
+#
+#==============================================================
+# Getting v at x_H 
+#==============================================================
+def get_v(v_field,x_H,local_values_v_in_H,M_Local_to_Global):
+    """
+    Getting v on x_H 
+    """
+
+    N_el, N_local_nodes_H=x_H.shape
+    v_in_H=np.zeros((N_el,N_local_nodes_H))
+    in_H_local_values_v=local_values_v_in_H.transpose()
+
+    for inde in range(N_el): 
+        global_indices_v = M_Local_to_Global[inde,:]    
+        v_local          = v_field[global_indices_v]
+        v_in_H[inde,:]   = in_H_local_values_v @ v_local
+
+    return v_in_H
