@@ -43,7 +43,7 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 200                #Frequency for saving the solution
+freq               = 1000                #Frequency for saving the solution
 N_max_iter         = 100             #Maximal number of iterations
 
 
@@ -56,7 +56,7 @@ jump               = "jc"
 #Folder where to store
 folder             = "Figures"
 printing           = True
-plotting           = True
+plotting           = False
 storing            = True
 
 
@@ -329,6 +329,15 @@ print("Timestepping loop")
 t=0     #Time
 indt=0  #Counter
 
+if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth"):
+    print()
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("Warning, running a smooth test with first order limiting!")
+    print("You may want to really do it, I'm telling you just in case!")
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print()
+
+
 #Printing and plotting IC
 if printing==True:
     visualization.printing_function(indt,t,H_field,v_field)
@@ -390,7 +399,9 @@ if storing==True:
 
 
 if storing==True:
-    visualization.storing(H_field, v_field, x_v, B_field, local_values_v_in_H, M_Local_to_Global, DATA)
+    H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+    B_in_x_v=lagrangian_scheme.get_H_in_x_v(B_field,x_v,local_values_H_in_v,M_Local_to_Global)
+    visualization.storing(H_field, v_field, x_v, B_field, H_in_x_v, B_in_x_v, M_Local_to_Global, DATA)
 
 
 

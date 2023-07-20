@@ -46,7 +46,7 @@ def plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,stori
     axs[0,1].set_xlabel("x")
     axs[0,1].grid()
 
-    #H
+    #eta
     for inde in range(N_el):
         axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*")
     axs[1,0].set_title("\eta")
@@ -62,7 +62,7 @@ def plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,stori
     fig.tight_layout()
 
     if DATA.storing==True and storing_info==True:
-        plt.savefig(DATA.folder+"/"+DATA.test+"/"+DATA.test+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+"_CFL_"+str(DATA.CFL)+".pdf", format="pdf", bbox_inches="tight")
+        plt.savefig(DATA.folder+"/"+DATA.test+"/"+DATA.test+"_perturbation"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+str(N_el)+"_CFL_"+str(DATA.CFL)+".pdf", format="pdf", bbox_inches="tight")
 
 
     plt.show()
@@ -74,10 +74,10 @@ def plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,stori
 #==============================================================
 # Function to store in a file
 #==============================================================
-def storing(H_field, v_field, x_v, B_field, local_values_v_in_H, M_Local_to_Global, DATA):
-    f=open(DATA.folder+"/"+DATA.test+"/v_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+"{:05d}".format(DATA.N_el)+"_CFL_"+str(DATA.CFL)+".dat","w+")
-    f.write("  indi,    x_v,    v,\n")
+def storing(H_field, v_field, x_v, B_field, H_in_x_v, B_in_x_v, M_Local_to_Global, DATA):
+    f=open(DATA.folder+"/"+DATA.test+"/values_perturbation"+str(DATA.perturbation)+"_LxF"+str(DATA.LaxFriedrichs)+"_P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+"{:05d}".format(DATA.N_el)+"_CFL_"+str(DATA.CFL)+".dat","w+")
+    f.write(" indi,                  x_v,                   v,                   H,                   q,                 eta\n")
     for indi in range(len(v_field)):
-        towrite=" "+str(indi)+",     "+format(x_v[indi], '.14f')+",    "+format(v_field[indi], '.14f')+",\n"
+        towrite=format(indi, '5d')+",     "+format(x_v[indi], '.14f')+",    "+format(v_field[indi], '.14f')+",    "+format(H_in_x_v[indi], '.14f')+",    "+format(H_in_x_v[indi]*v_field[indi], '.14f')+",    "+format(H_in_x_v[indi]+B_in_x_v[indi], '.14f')+",\n"
         f.write(towrite)
     f.close()
