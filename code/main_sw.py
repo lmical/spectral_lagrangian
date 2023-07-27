@@ -389,21 +389,23 @@ if printing==True:
     visualization.printing_function(indt,t,H_field,v_field)
 
 
-#Final plot to save
+
 if storing==True:
+    #Final plot to save
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
     visualization.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
 
-
-
-
-if storing==True:
-    H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+    #Storing the final solution
+    #indi, x_v, v, H, q, eta
     B_in_x_v=lagrangian_scheme.get_H_in_x_v(B_field,x_v,local_values_H_in_v,M_Local_to_Global)
     visualization.storing(H_field, v_field, x_v, B_field, H_in_x_v, B_in_x_v, M_Local_to_Global, DATA)
 
-
+    #Compute error
+    if DATA.analytical_solution==True and DATA.perturbation==0:
+        visualization.compute_error(H_field, v_field, x_v, x_H, H_in_x_v, M_Local_to_Global, w_H, w_v, local_derivatives_v_in_H, local_derivatives_v, DATA)
+        visualization.plot_error(H_field, v_field, x_v, x_H, H_in_x_v, DATA)
+        
 
 print(test,"N_el",N_el,"order_space",order_space,"CFL",CFL)
 print("Maxima",np.max(H_field),np.max(v_field))

@@ -40,6 +40,8 @@ class DATA_CLASS:
             self.periodic=False
             # gravity
             self.g=9.81
+            # Analytical solution
+            self.analytical_solution=False
         elif test=="Smooth_periodic": #Smooth for convergence analysis with experimental order of accuracy
             # Extrema
             self.xL=0
@@ -50,6 +52,8 @@ class DATA_CLASS:
             self.periodic=True
             # gravity
             self.g=9.81
+            # Analytical solution
+            self.analytical_solution=False
         elif test=="Lake_At_Rest_Smooth" or test=="Lake_At_Rest_Not_Smooth": #Lake at rest with smooth or non-smooth bathymetry
             # Extrema
             self.xL=0
@@ -60,6 +64,8 @@ class DATA_CLASS:
             self.periodic=True
             # gravity
             self.g=9.81
+            # Analytical solution
+            self.analytical_solution=True
         elif test=="Supercritical_Smooth": #Supercritical with smooth or non-smooth bathymetry
             # Extrema
             self.xL=0
@@ -70,6 +76,8 @@ class DATA_CLASS:
             self.periodic=False
             # gravity
             self.g=9.81
+            # Analytical solution
+            self.analytical_solution=True
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
