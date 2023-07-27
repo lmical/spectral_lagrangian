@@ -6,13 +6,13 @@ import os
 # INPUT
 #==============================================================
 test="Smooth_periodic"
-order=7
+order=4
 #==============================================================
 #
 #
 #
 #==============================================================
-folder="./Figures/"+test
+folder="./Results/"+test
 degree_H=order-1
 degree_v=order
 local_DoFs_H=degree_H+1

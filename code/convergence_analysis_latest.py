@@ -5,14 +5,14 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod
-order=3
+test="Supercritical_Smooth"   #Smooth_periodic, Supercritical_Smooth, Sod
+order=4
 #==============================================================
 #
 #
 #
 #==============================================================
-folder="./Figures/"+test
+folder="./Results/"+test
 degree_H=order-1
 degree_v=order
 local_DoFs_H=degree_H+1

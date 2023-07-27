@@ -54,7 +54,7 @@ WB                 = False
 jump               = "jc"
 
 #Folder where to store
-folder             = "Figures"
+folder             = "Results"
 printing           = True
 plotting           = False
 storing            = True
