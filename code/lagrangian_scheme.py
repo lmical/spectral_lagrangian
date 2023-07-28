@@ -266,8 +266,10 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
         global_indices_v=M_Local_to_Global[inde,:]
 
 
+        #Riemann Problem Left
+        #outside  L
+        #inside   R
         if inde==0: #Care for the BC
-            #Riemann Problem Left
             H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[0], H_field[0], B_field[0], v_field[0], H_field[-1,-1], B_field[-1,-1], v_field[-1],"L")
             H_inside  = H_field[inde,0]                            #First from the current cell
             B_inside  = B_field[inde,0]                            #First from the current cell
@@ -281,7 +283,6 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[0]],DATA)
             CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #IMPORTANT: - sign because of normal
         else:
-            #Riemann Problem Left
             H_outside = H_field[inde-1,-1]                       #Last from the left cell
             B_outside = B_field[inde-1,-1]                       #Last from the left cell
             H_inside  = H_field[inde,0]                          #First from the current cell
@@ -298,8 +299,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             #Add contribution
             CT_phi_v[global_indices_v[0]]=CT_phi_v[global_indices_v[0]]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #IMPORTANT: - sign because of normal
 
-        #In the lasst cell we skip the right RP
-        
+        #Riemann Problem Right
+        #inside    L
+        #outside   R
         if inde==N_el-1: #Care for the BC
             #Riemann Problem Right
             H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[-1], H_field[-1,-1], B_field[-1,-1], v_field[-1] ,H_field[0,0], B_field[0,0], v_field[0],"R")
@@ -309,9 +311,12 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_outside = np.array([H_outside,H_outside*v_outside]) #L state
             q_inside  = np.array([H_inside ,H_inside *v_inside])  #R state
             if DATA.WB==True:
+                # Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
                 Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
             else:
+                # Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
                 Hhat, HUhat = Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
+
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[-1]],DATA)
 
             CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
@@ -325,9 +330,12 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_outside = np.array([H_outside,H_outside*v_both])   #L state
             q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
             if DATA.WB==True:
+                # Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
                 Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, DATA.g)
             else:
+                # Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
                 Hhat, HUhat = Riemann_solver.shallow_water_hll(q_outside, q_inside, DATA.g)
+
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[-1]],DATA)
 
 
@@ -522,3 +530,75 @@ def get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global):
     H_in_x_v[-1]=H_in_x_v[-1]*2
 
     return H_in_x_v
+
+
+def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA):
+
+    #In local_derivatives_v we have
+    #Rows basis functions
+    #Columns x_j_v
+    #I transpose it to have in each row a specifc x_i_v and in the columns the basis functions
+    in_v_local_derivatives_v=local_derivatives_v.transpose()
+
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+    N_f=len(M_faces)
+
+    phi_jump=np.zeros(len(v_field))
+
+    for indf in range(N_f):
+        el_L=M_faces[indf][0]
+        el_R=M_faces[indf][1]
+        if el_L==-1 or el_R==-1:
+            #Not in the interior, skip
+            continue
+        else:
+
+            #Computation of the jump
+            global_indices_L = M_Local_to_Global[el_L,:]
+            global_indices_R = M_Local_to_Global[el_R,:]
+
+            v_local_L        = v_field[global_indices_L]
+            v_local_R        = v_field[global_indices_R]
+
+            x_v_local_L      = x_v[global_indices_L]
+            x_v_local_R      = x_v[global_indices_R]
+
+            dxL              = np.sum(x_v_local_L*in_v_local_derivatives_v[-1,:])
+            dxR              = np.sum(x_v_local_R*in_v_local_derivatives_v[0,:])
+
+            dxiL             = 1/dxL
+            dxiR             = 1/dxR
+
+            dv_L             = np.sum(v_local_L*in_v_local_derivatives_v[-1,:]) * dxiL
+            dv_R             = np.sum(v_local_R*in_v_local_derivatives_v[0,:])  * dxiR
+
+            jump_dv=dv_R-dv_L
+
+            #Computation of the spectral radius
+            H=(H_field[el_L,-1]+H_field[el_R,0])/2
+            sr=np.abs(v_local_R[0])+np.sqrt(DATA.g*H)
+
+            #Computation of dx
+            dx=(x_v_local_R[-1]-x_v_local_L[0])/2
+
+
+            phi_L=np.zeros(N_local_nodes_v)
+            phi_R=np.zeros(N_local_nodes_v)
+
+            #CIP coefficient
+            alpha=DATA.delta_CIP*sr*dx**2
+
+            #Element left
+            for indi in range(N_local_nodes_v):
+                phi_L[indi]=alpha*jump_dv*(-in_v_local_derivatives_v[-1,indi])*dxiL
+
+            #Element right
+            for indi in range(N_local_nodes_v):
+                phi_R[indi]=alpha*jump_dv*(in_v_local_derivatives_v[0,indi])*dxiR
+
+
+            phi_jump[global_indices_L]=phi_jump[global_indices_L]+phi_L
+            phi_jump[global_indices_R]=phi_jump[global_indices_R]+phi_R
+
+
+    return phi_jump

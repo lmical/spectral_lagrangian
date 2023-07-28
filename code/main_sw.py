@@ -51,7 +51,7 @@ N_max_iter         = 100             #Maximal number of iterations
 scheme             = "Galerkin"
 LaxFriedrichs      = True
 WB                 = False
-jump               = "jc"
+jump               = "j0"
 
 #Folder where to store
 folder             = "Results"

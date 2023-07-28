@@ -62,8 +62,14 @@ def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_
         ST_i[0]=ST_i[0]+ST_i[-1]
         ST_i[-1]=ST_i[0]
 
+    if DATA.jump=="jc":
+        phi_jump=lagrangian_scheme.jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA)
+    else:
+        phi_jump=np.zeros(len(phi_v))
 
-    return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i)/M_v
+
+
+    return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i-phi_jump)/M_v
 #==============================================================
 #
 #

@@ -30,6 +30,13 @@ class DATA_CLASS:
         self.plotting           = plotting
         self.storing            = storing
 
+        if order_space==1: 
+            self.delta_CIP=0.119
+        elif order_space==2:
+            self.delta_CIP=3.46e-03
+        elif order_space>=3:
+            self.delta_CIP=1.13e-04          
+
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema
             self.xL=0

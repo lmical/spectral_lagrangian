@@ -154,6 +154,9 @@ def build_mesh(DATA,N_el,local_nodes_H,local_nodes_v):
         M_faces[0,0]    = N_el-1 
         M_faces[N_el,1] = 0
 
+        #Elimination of the last face
+        M_faces=M_faces[0:N_el,:]
+
     #-----------------------------------------------
     # print("Inside build_mesh")
     # print(local_nodes_H)
