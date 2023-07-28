@@ -171,8 +171,8 @@ def compute_error(H_field, v_field, x_v, x_H, H_in_x_v, M_Local_to_Global, w_H, 
     errorvbis=np.linalg.norm(v_sol-v_field)/np.sqrt(len(v_field))
 
     f=open(DATA.folder+"/"+DATA.test+"/errors_perturbation"+str(DATA.perturbation)+"_LxF"+str(DATA.LaxFriedrichs)+"_P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+"{:05d}".format(DATA.N_el)+"_CFL_"+str(DATA.CFL)+".dat","w+")
-    f.write("   L^1(v),       L^1(H),       L^1(q),      ||v||_2,      ||H||_2,\n")
-    towrite=format(errorv, '.3e')+",    "+format(errorH, '.3e')+",    "+format(errorq, '.3e')+",    "+format(errorvbis, '.3e')+",    "+format(errorHbis, '.3e')+",\n"
+    f.write(" N_el,       L^1(v),       L^1(H),       L^1(q),      ||v||_2,      ||H||_2,\n")
+    towrite=format(N_el, '5d')+",    "+format(errorv, '.3e')+",    "+format(errorH, '.3e')+",    "+format(errorq, '.3e')+",    "+format(errorvbis, '.3e')+",    "+format(errorHbis, '.3e')+",\n"
     f.write(towrite)
     f.close()
 #==============================================================

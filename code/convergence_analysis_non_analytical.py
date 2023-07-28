@@ -6,7 +6,7 @@ import os
 # INPUT
 #==============================================================
 test="Supercritical_Smooth"   #Smooth_periodic, Supercritical_Smooth, Sod
-order=4
+order=5
 #==============================================================
 #
 #
@@ -29,7 +29,7 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
             errorfiles.append(file)
     if count>1: #If yes go on, MAKE THE CONVERGENCE ANALYSIS
         errorfiles.sort() #Order the files
-        print(errorfiles)
+        # print(errorfiles)
         #Check where you are
         print("You are in the folder"+folder+" where you have "+str(count)+" solution files")
         #Experimental order of convergence assuming half mesh size in subsequent meshes
@@ -125,12 +125,12 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
             errors_vec_q[indr-1]=errorq
             errors_vec_eta[indr-1]=erroreta
 
-        print("Meshes elements",n_el_vec)
-        print("Errors x",errors_vec_x)
-        print("Errors v",errors_vec_v)
-        print("Errors H",errors_vec_H)
-        print("Errors q",errors_vec_q)
-        print("Errors eta",errors_vec_eta)
+        # print("Meshes elements",n_el_vec)
+        # print("Errors x",errors_vec_x)
+        # print("Errors v",errors_vec_v)
+        # print("Errors H",errors_vec_H)
+        # print("Errors q",errors_vec_q)
+        # print("Errors eta",errors_vec_eta)
 
         errors = np.zeros((len(errorfiles)-1,5))
         errors[:,0]=errors_vec_x.copy()
@@ -140,8 +140,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         errors[:,4]=errors_vec_eta.copy()
 
         #Opening the file to write the rates of convergence
-        fid = open(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".tex",'w')
-        print("    N           Error x     Order x       Error v     Order v         Error H     Order H         Error q     Order q      Error \eta  Order \eta")
+        fid = open(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".tex",'w')
+        print("    N         Error x     Order x         Error v     Order v         Error H     Order H         Error q     Order q      Error \eta  Order \eta")
         fid.write("  N   & Error x  &  Order x & Error v  &  Order v   & Error H  &  Order H & Error q  &  Order q   & Error \eta  &  Order \eta\\ \n")  
         for indi in range(len(errors)): #Process the files
             if indi>0:
@@ -173,8 +173,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         params = {'mathtext.default': 'regular' }   
         plt.xlabel("$N_{elements}$")
         plt.ylabel("$L^1$ error")
-        plt.savefig(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"pdf", format="pdf", bbox_inches="tight")
-        # plt.savefig(folder+"/convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"png",dpi=600)
+        plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"pdf", format="pdf", bbox_inches="tight")
+        # plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"png",dpi=600)
         # plt.show()
 
 
