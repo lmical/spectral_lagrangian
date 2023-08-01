@@ -29,6 +29,8 @@ class DATA_CLASS:
         self.printing           = printing
         self.plotting           = plotting
         self.storing            = storing
+        self.time               = 0.       
+        self.dt                 = 0.        
 
         if order_space==1: 
             self.delta_CIP=0.119

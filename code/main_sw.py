@@ -39,7 +39,7 @@ order_space        = 2                         #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "DeC"             #Time scheme #"Euler" "DeC"
+time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
@@ -56,7 +56,7 @@ jump               = "jc"               #j0,    jc
 #Folder where to store
 folder             = "Results"
 printing           = True
-plotting           = False
+plotting           = True
 storing            = True
 
 
@@ -326,7 +326,7 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 #==============================================================
 print("------------------------------------------")
 print("Timestepping loop")
-t=0     #Time
+DATA.time=0     #Time
 indt=0  #Counter
 
 if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth"):
@@ -340,17 +340,17 @@ if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smo
 
 #Printing and plotting IC
 if printing==True:
-    output.printing_function(indt,t,H_field,v_field)
+    output.printing_function(indt,DATA.time,H_field,v_field)
 if plotting==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-    output.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
+    output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
-while(t<DATA.T):
+while(DATA.time<DATA.T):
     #Computation of the time step
-    dt=DATA.T-t
+    dt=DATA.T-DATA.time
     dt_max=lagrangian_scheme.Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL)
-    dt=min(dt,dt_max)
+    DATA.dt=min(dt,dt_max)
 
     #Store solution in the previous time step
     x_v_old=x_v
@@ -360,9 +360,11 @@ while(t<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v, B_field=time_stepping.Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
     elif time_scheme=="DeC":
-        H_field, v_field, x_v, B_field=time_stepping.DeC_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec)
+        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec)
+    elif time_scheme=="SSPRK4":
+        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
     else:
         print("Time scheme not available")
         quit()
@@ -370,18 +372,18 @@ while(t<DATA.T):
 
 
     #t
-    t=t+dt
+    DATA.time=DATA.time+DATA.dt
     indt=indt+1
 
     #Only every freq timesteps
     if (indt%freq==0):
         #Printing and plotting IC
         if printing==True:
-            output.printing_function(indt,t,H_field,v_field)
+            output.printing_function(indt,DATA.time,H_field,v_field)
         if plotting==True:
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-            output.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
+            output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
 
     if indt>=N_max_iter:
@@ -390,7 +392,7 @@ while(t<DATA.T):
 
 #Final print
 if printing==True:
-    output.printing_function(indt,t,H_field,v_field)
+    output.printing_function(indt,DATA.time,H_field,v_field)
 
 
 
@@ -398,7 +400,7 @@ if storing==True:
     #Final plot to save
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-    output.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
+    output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
 
     #Storing the final solution
     #indi, x_v, v, H, q, eta

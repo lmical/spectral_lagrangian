@@ -24,7 +24,7 @@ def printing_function(indt,t,H_field,v_field):
 #==============================================================
 # Function to plot H_field, v_field
 #==============================================================
-def plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info):
+def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info):
     N_el, N_local_nodes_H = x_H.shape
     degree_H=N_local_nodes_H-1
     degree_v=degree_H+1

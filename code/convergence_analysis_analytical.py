@@ -6,7 +6,8 @@ import os
 # INPUT
 #==============================================================
 test="Supercritical_Smooth"   #Supercritical_Smooth
-order=5
+order=3
+jump="j0"                        #jc, j0
 #==============================================================
 #
 #
@@ -24,7 +25,7 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
     count=0
     errorfiles=[]
     for file in os.listdir(folder): #CONDITION: Is there more than 1 error files?
-        if file.startswith("errors_perturbation0_LxFFalse_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
+        if file.startswith("errors_perturbation0_LxFFalse_"+jump+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
             count=count+1
             errorfiles.append(file)
     if count>1: #If yes go on, MAKE THE CONVERGENCE ANALYSIS
