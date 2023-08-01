@@ -340,9 +340,14 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
             v=q/H
             B=0.
         else:
-            H=H_inside
-            B=B_inside
-            v=v_inside
+            #NB: This is not correct
+            # H=H_inside; B=B_inside; v=v_inside
+            #
+            # This yes. State from the inside guaranteed by the numerical flux
+            H=2.      
+            q=24      
+            v=q/H
+            B=0.
     else:
         print("Problems in BC_state, test not available")
         quit()

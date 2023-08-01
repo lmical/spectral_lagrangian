@@ -5,8 +5,8 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Supercritical_Smooth"   #Smooth_periodic, Supercritical_Smooth, Sod
-order=5
+test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod
+order=3
 #==============================================================
 #
 #
@@ -24,7 +24,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
     count=0
     errorfiles=[]
     for file in os.listdir(folder): #CONDITION: Is there more than 1 error files?
-        if file.startswith("values_perturbation0_LxFFalse_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
+        # if file.startswith("values_perturbation0_LxFFalse_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
+        if file.startswith("values_perturbation0_LxFFalse_j0_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
             count=count+1
             errorfiles.append(file)
     if count>1: #If yes go on, MAKE THE CONVERGENCE ANALYSIS

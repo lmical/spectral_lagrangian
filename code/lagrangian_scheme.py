@@ -532,7 +532,7 @@ def get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global):
     return H_in_x_v
 
 
-def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA):
+def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA): 
 
     #In local_derivatives_v we have
     #Rows basis functions
@@ -579,14 +579,16 @@ def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces
             sr=np.abs(v_local_R[0])+np.sqrt(DATA.g*H)
 
             #Computation of dx
-            dx=(x_v_local_R[-1]-x_v_local_L[0])/2
+            deltaxL=x_v_local_L[-1]-x_v_local_L[0]
+            deltaxR=x_v_local_R[-1]-x_v_local_R[0]
+            deltax=(deltaxR+deltaxL)/2
 
 
             phi_L=np.zeros(N_local_nodes_v)
             phi_R=np.zeros(N_local_nodes_v)
 
             #CIP coefficient
-            alpha=DATA.delta_CIP*sr*dx**2
+            alpha=DATA.delta_CIP*sr*deltax**2
 
             #Element left
             for indi in range(N_local_nodes_v):
@@ -600,5 +602,9 @@ def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces
             phi_jump[global_indices_L]=phi_jump[global_indices_L]+phi_L
             phi_jump[global_indices_R]=phi_jump[global_indices_R]+phi_R
 
+
+    if DATA.periodic==True:
+        phi_jump[0]=phi_jump[0]+phi_jump[-1]
+        phi_jump[-1]=phi_jump[0]
 
     return phi_jump

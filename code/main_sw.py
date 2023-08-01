@@ -12,7 +12,7 @@ import time_stepping
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
 
@@ -44,14 +44,14 @@ order_time         = order_space       #Order, only important for arbitrary high
 
 CFL                = 0.5               #CFL
 freq               = 1000                #Frequency for saving the solution
-N_max_iter         = 100             #Maximal number of iterations
+N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
 LaxFriedrichs      = True
 WB                 = False
-jump               = "j0"
+jump               = "jc"               #j0,    jc
 
 #Folder where to store
 folder             = "Results"
@@ -383,6 +383,10 @@ while(t<DATA.T):
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
             output.plotting_function(indt,t,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
+
+    if indt>=N_max_iter:
+        print("Total number of iterations reached", indt, N_max_iter)
+        break
 
 #Final print
 if printing==True:
