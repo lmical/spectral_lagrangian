@@ -41,26 +41,14 @@ def Euler_method(dt,H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, 
 # rhs function for the DeC update of v
 #==============================================================
 def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA):
-    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v)
-    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global)
+    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,DATA)
+    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global,DATA)
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA)
+
     if DATA.LaxFriedrichs==True:
-        ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v)
+        ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,DATA)
     else:
         ST_i=np.zeros(len(phi_v))
-
-    if DATA.periodic==True:
-        M_v[0]=M_v[0]+M_v[-1]
-        M_v[-1]=M_v[0]
-
-        phi_v[0]=phi_v[0]+phi_v[-1]
-        phi_v[-1]=phi_v[0]
-
-        CT_phi_v[0]=CT_phi_v[0]+CT_phi_v[-1]
-        CT_phi_v[-1]=CT_phi_v[0]
-
-        ST_i[0]=ST_i[0]+ST_i[-1]
-        ST_i[-1]=ST_i[0]
 
     if DATA.jump=="jc":
         phi_jump=lagrangian_scheme.jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA)

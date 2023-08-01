@@ -108,7 +108,7 @@ def Lumped_Mass_Matrix_K(w_v,in_v_local_derivatives_v,x_v_local):
 # NB: It is time-dependent because of the lumping
 # NB: Uses Lumped_Mass_Matrix_K
 #==============================================================
-def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
+def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,DATA):
     """
     With the assumed lumping, the mass matrix is diagonal and reads
     M_ii=sum_{K in K_i} w_i^K det J(x_i,t)|_Khat
@@ -160,6 +160,11 @@ def Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v):
             M_v[global_indices_v[indi]]=M_v[global_indices_v[indi]]+M_v_in_K[indi] 
     
 
+    if DATA.periodic==True:
+        M_v[0]=M_v[0]+M_v[-1]
+        M_v[-1]=M_v[0]
+
+
     return M_v
 #==============================================================
 #
@@ -192,7 +197,7 @@ def Space_Residuals_v_K(w_v,in_v_local_derivatives_H,H_local,B_local):
 # NB: Uses Space_residuals_v_K
 # NB: To be multiplied by g
 #==============================================================
-def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global):
+def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global,DATA):
     """
     With the assumed lumping, the space residuals read
     phi_i=sum_{K in K_i} sum_{x_j_H in K} w_i^K grad_xi psi_j(xi_i)
@@ -241,7 +246,13 @@ def Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_t
             #w_v[indi]*d_H_and_B
             #-------------------------------------------------------
             phi_v[global_indices_v[indi]]=phi_v[global_indices_v[indi]]+phi_i_v_in_K[indi] 
-    
+
+
+    if DATA.periodic==True:
+        phi_v[0]=phi_v[0]+phi_v[-1]
+        phi_v[-1]=phi_v[0]
+
+
     return phi_v
 #==============================================================
 # Coupling terms in the space residuals v
@@ -342,6 +353,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             #Add contribution
             CT_phi_v[global_indices_v[-1]]=CT_phi_v[global_indices_v[-1]]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
 
+    if DATA.periodic==True:
+        CT_phi_v[0]=CT_phi_v[0]+CT_phi_v[-1]
+        CT_phi_v[-1]=CT_phi_v[0]
 
     return CT_phi_v
 #==============================================================
@@ -370,7 +384,7 @@ def Lax_Friedrichs_K(v_local,Hmax):
 # Lax-Friedrichs stabilization
 # NB: Uses Lax_Friedrichs_K
 #==============================================================
-def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v):
+def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,DATA):
     """
     Computation
     phi_i=sum_{K in K_i} alpha (c_i-cbar_K)
@@ -390,6 +404,11 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v):
         ST_i_K=Lax_Friedrichs_K(v_local,Hmax)
         for indi in range(N_local_nodes_v):
             ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
+
+    if DATA.periodic==True:
+        ST_i[0]=ST_i[0]+ST_i[-1]
+        ST_i[-1]=ST_i[0]
+
 
     return ST_i
 #==============================================================
