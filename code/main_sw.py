@@ -54,9 +54,9 @@ WB                 = False
 jump               = "jc"               #j0,    jc
 
 #Folder where to store
-folder             = "Results"
+folder             = "New_Results"
 printing           = True
-plotting           = True
+plotting           = False
 storing            = True
 
 

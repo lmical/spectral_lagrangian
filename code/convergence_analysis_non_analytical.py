@@ -5,16 +5,21 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod
-order=3
+test="Supercritical_Smooth"   #Smooth_periodic, Supercritical_Smooth, Sod
+order_space=3
+time_scheme="DeC"
+jump="j0"                        #jc, j0
+CFL=0.5
+LxF=False
+
 #==============================================================
 #
 #
 #
 #==============================================================
-folder="./Results/"+test
-degree_H=order-1
-degree_v=order
+folder="./New_Results/"+test #Results_old SSPRK
+degree_H=order_space-1
+degree_v=order_space
 local_DoFs_H=degree_H+1
 local_DoFs_v=degree_v+1
 #==============================================================
@@ -23,9 +28,9 @@ local_DoFs_v=degree_v+1
 if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
     count=0
     errorfiles=[]
+    fileword="values_pert0_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+time_scheme+"_LxF"+str(LxF)+"_"+jump+"_"+"CFL"+str(CFL)
     for file in os.listdir(folder): #CONDITION: Is there more than 1 error files?
-        # if file.startswith("values_perturbation0_LxFFalse_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
-        if file.startswith("values_perturbation0_LxFFalse_j0_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"):
+        if file.startswith(fileword):
             count=count+1
             errorfiles.append(file)
     if count>1: #If yes go on, MAKE THE CONVERGENCE ANALYSIS
@@ -146,11 +151,11 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         fid.write("  N   & Error x  &  Order x & Error v  &  Order v   & Error H  &  Order H & Error q  &  Order q   & Error \eta  &  Order \eta\\ \n")  
         for indi in range(len(errors)): #Process the files
             if indi>0:
-                order = np.array([-np.log(errors[indi,j]/errors[indi-1,j])/(np.log(2)) for j in range(5)])
+                order_space = np.array([-np.log(errors[indi,j]/errors[indi-1,j])/(np.log(2)) for j in range(5)])
             else:
-                order = np.zeros(5)
-            print(format(int(n_el_vec[indi+1]), '5d'),"     ",format(errors[indi,0], '.3e'),"     ", format(order[0], '.3f'),"     ",format(errors[indi,1], '.3e'),"     ", format(order[1], '.3f'),"     ",format(errors[indi,2], '.3e'),"     ", format(order[2], '.3f'),"     ",format(errors[indi,3], '.3e'),"     ", format(order[3], '.3f'),"     ",format(errors[indi,4], '.3e'),"     ", format(order[4], '.3f'))
-            fid.write(format(int(n_el_vec[indi+1]), '5d')+"  &   "+format(errors[indi,0], '.3e')+"  &  "+format(order[0], '.3f')+"  &  "+format(errors[indi,1], '.3e')+" & "+format(order[1], '.3f')+"  &  "+format(errors[indi,2], '.3e')+" & "+format(order[2], '.3f')+"  &  "+format(errors[indi,3], '.3e')+" & "+format(order[3], '.3f')+"  &  "+format(errors[indi,4], '.3e')+" & "+format(order[4], '.3f')+" \\ \n")  
+                order_space = np.zeros(5)
+            print(format(int(n_el_vec[indi+1]), '5d'),"     ",format(errors[indi,0], '.3e'),"     ", format(order_space[0], '.3f'),"     ",format(errors[indi,1], '.3e'),"     ", format(order_space[1], '.3f'),"     ",format(errors[indi,2], '.3e'),"     ", format(order_space[2], '.3f'),"     ",format(errors[indi,3], '.3e'),"     ", format(order_space[3], '.3f'),"     ",format(errors[indi,4], '.3e'),"     ", format(order_space[4], '.3f'))
+            fid.write(format(int(n_el_vec[indi+1]), '5d')+"  &   "+format(errors[indi,0], '.3e')+"  &  "+format(order_space[0], '.3f')+"  &  "+format(errors[indi,1], '.3e')+" & "+format(order_space[1], '.3f')+"  &  "+format(errors[indi,2], '.3e')+" & "+format(order_space[2], '.3f')+"  &  "+format(errors[indi,3], '.3e')+" & "+format(order_space[3], '.3f')+"  &  "+format(errors[indi,4], '.3e')+" & "+format(order_space[4], '.3f')+" \\ \n")  
         fid.close()
 
         #Plot
