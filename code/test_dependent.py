@@ -63,6 +63,18 @@ class DATA_CLASS:
             self.g=9.81
             # Analytical solution
             self.analytical_solution=False
+        elif test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth": #Smooth for convergence analysis with experimental order of accuracy
+            # Extrema
+            self.xL=0
+            self.xR=10
+            # Final time
+            self.T=0.04
+            # Periodicity of the mesh
+            self.periodic=False
+            # gravity
+            self.g=9.81
+            # Analytical solution
+            self.analytical_solution=False
         elif test=="Lake_At_Rest_Smooth" or test=="Lake_At_Rest_Not_Smooth": #Lake at rest with smooth or non-smooth bathymetry
             # Extrema
             self.xL=0
@@ -118,6 +130,10 @@ def Analytical_State(x,t,DATA):
     elif DATA.test=="Smooth_periodic":
         H=2+np.cos(2*np.pi*x)
         v=1.
+    elif DATA.test=="Constant_Slope_Smooth" or DATA.test=="No_Slope_Smooth":
+        q=10
+        H=2
+        v=q/H
     elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth":
         H=0.5-Bathymetry(x,DATA)
         v=0.
@@ -143,8 +159,12 @@ def Analytical_State(x,t,DATA):
 # Bathymetry in a point x
 #==============================================================
 def Bathymetry(x,DATA):
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic"  or DATA.test=="No_Slope_Smooth":
         B=0.
+    elif DATA.test=="Constant_Slope_Smooth":
+        offset=6
+        slope=0.5
+        B=offset-slope*x
     elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Supercritical_Smooth":
         x0=10.
         r=5.
@@ -230,6 +250,15 @@ def IC(x_H,x_v,t,DATA):
                 H_field[inde,indi_l] = vec[0]
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
         v_field[:]=1.
+    elif DATA.test=="Constant_Slope_Smooth" or DATA.test=="No_Slope_Smooth":
+        for inde in range(N_el):
+            for indi_l in range(local_nodes_H):
+                vec=Analytical_State(x_H[inde,indi_l],0,DATA)
+                H_field[inde,indi_l] = vec[0]
+                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
+        q=10
+        H=2
+        v_field[:]=q/H
     elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth":
         for inde in range(N_el):
             for indi_l in range(local_nodes_H):
@@ -310,6 +339,19 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
                     else:
                         print("No perturbation",DATA.perturbation,"available for test",DATA.test)
                         quit()
+    elif DATA.test=="Constant_Slope_Smooth" or DATA.test=="No_Slope_Smooth":
+        for inde in range(N_el):
+            for indi in range(local_nodes_H):
+                if DATA.perturbation==0:
+                    pass
+                else:
+                    x0=5
+                    r=2.5
+                    if DATA.perturbation==1:
+                        H_field[inde,indi]=H_field[inde,indi]+smoot_perturbation(x_H[inde,indi],x0,r,1*10**(-1))
+                    else:
+                        print("No perturbation",DATA.perturbation,"available for test",DATA.test)
+                        quit()
     else:
         print("Error in test_dependent module, in function function insert_perturbation, test not available")
         quit()
@@ -335,6 +377,26 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
             H=0.2
             B=0.
             v=0.
+    elif DATA.test=="Constant_Slope_Smooth":
+        if boundary=="L":
+            H=2.
+            q=10.
+            v=q/H
+            offset=6
+            slope=0.5
+            B=offset-slope*x
+        else:
+            H=2.
+            q=10.
+            v=q/H
+            offset=6
+            slope=0.5
+            B=offset-slope*x
+    elif DATA.test=="No_Slope_Smooth":
+        H=2.
+        q=10.
+        v=q/H
+        B=0.
     elif DATA.test=="Supercritical_Smooth":
         if boundary=="L":
             H=2.      #H on the left

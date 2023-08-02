@@ -15,6 +15,7 @@ import time_stepping
 test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
+                                                #"Constant_Slope_Smooth"
 
 
 perturbation       = 0                          #Perturbation
@@ -43,7 +44,7 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 1000                #Frequency for saving the solution
+freq               = 800                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
@@ -78,15 +79,15 @@ storing            = True
 print("------------------------------------------")
 print("Starting simulation")
 print("Test:", test, "with perturbation", perturbation)
-print("Number of elements:", N_el)
-print("Order space:", order_space) 
+print("Number of elements: ",N_el)
+print("Order space:", order_space,"->","P"+str(order_space-1)+"P"+str(order_space)) 
 #print("...with basis functions for H and v:", type_H, type_v)
 print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
-print("CFL: ", CFL)
 print("Lax-Friedrichs: ", LaxFriedrichs)
-print("Well-balancing: ", WB)
+print("Jump: ", jump)
+print("CFL: ", CFL)
 print("Frequency for storing the data: ", freq)
 print("Maximal number of iterations: ", N_max_iter)
 print("------------------------------------------")
@@ -329,7 +330,7 @@ print("Timestepping loop")
 DATA.time=0     #Time
 indt=0  #Counter
 
-if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth"):
+if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Constant_Slope_Smooth"):
     print()
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print("Warning, running a smooth test with first order limiting!")
