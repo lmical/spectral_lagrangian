@@ -2,3 +2,6 @@ Smooth_periodic N_el 50 order_space 2 CFL 0.5 LxF jc
 Maxima 2.8320651578067966 3.1174230204767137
 Minima 1.8071621465050116 -1.1587470182123034
 Average 2.1870523750376973 0.9992133045130193
+
+
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc 0.5 50

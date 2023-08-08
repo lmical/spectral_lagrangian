@@ -8,6 +8,7 @@ import mesh
 import lagrangian_scheme
 import output
 import time_stepping
+import sys
 
 #==============================================================
 #INPUT PARAMETERS
@@ -55,7 +56,7 @@ WB                 = False
 jump               = "jc"               #j0,    jc
 
 #Folder where to store
-folder             = "New_Results"
+folder             = "Debug"
 printing           = True
 plotting           = False
 storing            = True
@@ -68,7 +69,33 @@ storing            = True
 #==============================================================
 # IF SPECIFIED FROM COMMAND LINE REPLACE THE INPUT PARAMETERS
 #==============================================================
-# ...
+# print(sys.argv,len(sys.argv))
+if len(sys.argv)>1:
+    test=sys.argv[1]
+if len(sys.argv)>2:
+    perturbation=int(sys.argv[2])
+if len(sys.argv)>3:
+    order_space=int(sys.argv[3])
+if len(sys.argv)>4:
+    time_scheme=sys.argv[4]
+    if time_scheme=="DeC":
+        order_time=order_space
+if len(sys.argv)>5:
+    if sys.argv[5]=="True":
+        LaxFriedrichs=True
+    elif sys.argv[5]=="False":
+        LaxFriedrichs=False
+    else:
+        print("Impossible to get LxF imput from keyboard")
+        quit()
+if len(sys.argv)>6:
+    jump=sys.argv[6]
+if len(sys.argv)>7:
+    CFL=float(sys.argv[7])
+if len(sys.argv)>8:
+    N_el=int(sys.argv[8])
+
+
 #==============================================================
 #
 #
