@@ -13,9 +13,11 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Transcritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
+                                                #"Subcritical_Smooth", "Subcritical_Not_Smooth"
+                                                #"Transcritical_Smooth", "Transcritical_Not_Smooth"
                                                 #"Constant_Slope_Smooth"
 
 
@@ -24,7 +26,7 @@ perturbation       = 0                          #Perturbation
 N_el               = 50                        #Number of elements
 
 #Space
-order_space        = 2                         #Order in space
+order_space        = 3                         #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -45,20 +47,20 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 800                #Frequency for saving the solution
+freq               = 100                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = True
+LaxFriedrichs      = False
 WB                 = False
-jump               = "jc"               #j0,    jc
+jump               = "j0"               #j0,    jc
 
 #Folder where to store
-folder             = "Debug"
+folder             = "New_Debug"
 printing           = True
-plotting           = False
+plotting           = True
 storing            = True
 
 

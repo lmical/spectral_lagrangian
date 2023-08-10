@@ -99,6 +99,30 @@ class DATA_CLASS:
             self.g=9.81
             # Analytical solution
             self.analytical_solution=True
+        elif test=="Subcritical_Smooth": #Subcritical with smooth or non-smooth bathymetry
+            # Extrema
+            self.xL=0
+            self.xR=25
+            # Final time
+            self.T=0.3
+            # Periodicity of the mesh
+            self.periodic=False
+            # gravity
+            self.g=9.81
+            # Analytical solution
+            self.analytical_solution=True
+        elif test=="Transcritical_Smooth": #Transcritical with smooth or non-smooth bathymetry
+            # Extrema
+            self.xL=0
+            self.xR=25
+            # Final time
+            self.T=0.3
+            # Periodicity of the mesh
+            self.periodic=False
+            # gravity
+            self.g=9.81
+            # Analytical solution
+            self.analytical_solution=True
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
@@ -146,6 +170,30 @@ def Analytical_State(x,t,DATA):
         hvec=np.roots(p)
         H=hvec[1]
         v=q0/H
+    elif DATA.test=="Subcritical_Smooth":
+        q0=4.42
+        hL=2.
+        #Exact
+        b=Bathymetry(x,DATA)
+        #Exact
+        p=[1., (b-q0**2/(2.*DATA.g*hL**2) - hL), 0., q0**2/(2.*DATA.g)]
+        hvec=np.roots(p)
+        H=hvec[1]
+        v=q0/H
+    elif DATA.test=="Transcritical_Smooth":
+        q0=1.53
+        zm=0.2
+        #Exact
+        b=Bathymetry(x,DATA)
+        hc=(q0/np.sqrt(DATA.g))**(2./3.)
+        p=[1., (b-q0**2/(2.*DATA.g*hc**2)-hc-zm), 0., q0**2/(2.*DATA.g)]
+        hvec=np.roots(p)
+        #Exact
+        if x<10:
+            H=hvec[0] 
+        else:
+            H=hvec[1]
+        v=q0/H
     else:
         print("Error in function Analytical_State in test_dependent module, test not available")
         quit()
@@ -165,7 +213,7 @@ def Bathymetry(x,DATA):
         offset=6
         slope=0.5
         B=offset-slope*x
-    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Supercritical_Smooth":
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
         x0=10.
         r=5.
         B=0.
@@ -195,7 +243,7 @@ def Bathymetry(x,DATA):
 def Derivative_Bathymetry(x,DATA):
     if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
         dB=0.
-    elif DATA.test=="Lake_At_Rest_Smooth":
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
         x0=10.
         r=5.
         dB=0.
@@ -266,7 +314,7 @@ def IC(x_H,x_v,t,DATA):
                 H_field[inde,indi_l] = vec[0]
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
         v_field[:]=0.
-    elif DATA.test=="Supercritical_Smooth":
+    elif DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
         for inde in range(N_el):
             for indi_l in range(local_nodes_H):
                 vec=Analytical_State(x_H[inde,indi_l],0,DATA)
@@ -309,7 +357,7 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
         if DATA.perturbation!= 0:
             print("No perturbation provided for such test",DATA.test)
             quit()
-    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth" or DATA.test=="Supercritical_Smooth":
+    elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Lake_At_Rest_Not_Smooth" or DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth"  or DATA.test=="Transcritical_Smooth":
         for inde in range(N_el):
             for indi in range(local_nodes_H):
                 if DATA.perturbation==0:
@@ -322,6 +370,10 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
                         DATA.T=1.5
                     elif DATA.test=="Supercritical_Smooth":
                         DATA.T=1.
+                    elif DATA.test=="Subcritical_Smooth":
+                        DATA.T=1.5
+                    elif DATA.test=="Transcritical_Smooth":
+                        DATA.T=1.5
                     else:
                         print("No final time set in insert_perturbation in test_dependent module, the test was", DATA.test)
                         quit()
@@ -397,21 +449,9 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
         q=10.
         v=q/H
         B=0.
-    elif DATA.test=="Supercritical_Smooth":
-        if boundary=="L":
-            H=2.      #H on the left
-            q=24      #q on the left
-            v=q/H
-            B=0.
-        else:
-            #NB: This is not correct
-            # H=H_inside; B=B_inside; v=v_inside
-            #
-            # This yes. State from the inside guaranteed by the numerical flux
-            H=2.      
-            q=24      
-            v=q/H
-            B=0.
+    elif DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
+            H,v=Analytical_State(x,0,DATA)
+            B=Bathymetry(x,DATA)
     else:
         print("Problems in BC_state, test not available")
         quit()
