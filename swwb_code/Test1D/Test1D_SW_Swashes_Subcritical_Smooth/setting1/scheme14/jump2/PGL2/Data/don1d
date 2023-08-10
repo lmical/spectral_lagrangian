@@ -1,0 +1,12 @@
+1000   nt
+12  itype 1: P1, 2: B2, 3: P2, 4:P3, 5: B3, 6: B4, 7: P4, 11,12,13,14: PGL
+3 3 .TRUE.   #order #iterations for DEC #staggered 
+14 2 0 scheme: 4=GAL, 14=GALWB, 24=GF, jump: 1 (Burman),2 (eta), 3(entropy), 4(residual), 5(residual spectral), 6(GF), 7(GF spectral), GF: 1=WB, 2=STANDARD
+0.3   theta parameter in Burman stabilization first derivative term  
+0.2   theta2 parameter in Burman stabilization second derivative term  
+0.1    cfl  
+100000000    ktmax
+3.0     tmax
+5000     ifre
+121 0       test case SW
+.FALSE.   !MOOD

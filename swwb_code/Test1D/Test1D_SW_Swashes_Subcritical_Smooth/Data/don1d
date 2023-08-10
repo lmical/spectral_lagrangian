@@ -1,0 +1,12 @@
+1000   nt
+14    itype 1: P1, 2: B2, 3: P2, 4:P3, 5: B3
+5 5 .FALSE.  ordre 3: # of iteration for DEC 
+4 1 0   scheme: 1=supg, 2=psi, 3=mix, 4: galerkin+jump, 5: psi+jump 6 blend+jump 7: psi+galerkin2??
+0.5 #0.119   theta parameter in Burman stabilization term 
+0.01   theta2 parameter in Burman stabilization second derivative term 
+0.05    cfl 
+100000    ktmax
+3.0     tmax
+1000     ifre
+121 0       test case SW
+.FALSE.   !MOOD

@@ -1,0 +1,608 @@
+The final time in DATA is not used, it is in init_bc
+
+also, not all the mentioned schemes are present
+MENTIONED SCHEMES
+scheme: 1=supg, 2=psi, 3=mix, 4: galerkin+jump, 5: psi+jump 6 blend+jump 7: psi+galerkin2??
+ACTUAL SCHEMES 
+-1 lxf
+4 galerkin+jump
+5 psi+jump
+
+->main_dec.f90
+
+!*TYPE(Pvar), DIMENSION(:,:), ALLOCATABLE:: resJ !*NOT USED
+!*REAL(dp), DIMENSION(3):: x=0._dp !*NOT USED
+
+!*INTEGER:: nb_args, n, lp, liter !*NOT USED
+INTEGER:: Impre !*AS IF IT WAS NOT USED
+
+!*TYPE(Pvar),DIMENSION(1):: FL,FR !*NOT USED
+!*INTEGER, DIMENSION(:), ALLOCATABLE :: ShIndArray!*NOT USED
+
+Var%Ncells=Mesh%ns !*PROBABLY NOT NEEDED !*Var%Ncells=Mesh%ns is always 4096, probably an old structure not used anymore
+DELETED Var%Ncells & Mesh%ns and there are no problems :)
+
+!*TYPE(Pvar), DIMENSION(:),ALLOCATABLE:: u_b, u_c !*NOT NEEDED
+
+!*ALERT A subroutine test is called (from timestepping) to perform the mood stabilization. It's basically all in SP, the real are declared as REAL and not REAL(DP)
+
+!*Also in the 1D case the boundary residuals of the different subtimesteps should be combined through the thetas.
+!*In this case it is not a big problem because we have 
+    !*STRONG IMPOSITION: nothing to combine (no boundary update so no boundary residuals)
+    !*PERIODIC: Var%un(1) and Var%un(Mesh%nt) (node residuals of the boundary nodes (first and last) and so combined) are given to the first and the last node.
+!*In 2d it is more critical: the weak boundary conditions generate boundary residuals that must be combined through the thetas and this must be corrected in the 2d code
+
+!*ALERT
+I report a problem on the strong imposition of the boundary conditions in 1d.Basically BC is called before updating the solution with in fin() 
+DO is=1, Mesh%ndofs
+       var%ua(is,k-1)=Var%up(is,k-1)-Var%un(is)*Mesh%aires(is) !*Updating
+ENDDO
+
+Whenever we want to impose strong Dirichlet (see for example case(4) in init_bc_euler), BC modifies Var%ua through
+Var%ua(k-1,i1)%u=whatever we want
+
+But then when we update we lose this information (because we set  var%ua(is,k-1)=Var%up(is,k-1)-Var%un(is)*Mesh%aires(is))
+I've talked a bit with Davide about it:One possibility is to call BC before and after the updating. This works but I think we lose a bit in "linearity" and "clarity" of the code. So I suggest to think a bit about it and to find a solution.
+NB:->Setting Var%un=0 doesn't work because later we would still havevar%ua(is,k-1)=Var%up(is,k-1)-Var%un(is)*Mesh%aires(is)=Var%up(is,k-1) 
+->so you may think that we could modify Var%up and set Var%un=0This doesn't work either because at the next subtimestep you would have a different value for Var%up
+For the moment I suggest to apply BCs before and after the updating but as I wrote, this is not a proper solution if we want to fix the code forever.
+
+
+!*n in Pas_de_temps to be declared with ._DP
+
+n_theta=0 !*<- It is a vector of integers, no need to declare it as DP
+
+
+
+->elements_1D
+
+TONS OF ._DP MISSING (for example in gradient_element)
+
+e%log !*NOT NEEDED, I commented and nothing changes
+
+e%n !*INTERNAL normal
+
+e%coeff_b=> NULL() !*NOT USED, not initialized, they can give segmentation fault in fact
+
+aire_element(e)
+   b is useless
+   a can be defined as a scalar
+   
+normale_element(e)
+   l useless and also the loop
+
+eval_func_element
+   x, alpha, beta, a ,b, c, aa, cc, flag
+   
+PROCEDURE, PUBLIC:: der_sec=>der_sec_element !*OLD, IT CAN BE REMOVED !*APPARENTLY an alternative to eval_der2
+     !*In practice much less complete, it lacks P2, P3
+     !*Moreover for B3 it gives as output sth of dimension 2 which is not so well clear what is
+     !*FURTHER it takes as input a vector of real and not of PVar. Definitely an old feature to remove   
+
+
+PROCEDURE, PUBLIC:: der2_poly=>der2_poly_element !*OLD, IT CAN BE REMOVED !*APPARENTLY another alternative to eval_der2
+     !*In practice much less complete, it lacks P2, P3
+     !*Moreover for B3 it gives as output sth of dimension 4 which is not so well clear what is
+     !*FURTHER it takes as input a vector of real and not of PVar. Definitely an old feature to remove
+     
+
+FUNCTION gradient_element(e,k,x)
+fy,fz useless
+
+average_element(e,u)
+i useless
+
+base_ref_element(e) !*ALERT
+Depending on the compiler not specifying ._DP can be dangerous
+
+eval_coeff_element_old(e) !*It can be removed !*IT IS NOT USED HERE AND NOT EVEN A PUBLIC PROCEDURE
+  !*ANYWAY IT IS NOT WRONG
+
+eval_coeff_element(e)
+eps !*NOT NEEDED
+!*NOT NEEDED
+REAL(dp), DIMENSION(2,2):: xp
+xp(1,1)=0.0_dp; xp(2,1)=1.0_dp; xp(1,2)=1.0_dp; xp(2,2)=0.0_dp
+
+->aretes !*Arete is the class of the boundaries of the elements which are faces in 3d, segments in 2d, points in 1d, 
+!*In this case (1d) it is almost useless
+!*We have a lot of useless fields which just make sense for higher dimension and are not be used/initialized here
+THREE FIELDS ONLY ARE IMPORTANT, THE OTHERS CAN BE DELETED
+!*I)bord !*GOOD !*It tells whether the arete is on the boundary of the domain or not
+!*NB: 
+!*Mesh%edge(1)%bord=T
+!*Mesh%edge(Mesh%nsegmt)%bord=Mesh%edge(Mesh%nt+1)%bord=T
+!*The others are F
+!*II) jt1=-1, jt2 =-1 ! les deux elements de par et d'autre de l'arete. !*GOOD
+!*The two (in 1d) elements sharing the arete 
+!*NB: The aretes at the boundary of the domain will have just one element !*IN THIS CASE IT IS SET jt1=jt2=that element !*Clearly this happens for the first and the last one
+!*Mesh%edge(1)%jt1=Mesh%edge(1)%jt2=1
+!*Mesh%edge(nsegmt)%jt1=Mesh%edge(nsegmt)%jt2=Mesh%nt
+!*For the rest we have
+!*Mesh%edge(indi)%jt1=indi-1
+!*Mesh%edge(indi)%jt2=indi
+
+
+
+!*NB:TO REMOVE THE FOLLOWING STRUCTURES YOU HAVE TO CLEAN AND RECOMPILE
+
+
+INTEGER:: nsommets, itype, nvertex! nbre de dofs, type element: 1-> P1 !*USELESS 
+!*nsommets !*-10, clearly not used, by logic it should be the number of DoFs in the "edge" which would be 1 in the 1d case
+!*itype -1, clearly not used, by logic it should be the itype 
+!*-1, clearly not used, by logic it should be the number of vertices in the "edge" which would be 1 in the 1d case
+
+INTEGER, DIMENSION(:,:), POINTER :: nu !*USELESS 
+
+REAL(dp), DIMENSION(:,:), POINTER :: coor !*USELESS !*NOT EVEN INITIALIZED -> If you try to print you get segmentation fault
+
+volume and jump_flag !*USELESS, moreover they were declared without._DP
+
+REAL(dp),  DIMENSION(:), POINTER :: n   =>Null() !*USELESS !*NOT EVEN INITIALIZED -> If you try to print you get segmentation fault
+
+!*INTEGER  :: log    ! logique !*Always 0 !*USELESS
+
+ALL THE QUADRATURE STRUCTURES
+
+
+->variable_def_euler
+
+ALERT: TONS OF ._DP MISSING SPECIALLY IN THE PARAMETERS
+For example pi or gamma
+ALSO REMOVE THE DP FROM THE EXPONENT WHEN IT IS A NATURAL **2 AND NOT ._DP
+
+FUNCTION roe_eul(e,u,n) RESULT (J) NOT NEEDED
+Inherited from 2d
+
+In flux: FUNCTION flux_eul(Var,x) RESULT(f)
+REAL(dp),       DIMENSION(n_dim), INTENT(in) :: x !*NOT NEEDED OR AT LEAST OPTIONAL
+
+FUNCTION source_euler(e,x,test) RESULT(s)
+Attempt to introduce the source. 
+It is not bad but probably not used in fact it is identically 0
+I leave it even if I think that the source must be in utils
+
+FUNCTION AbsJacobian_eul(Var,x) RESULT(J)
+!*REAL(dp) :: Vi2, u, H, eps, p !*NOT NEEDED
+
+lvectors
+!*REAL(dp) :: rho, u, p, a, E, H, gmm1, eps
+!*NB lvectors are got through inversion, it is better to directly define them to avoid the inverision of the matrix every time
+
+
+PROCEDURE, PUBLIC:: Nmat => Nmat_eul !*NOT NEEDED AND NOT EVEN PROPERLY DEFINED AT THE END IT IS SET 0._DP
+
+!*These two last functions are drafts of the positive and the negative parts of the Jacobian but they are not public and not used
+-min_mat_eul
+-max_mat_eul
+
+
+->timestepping
+Adjust the indentation of edge_main_update and add a comment where you say that
+even if in fin() edge_main_update is called only for DATA%ischema==5 .OR. DATA%ischema==4 it is called also in mood so the IFs make sense 
+!*Anyway note how in the "standard" case where we do not have mood we enter in these IFs
+
+!*ALERT
+!*THIS IS NOT EVEN COMPILED, I GUESS IT BELONGS TO THE PREVIOUS VERSION OF THE DeC, WHERE THE OPERATOR L^1 WAS MORE COMPLICATED.
+!*ANYWAY IT IS NOT USED
+!*I SMELL THAT IT COULD ALSO BE WRONG -> Before the updating ua and up are equal so 
+!*up1(l,lp)-ua1(l,lp)
+!*I DO NOT DELETE 
+!*DAVIDE TOLD ME THAT IT IS IMPORTANT FOR SO I LEAVE IT
+!*ANYWAY TO BE USED YOU MUST DO STH ON ua OR up OTHERWISE THEY ARE THE SAME
+#if (1==0)
+              !Gauss-Seidel like
+              DO l=1,e1%nsommets
+                 DO lp=1, k-1
+                    u1(l)=u1(l)-GAMMA(lp,DATA%iordret-1,DATA%iordret)* (up1(l,lp)-ua1(l,lp))
+                 ENDDO
+              ENDDO
+
+              DO l=1,e2%nsommets
+                 DO lp=1,k-1
+                    u2(l)=u2(l)-GAMMA(lp,DATA%iordret-1,DATA%iordret)* (up2(l,lp)-ua2(l,lp))
+                 ENDDO
+              ENDDO
+#endif
+
+SUBROUTINE test(k_iter,Debug,Var, mesh, DATA, flux_mood) !*ALERT IT WAS MOSTLY IN SP, I'M CHANGING IT INTO DP
+
+
+->scheme.f90
+FUNCTION galerkin
+is not used anymore. (Now we use galerkin_new.)
+I tried to comment it and it runs without problems,
+I tried to rename it and it runs without problems.
+so actually galerkin is not used anymore
+I leave it because it computes the galerkin residuals with the integration by parts (in galerkin_new it performs the integration integrating directly phi div f without passing the derivative on the test function) and it may be useful to have it already implmented even if it is not used.
+NB: IT MUST BE CORRECTED 
+I REMOVED
+u_loc   = e%eval_func(u       ,e%quad(:,iq))
+AND THE FIRST ALTERNATIVE OF THE IF DELETING THE IF AND TAKING JUST THE #ELSE
+#if (1==1)
+          ! not quadrature free
+          fluxloc=u_loc%flux(xx) ! warning: mismatch between bary coord and e%coord
+
+BECAUSE the flux is nonlinear and you cannot expect to compute it on the combination of the u in time thorugh the thetas and get the combination of the fluxes in the different subtimesteps through the thetas
+NB: This problem exists also in 2d
+
+lxf
+!*NOT USED !*u_diff(i)=(u(i)-vbar(i)) 
+The loop on i is useless
+
+jump
+Some ._DP missing
+
+Add the DP
+ubar1%u(l)= SUM(uu1%u(l))/REAL(SIZE(uu1))
+ubar2%u(l)= SUM(uu2%u(l))/REAL(SIZE(uu2))
+
+jump_old NOT USED, not even public. FUrther I made it public and I tested it, it doesn't work so I deleted it.
+
+NB:I moved a bit some functions and subroutines to make a logic flow: for example, now I have
+galerkin
+galerkin_new
+lxf
+psi_galerkin
+jump
+limit
+limit_char
+limit_var
+
+->geometry
+
+dx=DATA%Length/REAL(nt,DP) <-DP
+
+._DP missing in the definition of the stuff for internal DoFs
+
+
+k=0 and several k=k+1 not used
+
+Very misleading comments in the construction of the edges
+
+       Mesh%aires(e%nu)=Mesh%aires(e%nu)+e%volume/REAL(e%nsommets,DP)<- DP
+
+->init_bc_euler
+
+Wrong unit of measures in the comments
+They should be
+[kg/m^3]
+[kg/m^3*m/s]
+[J/m^3]
+I corrected them
+Let's add a comment saying that we give the IC in term of conserved variables (and as values that must be later projected into the space of the coefficients)
+
+usual problem with dp
+
+->utils 
+NOT USED for Euler
+
+usual problem with dp
+
+->algebra
+some missing ._DP
+I was tired and I just made sure that there were no missing DP or variables in SP
+
+->postprocessing
+sol(l)IC(e%coor(l)-DATA%temps,DATA) only good for linear advection with speed=1
+I substituted it with
+sol(l)=0._DP !*In case it is known, this is the exact solution which one can use to have feedbacks or to make convergence analyses. For example in the linear advection with speed a=1 we have sol(l)IC(e%coor(l)-DATA%temps,DATA)
+
+There is a redundant
+u(l)=Var%ua(e%nu(l),0)
+
+NOT USED
+DO k=1, e%nsommets 
+    base(k)=e%base(k,e%x(:,l))
+    grad(:,k)=e%gradient(k,e%x(:,l))
+ENDDO
+
+base and grad actually useless, I deleted them
+
+In some files we write the same information. This is due to the fact that some of them are overwritten every time (the "last" files), while some are written for the first time.
+DESPITE THIS, some files could be redundant, check.
+
+
+-> CORRECTION THE UPDATING LOOP
+Now it goes k=2,DATA%iordret 
+I will change it k=1,DATA%iordret-1
+
+List of the changes:
+
+*) in main_dec
+
+the loop in which we call fin()
+BEFORE: DO k=2, DATA%iordret
+NOW: DO k=1, DATA%iordret-1
+
+in the loop
+BEFORE: DATA%temps = tn + alpha(k-1,DATA%iordret)*dt
+NOW: DATA%temps = tn + alpha(k,DATA%iordret)*dt
+
+in fin()
+update of the solution
+BEFORE:
+DO is=1, Mesh%ndofs
+   var%ua(is,k-1)=Var%up(is,k-1)-Var%un(is)*Mesh%aires(is) !*Updating
+ENDDO
+NOW:
+DO is=1, Mesh%ndofs
+   var%ua(is,k)=Var%up(is,k)-Var%un(is)*Mesh%aires(is) !*Updating
+ENDDO
+
+Now we must correct three subroutines
+main_update in timestepping
+edge_main_update in timestepping
+BC in init_bc
+
+main_update and edge_main_update take k as input and inside they use k-1
+    
+*) in timestepping we must correct the k-1 to k 
+
+in main_update
+BEFORE:
+DO l=1,e%nsommets
+    difference(l)=up(l,k-1)-up(l,0) 
+ENDDO
+NOW:
+DO l=1,e%nsommets
+    difference(l)=up(l,k)-up(l,0) 
+ENDDO
+
+BEFORE:
+flux_c(l,:)= flux_c(l,:)+ theta(lp,k-1,DATA%iordret)* up_P(l,lp)%flux((/e%coor(l)/))
+uu(l)      = uu(l)      + theta(lp,k-1,DATA%iordret)* up  (l,lp)
+source_c(l)= source_c(l)+ theta(lp,k-1,DATA%iordret)* up_P(l,lp)%source((/e%coor(l)/),DATA%test)
+NOW:
+flux_c(l,:)= flux_c(l,:)+ theta(lp,k,DATA%iordret)* up_P(l,lp)%flux((/e%coor(l)/)) 
+uu(l)      = uu(l)      + theta(lp,k,DATA%iordret)* up  (l,lp) 
+source_c(l)= source_c(l)+ theta(lp,k,DATA%iordret)* up_P(l,lp)%source((/e%coor(l)/),DATA%test)
+
+Loop inside the #if(1==0)
+BEFORE: DO lp=1,k-1
+NOW: DO lp=1,k
+
+in edge_main_update
+combination of the coefficients of the first element
+BEFORE:
+u1(l)=u1(l)+theta(lp,k-1,DATA%iordret)* up1(l,lp)
+NOW:
+u1(l)=u1(l)+theta(lp,k,DATA%iordret)* up1(l,lp)
+
+BEFORE: lp=k-1
+NOW: lp=k
+
+combination of the coefficients of the second element
+BEFORE:
+u2(l)=u2(l)+theta(lp,k-1,DATA%iordret)* up2(l,lp)
+NOW:
+u2(l)=u2(l)+theta(lp,k,DATA%iordret)* up2(l,lp)
+
+BEFORE: lp=k-1
+NOW: lp=k
+
+2 Loops inside the #if(1==0)
+BEFORE: DO lp=1,k-1
+NOW: DO lp=1,k
+
+BEFORE: DO lp=1,k-1
+NOW: DO lp=1,k
+
+*) in init_bc_euler
+
+in CASE(3)
+BEFORE:
+Var%un(i1)%u(2) = 2.0_dp*Var%ua(k-1,i1)%u(2)
+Var%un(iN)%u(2) = 2.0_dp*Var%ua(k-1,iN)%u(2)
+AFTER:
+Var%un(i1)%u(2) = 2.0_dp*Var%ua(k,i1)%u(2)
+Var%un(iN)%u(2) = 2.0_dp*Var%ua(k,iN)%u(2)
+
+in CASE(4)
+BEFORE:
+Var%ua(k-1,i1)%u(1) = 1.0_dp
+Var%ua(k-1,i1)%u(2) = 3.0_dp
+Var%ua(k-1,i1)%u(3) = 4.5_dp + 1.7857_dp
+AFTER:
+Var%ua(k,i1)%u(1) = 1.0_dp
+Var%ua(k,i1)%u(2) = 3.0_dp
+Var%ua(k,i1)%u(3) = 4.5_dp + 1.7857_dp
+
+NB: 
+Corrected the updating loop from k=2,order to k=1, order-1. NB: I corrected everything: main_update, edge_main_update, ecc... But for what concerns the BCs I only corrected init_bc_euler. One should correct them in the other equations setting k-1->k
+
+OTHER EQUATIONS
+
+*) in init_bc_wave_1D
+in CASE(3)
+BEFORE:
+! reflective
+Var%un(i1)%u(2) = 2.0_dp*Var%ua(k-1,i1)%u(2)
+Var%un(iN)%u(2) = 2.0_dp*Var%ua(k-1,iN)%u(2)
+AFTER:
+! reflective
+Var%un(i1)%u(2) = 2.0_dp*Var%ua(k,i1)%u(2)
+Var%un(iN)%u(2) = 2.0_dp*Var%ua(k,iN)%u(2)
+
+
+*) in init_bc_sw
+in CASE(4) (also in the comment XD)
+BEFORE:
+Var%ua(i1,k-1)%u(1) = 1.0_dp
+Var%ua(i1,k-1)%u(2) = 3.0_dp
+! Var%ua(k-1,i1)%u(3) = 4.5_dp + 1.7857_dp
+AFTER:
+Var%ua(i1,k)%u(1) = 1.0_dp
+Var%ua(i1,k)%u(2) = 3.0_dp
+! Var%ua(k,i1)%u(3) = 4.5_dp + 1.7857_dp
+
+in CASE(21)
+BEFORE:
+Var%ua(i1,k-1)%u(1) = 0.5_dp
+Var%ua(iN,k-1)%u(1) = 0.5_dp
+Var%ua(i1,k-1)%u(2) = 0.0_dp
+Var%ua(iN,k-1)%u(2) = 0.0_dp
+AFTER
+Var%ua(i1,k)%u(1) = 0.5_dp
+Var%ua(iN,k)%u(1) = 0.5_dp
+Var%ua(i1,k)%u(2) = 0.0_dp
+Var%ua(iN,k)%u(2) = 0.0_dp
+
+in CASE(22,23)
+BEFORE:
+Var%ua(i1,k-1)%u(2) = 4.42_dp
+Var%ua(iN,k-1)%u(1) = 2._dp!MIN(2.0_dp,Var%ua(k-1,iN)%u_lim(1) ) 
+AFTER:
+Var%ua(i1,k)%u(2) = 4.42_dp
+Var%ua(iN,k)%u(1) = 2._dp!MIN(2.0_dp,Var%ua(k,iN)%u_lim(1) ) 
+
+in CASE(31)
+BEFORE:
+eta = 0._dp !profile_bathymetry( DATA%test, (/ DATA%domain_left /) )
+Var%un(iN)%u(:) = 0._dp
+Var%ua(i1,k-1)%u(1) = 0.37_dp+0.0615*SIN(DATA%temps*12.*ASIN(1.)/10.)-bathymetry(DATA%test,DATA%domain_left)
+Var%ua(iN,k-1)%u(1) = 0.0_dp
+Var%ua(iN,k-1)%u(2) = 0.0_dp
+! Var%ua(k-1,iN)%u_lim(1) = 2._dp!MIN(2.0_dp,Var%ua(k-1,iN)%u_lim(1) ) 
+AFTER:
+eta = 0._dp !profile_bathymetry( DATA%test, (/ DATA%domain_left /) )
+Var%un(iN)%u(:) = 0._dp
+Var%ua(i1,k)%u(1) = 0.37_dp+0.0615*SIN(DATA%temps*12.*ASIN(1.)/10.)-bathymetry(DATA%test,DATA%domain_left)
+Var%ua(iN,k)%u(1) = 0.0_dp
+Var%ua(iN,k)%u(2) = 0.0_dp
+! Var%ua(k,iN)%u_lim(1) = 2._dp!MIN(2.0_dp,Var%ua(k,iN)%u_lim(1) ) 
+
+in CASE(24)
+BEFORE:
+!dirichlet bc
+! PRINT*, "BC for i1. iN", i1, iN
+! PRINT*, Var%ua(k-1,i1)
+! PRINT*, Var%ua(k-1,iN)
+! Var%un(i1) = 0._dp
+! Var%un(iN) = 0._dp
+! Var%ua(k-1,i1)%u_lim(1) = 1.01445
+Var%ua(i1,k-1)%u(2) = 1.53_dp
+IF (Var%ua(iN,k-1)%u(1) >0.66 ) THEN
+   Var%ua(iN,k-1)%u(1) = 0.60
+ENDIF
+! Var%ua(k-1,iN)%u_lim(1) = 0.405781 !MIN(0.66_dp,Var%ua(k-1,iN)%u_lim(1) ) 
+! Var%ua(k-1,iN)%u_lim(2) = 1.53_dp
+AFTER:
+!dirichlet bc
+! PRINT*, "BC for i1. iN", i1, iN
+! PRINT*, Var%ua(k,i1)
+! PRINT*, Var%ua(k,iN)
+! Var%un(i1) = 0._dp
+! Var%un(iN) = 0._dp
+! Var%ua(k,i1)%u_lim(1) = 1.01445
+Var%ua(i1,k)%u(2) = 1.53_dp
+IF (Var%ua(iN,k)%u(1) >0.66 ) THEN
+   Var%ua(iN,k)%u(1) = 0.60
+ENDIF
+! Var%ua(k,iN)%u_lim(1) = 0.405781 !MIN(0.66_dp,Var%ua(k,iN)%u_lim(1) ) 
+! Var%ua(k,iN)%u_lim(2) = 1.53_dp
+
+in CASE(25)
+BEFORE:
+!dirichlet bc
+Var%ua(i1,k-1)%u(2) = 0.18_dp
+Var%ua(iN,k-1)%u(1) = 0.33_dp
+AFTER:
+!dirichlet bc
+Var%ua(i1,k)%u(2) = 0.18_dp
+Var%ua(iN,k)%u(1) = 0.33_dp
+
+in CASE(26)
+BEFORE:
+!dirichlet bc
+Var%ua(i1,k-1)%u(2) = 0.3_dp
+Var%ua(iN,k-1)%u(1) = 0.3_dp
+AFTER:
+!dirichlet bc
+Var%ua(i1,k)%u(2) = 0.3_dp
+Var%ua(iN,k)%u(1) = 0.3_dp
+
+*) in init_bc_scalar
+in CASE(1,2)
+BEFORE:
+! outflow
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)
+Var%un(p1)=0._dp
+Var%un(pN)=0._dp
+Var%ua(p1,k-1)%u(1) = 1._dp
+AFTER:
+! outflow
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)
+Var%un(p1)=0._dp
+Var%un(pN)=0._dp
+Var%ua(p1,k)%u(1) = 1._dp
+
+in CASE(10)
+BEFORE:
+! Dirichlet
+Var%ua(i1,k-1)%u(1) = sin(ACOS(-1.)*(-a*DATA%temps))*0.1_dp 
+Var%ua(iN,k-1)%u(1) = sin(ACOS(-1.)*(2.0-a*DATA%temps))*0.1_dp 
+AFTER:
+! Dirichlet
+Var%ua(i1,k)%u(1) = sin(ACOS(-1.)*(-a*DATA%temps))*0.1_dp 
+Var%ua(iN,k)%u(1) = sin(ACOS(-1.)*(2.0-a*DATA%temps))*0.1_dp 
+
+in CASE(100)
+BEFORE:
+! weak periodic
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)       Var%un(p1)%u(1)=Var%un(p1)%u(1)+Var%dt*0.5*( Var%ua(k-1,p1)%u(1)-Var%ua(k-1,pN)%u(1) )
+Var%un(pN)%u(1)=Var%un(pN)%u(1)+Var%dt*0.5*( Var%ua(k-1,p1)%u(1)-Var%ua(k-1,pN)%u(1) )
+AFTER:
+! weak periodic
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)       Var%un(p1)%u(1)=Var%un(p1)%u(1)+Var%dt*0.5*( Var%ua(k,p1)%u(1)-Var%ua(k,pN)%u(1) )
+Var%un(pN)%u(1)=Var%un(pN)%u(1)+Var%dt*0.5*( Var%ua(k,p1)%u(1)-Var%ua(k,pN)%u(1) )
+
+*) in init_bc_burgers
+
+in CASE(1,2)
+BEFORE:
+! outflow
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)
+Var%un(p1)=0._dp
+Var%un(pN)=0._dp
+Var%ua(p1,k-1)%u(1) = 1._dp
+AFTER:
+! outflow
+p1=i1
+pN=iN
+a0=Var%un(p1)
+a1=Var%un(pN)
+Var%un(p1)=0._dp
+Var%un(pN)=0._dp
+Var%ua(p1,k)%u(1) = 1._dp
+
+in CASE(10)
+BEFORE:
+Var%un(i1)%u(1) = 0._dp
+Var%un(iN)%u(1) = 0._dp
+Var%ua(i1,k-1)%u(1) = 0._dp
+Var%ua(iN,k-1)%u(1) = 0._dp
+AFTER:
+Var%un(i1)%u(1) = 0._dp
+Var%un(iN)%u(1) = 0._dp
+Var%ua(i1,k)%u(1) = 0._dp
+Var%ua(iN,k)%u(1) = 0._dp
+
+
+
+
