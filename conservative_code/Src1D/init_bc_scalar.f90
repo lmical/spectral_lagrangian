@@ -52,7 +52,7 @@ CONTAINS
     SELECT CASE(DATA%test) !*Choice of the test
     CASE(0)
         DATA%tmax = 1._dp
-        Var%u(1)=COS(2._DP*Pi*x)
+        Var%u(1)=COS(2._DP*Pi*(x-1._DP*DATA%temps))
     CASE default
        PRINT*, "Wrong test number for scalar_ic, test = ", DATA%test
        STOP
