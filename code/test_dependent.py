@@ -178,7 +178,7 @@ def Analytical_State(x,t,DATA):
         #Exact
         p=[1., (b-q0**2/(2.*DATA.g*hL**2) - hL), 0., q0**2/(2.*DATA.g)]
         hvec=np.roots(p)
-        H=hvec[1]
+        H=hvec[0]
         v=q0/H
     elif DATA.test=="Transcritical_Smooth":
         q0=1.53
