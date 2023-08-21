@@ -1,0 +1,7 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Governing equations and motivation}{3}{0}{1}
+\beamer@sectionintoc {2}{Continuous FEM}{17}{0}{2}
+\beamer@sectionintoc {3}{Well-balancing}{24}{0}{3}
+\beamer@subsectionintoc {3}{1}{Spatial part}{25}{0}{3}
+\beamer@subsectionintoc {3}{2}{Stabilization, continuous interior penalty}{30}{0}{3}
+\beamer@sectionintoc {4}{Numerical results}{37}{0}{4}
