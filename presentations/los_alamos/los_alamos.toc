@@ -2,8 +2,10 @@
 \beamer@sectionintoc {1}{Governing equations}{3}{0}{1}
 \beamer@sectionintoc {2}{Scheme and motivation}{6}{0}{2}
 \beamer@sectionintoc {3}{Numerics}{16}{0}{3}
-\beamer@sectionintoc {4}{Continuous FEM}{22}{0}{4}
-\beamer@sectionintoc {5}{Well-balancing}{29}{0}{5}
-\beamer@subsectionintoc {5}{1}{Spatial part}{30}{0}{5}
-\beamer@subsectionintoc {5}{2}{Stabilization, continuous interior penalty}{35}{0}{5}
-\beamer@sectionintoc {6}{Numerical results}{42}{0}{6}
+\beamer@subsectionintoc {3}{1}{Sod}{17}{0}{3}
+\beamer@subsectionintoc {3}{2}{Smooth periodic}{18}{0}{3}
+\beamer@sectionintoc {4}{Continuous FEM}{25}{0}{4}
+\beamer@sectionintoc {5}{Well-balancing}{33}{0}{5}
+\beamer@subsectionintoc {5}{1}{Spatial part}{34}{0}{5}
+\beamer@subsectionintoc {5}{2}{Stabilization, continuous interior penalty}{39}{0}{5}
+\beamer@sectionintoc {6}{Numerical results}{46}{0}{6}

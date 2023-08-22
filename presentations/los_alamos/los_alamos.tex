@@ -563,22 +563,84 @@ However, only a point evaluation
 \section{Numerics}
 \frame\sectionpage
 
+\subsection{Sod}
+
+
+\begin{frame}\frametitle{Sod}
+
+
+    \begin{columns}
+
+        \begin{column}{0.40\textwidth}
+        
+\begin{figure}
+     \centering
+         \includegraphics[width=0.9\textwidth]{figures/sod/reference.png}
+         \caption{Reference}
+\end{figure}
+   		\end{column}
+        \begin{column}{0.60\textwidth}
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.40\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/o2.pdf}
+         \caption{order 2}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.40\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/o3.pdf}
+         \caption{order 3}
+     \end{subfigure}\\
+     \begin{subfigure}[b]{0.40\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/o4.pdf}
+         \caption{order 4}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.40\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/o5.pdf}
+         \caption{order 5}
+     \end{subfigure}
+\end{figure}
+
+		\end{column}
+
+	\end{columns}
+
+\end{frame}
+
+\subsection{Smooth periodic}
+
 
 \begin{frame}
-\frametitle{Numerics, Sod (Sorry for low quality)}
+\frametitle{Numerics, Convergence}
 
+\begin{align*}
+\begin{cases}
+H=2+cos(2\pi x)\\
+v=1
+\end{cases}
+\end{align*}
+
+%$T=0.07$
 
 \begin{figure}
      \centering
-     \begin{subfigure}[b]{0.3\textwidth}
+     \begin{subfigure}[b]{0.40\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{figures/sod/reference.png}
+         \includegraphics[width=\textwidth]{figures/smooth_periodic/eul.png}
+         \caption{Eulerian}
      \end{subfigure}
-     \begin{subfigure}[b]{0.8\textwidth}
+     \begin{subfigure}[b]{0.50\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{figures/sod/my_results.png}
-     \end{subfigure}
+         \includegraphics[width=\textwidth]{figures/smooth_periodic/lagr.pdf}
+         \caption{Lagrangian}
+     \end{subfigure}\\
 \end{figure}
+
+
+
 
 
 \end{frame}
@@ -587,18 +649,11 @@ However, only a point evaluation
 \begin{frame}
 \frametitle{Numerics, Convergence\footnote{Mantri, Oeffner, Ricchiuto, Fully well balanced entropy controlled DGSEM, 2022} ($2p$)}
 
-\begin{align}
-\begin{cases}
-H=2+cos(2\pi x)\\
-v=1
-\end{cases}
-\end{align}
-
 
 
 \begin{figure}
      \centering
-         \includegraphics[width=0.8\textwidth]{figures/smooth_periodic/conv.png}
+         \includegraphics[width=0.55\textwidth]{figures/smooth_periodic/conv.png}
 \end{figure}
 
 
@@ -608,7 +663,7 @@ v=1
 \begin{frame}
 \frametitle{Numerics, well-balancing}
 
-In particular (in Eulerian) $\textcolor{red}{\frac{\partial}{\partial t}\uvec{u}\equiv 0 ~ \Leftrightarrow ~ \frac{\partial}{\partial x}\boldsymbol{F}(\uvec{u})=\boldsymbol{S}(x,\uvec{u}) }$)
+In particular (in Eulerian) $\textcolor{red}{\frac{\partial}{\partial t}\uvec{u}\equiv 0 ~ \Leftrightarrow ~ \frac{\partial}{\partial x}\boldsymbol{F}(\uvec{u})=\boldsymbol{S}(x,\uvec{u}) }$
 
 
 \begin{itemize}
@@ -644,6 +699,49 @@ $$\eta=H+B\equiv const$$
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Numerics, well-balancing}
+
+Lake at rest is exactly preserved
+
+\begin{align*}
+\frac{d}{dt}\uvec{x}=\textcolor{red}{\uvec{v}}, \quad \frac{d}{dt}\uvec{v}=\uvec{r}, \quad \text{SMC}
+\end{align*}
+
+\begin{align*}
+&H(\uvec{x}(\uvec{\xi},t),t)=\frac{\widehat{H}(\uvec{\xi})}{det \uvec{J}(\uvec{\xi},t)}, \quad \uvec{J}(\uvec{\xi},t)=\frac{\partial \uvec{x}}{\partial \uvec{\xi}}(\uvec{\xi},t)
+\end{align*}
+
+\begin{align*}
+\sum_{K \in K_i} & \sum_{\uvec{x}_j \in K} \Bigg(\int_K \varphi_i \varphi_j d \uvec{x}\Bigg) \frac{d}{dt}\uvec{v}_j(t)\\
+&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}\textcolor{red}{(H_h+B_h)}  d\uvec{x}\Bigg] - \sum_{K \in K_i} \uvec{CT}_i^K -\uvec{ST}_i
+\end{align*}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Numerics, well-balancing}
+
+\begin{align*}
+\sum_{K \in K_i} & \sum_{\uvec{x}_j \in K} \Bigg(\int_K \varphi_i \varphi_j d \uvec{x}\Bigg) \frac{d}{dt}\uvec{v}_j(t)\\
+&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}\textcolor{black}{(H_h+B_h)}  d\uvec{x}\Bigg] - \sum_{K \in K_i} \uvec{CT}_i^K -\uvec{ST}_i
+\end{align*}
+
+
+\begin{align*}
+\uvec{CT}_i^K=g\int_{\partial K} \varphi_i \textcolor{red}{(\eta^*-\eta\vert_K)} \uvec{\nu} d \uvec{\sigma}
+\end{align*}
+
+
+
+\begin{align*}
+\uvec{ST}^{CIP}_i:=\sum_{f}\alpha_f  \biggl\llbracket \frac{\partial}{\partial x} \varphi_i\biggr\rrbracket  \biggl\llbracket \frac{\partial}{\partial x} \textcolor{red}{v} \biggr\rrbracket, \quad \uvec{ST}^{LxF}_i:= \sum_{K \in K_i} \alpha_K \textcolor{red}{(\uvec{v}_i-\overline{\uvec{v}}_K)}
+\end{align*}
+
+
+\end{frame}
+
 
 
 \begin{frame}
@@ -667,15 +765,41 @@ with $A=5\cdot 10^{-5}$.
 
 \begin{frame}
 \frametitle{Numerics, well-balancing}
+\centering
 
+Order 5, 30 elements
 
 \begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.3\textwidth}
          \centering
-         \includegraphics[width=1.2\textwidth]{figures/lakeatrest/perturbation.png}
+         \includegraphics[width=\textwidth]{figures/lakeatrest/eul_nonWB.pdf}
+         \caption{Eulerian, non WB}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/lakeatrest/eul.pdf}
+     \caption{Eulerian, WB}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/lakeatrest/lagr.pdf}
+     \caption{Lagrangian}
+     \end{subfigure}
 \end{figure}
 
 
 \end{frame}
+
+
+
+
+\begin{figure}
+     \centering
+         \includegraphics[width=0.9\textwidth]{figures/supercritical_smooth/conv.png}
+\end{figure}
+
+
 
 \section{Continuous FEM}
 \frame\sectionpage
