@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2023.6.1)  22 AUG 2023 10:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2023.6.1)  22 AUG 2023 11:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -979,18 +979,18 @@ LaTeX Font Info:    Trying to load font information for U+stmry on input line 2
 (/usr/share/texlive/texmf-dist/tex/latex/stmaryrd/Ustmry.fd) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./los_alamos.toc)
-<frontespizio.png, id=90, 1204.5pt x 1197.47375pt>
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 221.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+<figures/LANL_logo.png, id=95, 476.78125pt x 218.8175pt>
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 221.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [2
 
- <./frontespizio.png>]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 224.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ <./figures/LANL_logo.png>]
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 224.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [3
 
 ]
@@ -1002,134 +1002,134 @@ No file sslide.tex.
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
 (Font)              using `U/stmry/m/n' instead on input line 291.
 
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 291.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 291.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 [4
 
 
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 335.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 335.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [5
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 339.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 339.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [6
 
 ]
-<figures/lagrangian_maps.pdf, id=246, 614.295pt x 398.288pt>
+<figures/lagrangian_maps.pdf, id=252, 614.295pt x 398.288pt>
 File: figures/lagrangian_maps.pdf Graphic file (type pdf)
 <use figures/lagrangian_maps.pdf>
 Package pdftex.def Info: figures/lagrangian_maps.pdf  used on input line 361.
 (pdftex.def)             Requested size: 154.09483pt x 99.906pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 361.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 361.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [7
 
  <./figures/lagrangian_maps.pdf>]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 389.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 391.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [8
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 425.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 427.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [9
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 456.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 461.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [10
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 482.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 487.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [11
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 500.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 505.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [12
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 513.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 518.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [13
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 536.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 541.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 
 [14
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 560.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 565.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [15
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 564.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 569.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [16
 
 ]
-<figures/sod/reference.png, id=519, 1082.0425pt x 662.475pt>
+<figures/sod/reference.png, id=526, 1082.0425pt x 662.475pt>
 File: figures/sod/reference.png Graphic file (type png)
 <use figures/sod/reference.png>
-Package pdftex.def Info: figures/sod/reference.png  used on input line 611.
+Package pdftex.def Info: figures/sod/reference.png  used on input line 616.
 (pdftex.def)             Requested size: 123.27399pt x 75.47037pt.
-<figures/sod/o2.pdf, id=520, 395.90533pt x 327.20317pt>
+<figures/sod/o2.pdf, id=527, 395.90533pt x 327.20317pt>
 File: figures/sod/o2.pdf Graphic file (type pdf)
 <use figures/sod/o2.pdf>
-Package pdftex.def Info: figures/sod/o2.pdf  used on input line 611.
+Package pdftex.def Info: figures/sod/o2.pdf  used on input line 616.
 (pdftex.def)             Requested size: 82.18405pt x 67.92084pt.
-<figures/sod/o3.pdf, id=521, 395.90533pt x 327.20317pt>
+<figures/sod/o3.pdf, id=528, 395.90533pt x 327.20317pt>
 File: figures/sod/o3.pdf Graphic file (type pdf)
 <use figures/sod/o3.pdf>
-Package pdftex.def Info: figures/sod/o3.pdf  used on input line 611.
+Package pdftex.def Info: figures/sod/o3.pdf  used on input line 616.
 (pdftex.def)             Requested size: 82.18405pt x 67.92084pt.
-<figures/sod/o4.pdf, id=522, 395.90533pt x 327.20317pt>
+<figures/sod/o4.pdf, id=529, 395.90533pt x 327.20317pt>
 File: figures/sod/o4.pdf Graphic file (type pdf)
 <use figures/sod/o4.pdf>
-Package pdftex.def Info: figures/sod/o4.pdf  used on input line 611.
+Package pdftex.def Info: figures/sod/o4.pdf  used on input line 616.
 (pdftex.def)             Requested size: 82.18405pt x 67.92084pt.
-<figures/sod/o5.pdf, id=523, 395.90533pt x 327.20317pt>
+<figures/sod/o5.pdf, id=530, 395.90533pt x 327.20317pt>
 File: figures/sod/o5.pdf Graphic file (type pdf)
 <use figures/sod/o5.pdf>
-Package pdftex.def Info: figures/sod/o5.pdf  used on input line 611.
+Package pdftex.def Info: figures/sod/o5.pdf  used on input line 616.
 (pdftex.def)             Requested size: 82.18405pt x 67.92084pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 611.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 616.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [17
 
  <./figures/sod/reference.png> <./figures/sod/o2.pdf> <./figures/sod/o3.pdf
@@ -1145,106 +1145,106 @@ ultiple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figures/sod/o5.pdf): PDF inclusion: m
 ultiple pdfs with page group included in a single page
 >]
-<figures/smooth_periodic/eul.png, id=1022, 571.13374pt x 426.59375pt>
+<figures/smooth_periodic/eul.png, id=1029, 571.13374pt x 426.59375pt>
 File: figures/smooth_periodic/eul.png Graphic file (type png)
 <use figures/smooth_periodic/eul.png>
-Package pdftex.def Info: figures/smooth_periodic/eul.png  used on input line 64
-6.
+Package pdftex.def Info: figures/smooth_periodic/eul.png  used on input line 65
+1.
 (pdftex.def)             Requested size: 136.97203pt x 102.30647pt.
-<figures/smooth_periodic/lagr.pdf, id=1023, 455.27718pt x 342.75226pt>
+<figures/smooth_periodic/lagr.pdf, id=1030, 455.27718pt x 342.75226pt>
 File: figures/smooth_periodic/lagr.pdf Graphic file (type pdf)
 <use figures/smooth_periodic/lagr.pdf>
 Package pdftex.def Info: figures/smooth_periodic/lagr.pdf  used on input line 6
-46.
+51.
 (pdftex.def)             Requested size: 171.21765pt x 128.89787pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 646.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 651.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [18
 
  <./figures/smooth_periodic/eul.png> <./figures/smooth_periodic/lagr.pdf>]
-<figures/smooth_periodic/conv.png, id=1184, 812.03375pt x 917.4275pt>
+<figures/smooth_periodic/conv.png, id=1191, 812.03375pt x 917.4275pt>
 File: figures/smooth_periodic/conv.png Graphic file (type png)
 <use figures/smooth_periodic/conv.png>
 Package pdftex.def Info: figures/smooth_periodic/conv.png  used on input line 6
-60.
+65.
 (pdftex.def)             Requested size: 188.34047pt x 212.78174pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 660.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 665.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [19
 
  <./figures/smooth_periodic/conv.png>]
-<lakezurich.jpg, id=1214, 3527.1775pt x 2847.63875pt>
+<lakezurich.jpg, id=1221, 3527.1775pt x 2847.63875pt>
 File: lakezurich.jpg Graphic file (type jpg)
 <use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 703.
+Package pdftex.def Info: lakezurich.jpg  used on input line 708.
 (pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
 
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 703--703
+Overfull \hbox (12.00319pt too wide) in paragraph at lines 708--708
  [] 
  []
 
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 703.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 708.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 [20
 
  <./lakezurich.jpg>]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 723.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 728.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [21
 
 ]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 746.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 751.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [22
 
 ]
-<figures/lakeatrest/alb_latr_pert_IC.pdf, id=1296, 395.90533pt x 315.83257pt>
+<figures/lakeatrest/alb_latr_pert_IC.pdf, id=1303, 395.90533pt x 315.83257pt>
 File: figures/lakeatrest/alb_latr_pert_IC.pdf Graphic file (type pdf)
 <use figures/lakeatrest/alb_latr_pert_IC.pdf>
 Package pdftex.def Info: figures/lakeatrest/alb_latr_pert_IC.pdf  used on input
- line 767.
+ line 772.
 (pdftex.def)             Requested size: 154.09483pt x 122.92842pt.
 
-Overfull \vbox (12.59392pt too high) detected at line 767
+Overfull \vbox (12.59392pt too high) detected at line 772
  []
 
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 767.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 772.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 [23
 
  <./figures/lakeatrest/alb_latr_pert_IC.pdf>]
-<figures/lakeatrest/eul_nonWB.pdf, id=1343, 438.51765pt x 315.83257pt>
+<figures/lakeatrest/eul_nonWB.pdf, id=1350, 438.51765pt x 315.83257pt>
 File: figures/lakeatrest/eul_nonWB.pdf Graphic file (type pdf)
 <use figures/lakeatrest/eul_nonWB.pdf>
-Package pdftex.def Info: figures/lakeatrest/eul_nonWB.pdf  used on input line 7
-95.
+Package pdftex.def Info: figures/lakeatrest/eul_nonWB.pdf  used on input line 8
+00.
 (pdftex.def)             Requested size: 102.73163pt x 73.98933pt.
-<figures/lakeatrest/eul.pdf, id=1344, 410.9616pt x 322.65492pt>
+<figures/lakeatrest/eul.pdf, id=1351, 410.9616pt x 322.65492pt>
 File: figures/lakeatrest/eul.pdf Graphic file (type pdf)
 <use figures/lakeatrest/eul.pdf>
-Package pdftex.def Info: figures/lakeatrest/eul.pdf  used on input line 795.
+Package pdftex.def Info: figures/lakeatrest/eul.pdf  used on input line 800.
 (pdftex.def)             Requested size: 102.73163pt x 80.65367pt.
-<figures/lakeatrest/lagr.pdf, id=1345, 395.90533pt x 327.20317pt>
+<figures/lakeatrest/lagr.pdf, id=1352, 395.90533pt x 327.20317pt>
 File: figures/lakeatrest/lagr.pdf Graphic file (type pdf)
 <use figures/lakeatrest/lagr.pdf>
-Package pdftex.def Info: figures/lakeatrest/lagr.pdf  used on input line 795.
+Package pdftex.def Info: figures/lakeatrest/lagr.pdf  used on input line 800.
 (pdftex.def)             Requested size: 102.73163pt x 84.90106pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 795.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 800.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [24
 
  <./figures/lakeatrest/eul_nonWB.pdf> <./figures/lakeatrest/eul.pdf
@@ -1256,28 +1256,28 @@ usion: multiple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figures/lakeatrest/lagr.pdf): PDF inc
 lusion: multiple pdfs with page group included in a single page
 >]
-<figures/smooth_steady/sub/sub.pdf, id=1480, 395.90533pt x 315.83257pt>
+<figures/smooth_steady/sub/sub.pdf, id=1487, 395.90533pt x 315.83257pt>
 File: figures/smooth_steady/sub/sub.pdf Graphic file (type pdf)
 <use figures/smooth_steady/sub/sub.pdf>
 Package pdftex.def Info: figures/smooth_steady/sub/sub.pdf  used on input line 
-831.
+836.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<figures/smooth_steady/trans/trans.pdf, id=1481, 395.90533pt x 315.83257pt>
+<figures/smooth_steady/trans/trans.pdf, id=1488, 395.90533pt x 315.83257pt>
 File: figures/smooth_steady/trans/trans.pdf Graphic file (type pdf)
 <use figures/smooth_steady/trans/trans.pdf>
 Package pdftex.def Info: figures/smooth_steady/trans/trans.pdf  used on input l
-ine 831.
+ine 836.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<figures/smooth_steady/sup/sup.pdf, id=1482, 395.90533pt x 315.83257pt>
+<figures/smooth_steady/sup/sup.pdf, id=1489, 395.90533pt x 315.83257pt>
 File: figures/smooth_steady/sup/sup.pdf Graphic file (type pdf)
 <use figures/smooth_steady/sup/sup.pdf>
 Package pdftex.def Info: figures/smooth_steady/sup/sup.pdf  used on input line 
-831.
+836.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 831.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 836.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [25
 
  <./figures/smooth_steady/sub/sub.pdf> <./figures/smooth_steady/trans/trans.pdf
@@ -1290,58 +1290,58 @@ pdfTeX warning: /usr/bin/pdflatex (file ./figures/smooth_steady/trans/trans.pdf
 pdfTeX warning: /usr/bin/pdflatex (file ./figures/smooth_steady/sup/sup.pdf): P
 DF inclusion: multiple pdfs with page group included in a single page
 >]
-<figures/smooth_steady/sup/conv.png, id=1570, 1103.12125pt x 879.285pt>
+<figures/smooth_steady/sup/conv.png, id=1577, 1103.12125pt x 879.285pt>
 File: figures/smooth_steady/sup/conv.png Graphic file (type png)
 <use figures/smooth_steady/sup/conv.png>
 Package pdftex.def Info: figures/smooth_steady/sup/conv.png  used on input line
- 841.
+ 846.
 (pdftex.def)             Requested size: 273.9493pt x 218.35828pt.
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 841.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 846.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [26
 
  <./figures/smooth_steady/sup/conv.png>]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 858.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 863.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
  [27
 
 ]
-<figures/debug/sup/error_eul.pdf, id=1625, 455.27527pt x 342.75226pt>
+<figures/debug/sup/error_eul.pdf, id=1632, 455.27527pt x 342.75226pt>
 File: figures/debug/sup/error_eul.pdf Graphic file (type pdf)
 <use figures/debug/sup/error_eul.pdf>
 Package pdftex.def Info: figures/debug/sup/error_eul.pdf  used on input line 89
-3.
+8.
 (pdftex.def)             Requested size: 133.54956pt x 100.54095pt.
-<figures/debug/sup/values_eul.pdf, id=1626, 455.4271pt x 342.75226pt>
+<figures/debug/sup/values_eul.pdf, id=1633, 455.4271pt x 342.75226pt>
 File: figures/debug/sup/values_eul.pdf Graphic file (type pdf)
 <use figures/debug/sup/values_eul.pdf>
 Package pdftex.def Info: figures/debug/sup/values_eul.pdf  used on input line 8
-93.
+98.
 (pdftex.def)             Requested size: 133.54956pt x 100.50958pt.
-<figures/debug/sup/error_lagr.pdf, id=1627, 455.27527pt x 342.75226pt>
+<figures/debug/sup/error_lagr.pdf, id=1634, 455.27527pt x 342.75226pt>
 File: figures/debug/sup/error_lagr.pdf Graphic file (type pdf)
 <use figures/debug/sup/error_lagr.pdf>
 Package pdftex.def Info: figures/debug/sup/error_lagr.pdf  used on input line 8
-93.
+98.
 (pdftex.def)             Requested size: 133.54956pt x 100.54095pt.
-<figures/debug/sup/values_lagr.pdf, id=1628, 455.4271pt x 342.75226pt>
+<figures/debug/sup/values_lagr.pdf, id=1635, 455.4271pt x 342.75226pt>
 File: figures/debug/sup/values_lagr.pdf Graphic file (type pdf)
 <use figures/debug/sup/values_lagr.pdf>
 Package pdftex.def Info: figures/debug/sup/values_lagr.pdf  used on input line 
-893.
+898.
 (pdftex.def)             Requested size: 133.54956pt x 100.50958pt.
 
-Overfull \vbox (3.93706pt too high) detected at line 893
+Overfull \vbox (3.93706pt too high) detected at line 898
  []
 
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 893.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 898.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 [28
 
  <./figures/debug/sup/error_eul.pdf> <./figures/debug/sup/values_eul.pdf
@@ -1357,38 +1357,38 @@ F inclusion: multiple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./figures/debug/sup/values_lagr.pdf): P
 DF inclusion: multiple pdfs with page group included in a single page
 >]
-<figures/debug/sub/error_lagr.pdf, id=2085, 455.70125pt x 342.75226pt>
+<figures/debug/sub/error_lagr.pdf, id=2092, 455.70125pt x 342.75226pt>
 File: figures/debug/sub/error_lagr.pdf Graphic file (type pdf)
 <use figures/debug/sub/error_lagr.pdf>
 Package pdftex.def Info: figures/debug/sub/error_lagr.pdf  used on input line 9
-28.
+33.
 (pdftex.def)             Requested size: 133.54956pt x 100.44682pt.
-<figures/debug/sub/values_lagr.pdf, id=2086, 449.10347pt x 342.75226pt>
+<figures/debug/sub/values_lagr.pdf, id=2093, 449.10347pt x 342.75226pt>
 File: figures/debug/sub/values_lagr.pdf Graphic file (type pdf)
 <use figures/debug/sub/values_lagr.pdf>
 Package pdftex.def Info: figures/debug/sub/values_lagr.pdf  used on input line 
-928.
+933.
 (pdftex.def)             Requested size: 133.54956pt x 101.92168pt.
-<figures/debug/trans/errors_lagr.pdf, id=2087, 455.36562pt x 342.75226pt>
+<figures/debug/trans/errors_lagr.pdf, id=2094, 455.36562pt x 342.75226pt>
 File: figures/debug/trans/errors_lagr.pdf Graphic file (type pdf)
 <use figures/debug/trans/errors_lagr.pdf>
 Package pdftex.def Info: figures/debug/trans/errors_lagr.pdf  used on input lin
-e 928.
+e 933.
 (pdftex.def)             Requested size: 133.54956pt x 100.52003pt.
-<figures/debug/trans/values_lagr.pdf, id=2088, 455.36751pt x 342.75226pt>
+<figures/debug/trans/values_lagr.pdf, id=2095, 455.36751pt x 342.75226pt>
 File: figures/debug/trans/values_lagr.pdf Graphic file (type pdf)
 <use figures/debug/trans/values_lagr.pdf>
 Package pdftex.def Info: figures/debug/trans/values_lagr.pdf  used on input lin
-e 928.
+e 933.
 (pdftex.def)             Requested size: 133.54956pt x 100.52003pt.
 
-Overfull \vbox (5.29686pt too high) detected at line 928
+Overfull \vbox (5.29686pt too high) detected at line 933
  []
 
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 928.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 933.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
 [29
 
  <./figures/debug/sub/error_lagr.pdf> <./figures/debug/sub/values_lagr.pdf
@@ -1404,6 +1404,46 @@ pdfTeX warning: /usr/bin/pdflatex (file ./figures/debug/trans/errors_lagr.pdf):
 pdfTeX warning: /usr/bin/pdflatex (file ./figures/debug/trans/values_lagr.pdf):
  PDF inclusion: multiple pdfs with page group included in a single page
 >]
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 937.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
+ [30
+
+]
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 956.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
+ [31
+
+]
+<figures/thanks/LosAlamosMainGate.png, id=2995, 1525.86557pt x 1144.39917pt>
+File: figures/thanks/LosAlamosMainGate.png Graphic file (type png)
+<use figures/thanks/LosAlamosMainGate.png>
+Package pdftex.def Info: figures/thanks/LosAlamosMainGate.png  used on input li
+ne 1009.
+(pdftex.def)             Requested size: 119.85182pt x 89.87744pt.
+<figures/thanks/Oppenheimer.png, id=2996, 3960.0pt x 2962.08pt>
+File: figures/thanks/Oppenheimer.png Graphic file (type png)
+<use figures/thanks/Oppenheimer.png>
+Package pdftex.def Info: figures/thanks/Oppenheimer.png  used on input line 100
+9.
+(pdftex.def)             Requested size: 119.85182pt x 89.62692pt.
+<figures/thanks/GhostRanch.png, id=2997, 2962.08pt x 3960.0pt>
+File: figures/thanks/GhostRanch.png Graphic file (type png)
+<use figures/thanks/GhostRanch.png>
+Package pdftex.def Info: figures/thanks/GhostRanch.png  used on input line 1009
+.
+(pdftex.def)             Requested size: 136.97464pt x 183.0867pt.
+File: figures/LANL_logo.png Graphic file (type png)
+<use figures/LANL_logo.png>
+Package pdftex.def Info: figures/LANL_logo.png  used on input line 1009.
+(pdftex.def)             Requested size: 61.99101pt x 28.45274pt.
+ [32
+
+ <./figures/thanks/LosAlamosMainGate.png (PNG copy)> <./figures/thanks/Oppenhei
+mer.png (PNG copy)> <./figures/thanks/GhostRanch.png (PNG copy)>]
 \tf@nav=\write6
 \openout6 = `los_alamos.nav'.
 
@@ -1413,23 +1453,24 @@ pdfTeX warning: /usr/bin/pdflatex (file ./figures/debug/trans/values_lagr.pdf):
 \tf@snm=\write8
 \openout8 = `los_alamos.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 936.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 936.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1013.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1013.
  (./los_alamos.aux (./sslide.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 936.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 936.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1013.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1013.
+
 Package rerunfilecheck Info: File `los_alamos.out' has not changed.
-(rerunfilecheck)             Checksum: 884EC5053ABD1B04D35AC9EF75B1F22E;405.
+(rerunfilecheck)             Checksum: 001B5E6AE59E4E995284A74DF5D89167;451.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 25959 strings out of 481239
- 516248 string characters out of 5920378
+ 25995 strings out of 481239
+ 517018 string characters out of 5920378
  882417 words of memory out of 5000000
- 40522 multiletter control sequences out of 15000+600000
+ 40547 multiletter control sequences out of 15000+600000
  553407 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  58i,18n,67p,777b,1018s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1459,10 +1500,10 @@ lic/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss109
 xmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf/fonts/type1/publ
 ic/cm-super/sfsx1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/stma
 ryrd/stmary10.pfb>
-Output written on los_alamos.pdf (29 pages, 3077503 bytes).
+Output written on los_alamos.pdf (32 pages, 35884919 bytes).
 PDF statistics:
- 3043 PDF objects out of 3580 (max. 8388607)
- 1026 compressed objects within 11 object streams
- 77 named destinations out of 1000 (max. 500000)
- 258 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3133 PDF objects out of 3580 (max. 8388607)
+ 1109 compressed objects within 12 object streams
+ 84 named destinations out of 1000 (max. 500000)
+ 281 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -6,3 +6,4 @@
 \beamer@subsectionintoc {3}{2}{Smooth periodic}{18}{0}{3}
 \beamer@subsectionintoc {3}{3}{Well-balancing}{20}{0}{3}
 \beamer@subsectionintoc {3}{4}{Supercritical smooth}{25}{0}{3}
+\beamer@sectionintoc {4}{Conclusions}{30}{0}{4}
