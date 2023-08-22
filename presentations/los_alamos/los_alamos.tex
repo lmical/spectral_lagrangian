@@ -32,13 +32,6 @@
 \definecolor{SSCred}{HTML}{d5685d}   % red   as in the SSC logo (primary)
 \definecolor{SSCdarkred}{HTML}{bf2413}
 
-%\usebackgroundtemplate%
-%{%
-%    \begin{tikzpicture}
-%      \hspace{3truecm}\node[opacity=0.4] at (0,0) 
-%        {\includegraphics[width=\textwidth]{sscback.pdf}};
-%    \end{tikzpicture}
-%}
 
 \mode<presentation>
 {
@@ -145,6 +138,15 @@
 \newcommand{\hphi}[0]{\widehat{\varphi}}
 \newcommand{\hpsi}[0]{\widehat{\psi}}
 
+
+\newcommand{\hl}{\widehat{\lambda}}
+\newcommand{\hK}{\widehat{K}}
+\newcommand{\hw}{\widehat{\omega}}
+
+\newcommand{\xt}{\uvec{x},t}
+\newcommand{\et}{\uvec{xi},t}
+
+
 \def\restriction#1#2{\mathchoice
               {\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
               \restrictionaux{#1}{#2}}
@@ -218,7 +220,7 @@
 
 \end{frame}
 
-\section{Governing equations and motivation}
+\section{Governing equations}
 \frame\sectionpage
 
 
@@ -242,7 +244,7 @@ H\uvec{v}\\
 \end{pmatrix}$$
 $$\uvec{F}(\uvec{u}):=\begin{pmatrix}
 H\uvec{v}\\
-H\uvec{v} \otimes \uvec{v}+\textcolor{SSCdarkgreen}{g}\frac{H^2}{2}
+H\uvec{v} \otimes \uvec{v}+\textcolor{SSCdarkgreen}{g}\frac{H^2}{2}\mathbb{I}
 \end{pmatrix}$$
 $$
 \boldsymbol{S}(\uvec{x},\uvec{u}):=-\begin{pmatrix}
@@ -304,7 +306,7 @@ H\uvec{v}\\
 \end{pmatrix}$$
 $$\uvec{F}(\uvec{u}):=\begin{pmatrix}
 H\uvec{v}\\
-H\uvec{v} \otimes \uvec{v}+\textcolor{SSCdarkgreen}{g}\frac{H^2}{2}
+H\uvec{v} \otimes \uvec{v}+\textcolor{SSCdarkgreen}{g}\frac{H^2}{2}\mathbb{I}
 \end{pmatrix}$$
 $$
 \boldsymbol{S}(\uvec{x},\uvec{u}):=-\begin{pmatrix}
@@ -332,6 +334,9 @@ Neglecting the energy equation
 
 \end{frame}
 
+
+\section{Scheme and motivation}
+\frame\sectionpage
 
 
 \begin{frame}
@@ -362,11 +367,11 @@ Neglecting the energy equation
 \begin{itemize}
 
 \item \textbf{Motion}
-$$\frac{d}{dt}\uvec{x}(\uvec{\xi},t)=\uvec{v}(\uvec{x}(\uvec{\xi},t),t);$$
+$$\frac{d}{dt}\uvec{x}(\uvec{\xi},t)=\uvec{v}(\uvec{x}(\uvec{\xi},t),t)$$
 
 \item \textbf{Water height/density (SMC)} 
 \begin{align*}
-&H(\uvec{x}(\uvec{\xi},t),t)=\frac{\widehat{H}(\uvec{\xi})}{det \uvec{J}(\uvec{\xi},t)}, \quad \uvec{J}(\uvec{\xi},t)=\frac{\partial \uvec{x}}{\partial \uvec{\xi}}(\uvec{\xi},t);
+&H(\uvec{x}(\uvec{\xi},t),t)=\frac{\widehat{H}(\uvec{\xi})}{det \uvec{J}(\uvec{\xi},t)}, \quad \uvec{J}(\uvec{\xi},t)=\frac{\partial \uvec{x}}{\partial \uvec{\xi}}(\uvec{\xi},t)
 \end{align*}
 
 
@@ -396,8 +401,8 @@ $$\frac{d}{dt}\uvec{v}(\uvec{x},t)=-g\nabla_{\uvec{x}}(H+B)$$
 \quad $\hpsi_i\in \mathbb{P}_{M}$ \quad discontinuous
         \end{column}
         \begin{column}{0.50\textwidth}
-$$\varphi_i(\uvec{x}(\xi,t),t)=\hphi_i(\xi)$$
-$$\psi_i(\uvec{x}(\xi,t),t)=\hpsi_i(\xi)$$
+$$\varphi_i(\uvec{x}(\uvec{\xi},t),t)=\hphi_i(\uvec{\xi})$$
+$$\psi_i(\uvec{x}(\uvec{\xi},t),t)=\hpsi_i(\uvec{\xi})$$
         \end{column}
     \end{columns}
 
@@ -406,13 +411,13 @@ $$\psi_i(\uvec{x}(\xi,t),t)=\hpsi_i(\xi)$$
     \begin{columns}
 
         \begin{column}{0.50\textwidth}
-$$\uvec{x}_h(\uvec{\xi},t)=\sum_i\uvec{x}_i(t)\hphi_i(\xi)$$
-$$\uvec{v}_h(\uvec{\xi},t)=\sum_i\uvec{v}_i(t)\hphi_i(\xi)$$
-$$H_h(\uvec{\xi},t)=\sum_i H_i(t)\hpsi_i(\xi)$$
+$$\uvec{x}_h(\uvec{\xi},t)=\sum_i\uvec{x}_i(t)\hphi_i(\uvec{\xi})$$
+$$\uvec{v}_h(\uvec{\xi},t)=\sum_i\uvec{v}_i(t)\hphi_i(\uvec{\xi})$$
+$$H_h(\uvec{\xi},t)=\sum_i H_i(t)\hpsi_i(\uvec{\xi})$$
         \end{column}
         \begin{column}{0.50\textwidth}
-$$\uvec{v}_h(\uvec{x},t)=\sum_i\uvec{v}_i(t)\hphi_i(\xi(\uvec{x},t))$$
-$$H_h(\uvec{x},t)=\sum_i H_i(t)\hpsi_i(\xi(\uvec{x},t))$$
+$$\uvec{v}_h(\uvec{x},t)=\sum_i\uvec{v}_i(t)\hphi_i(\uvec{\xi}(\uvec{x},t))$$
+$$H_h(\uvec{x},t)=\sum_i H_i(t)\hpsi_i(\uvec{\xi}(\uvec{x},t))$$
         \end{column}
     \end{columns}
 
@@ -430,11 +435,11 @@ $$H_h(\uvec{x},t)=\sum_i H_i(t)\hpsi_i(\xi(\uvec{x},t))$$
 \begin{itemize}
 
 \item \textbf{Motion}
-$$\frac{d}{dt}\uvec{x}_i(t)=\uvec{v}_i(t);$$
+$$\frac{d}{dt}\uvec{x}_i(t)=\uvec{v}_i(t)$$
 
 \item \textbf{Water height/density (SMC) $\Rightarrow$ PP} 
 \begin{align*}
-&H_i(t)=\frac{\widehat{H}_i}{det \uvec{J}(\uvec{\xi}_i,t)}, \quad \uvec{J}(\uvec{\xi},t)=\frac{\partial \uvec{x}}{\partial \uvec{\xi}}(\uvec{\xi},t);
+&H_i(t)=\frac{\widehat{H}_i}{det \uvec{J}(\uvec{\xi}_i,t)}, \quad \uvec{J}(\uvec{\xi},t)=\frac{\partial \uvec{x}}{\partial \uvec{\xi}}(\uvec{\xi},t)
 \end{align*}
 
 
@@ -442,7 +447,7 @@ $$\frac{d}{dt}\uvec{x}_i(t)=\uvec{v}_i(t);$$
 
 \begin{align*}
 \sum_{K \in K_i} & \sum_{\uvec{x}_j \in K} \Bigg(\int_K \varphi_i \varphi_j d \uvec{x}\Bigg) \frac{d}{dt}\uvec{v}_j(t)\\
-&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x}+\uvec{CT}_i^K \Bigg]+\uvec{ST}_i
+&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x}\Bigg] - \sum_{K \in K_i} \uvec{CT}_i^K -\uvec{ST}_i
 \end{align*}
 
 \end{itemize}
@@ -457,23 +462,53 @@ $$\frac{d}{dt}\uvec{x}_i(t)=\uvec{v}_i(t);$$
 
 \begin{align*}
 \sum_{K \in K_i} & \sum_{\uvec{x}_j \in K} \Bigg(\int_K \varphi_i \varphi_j d \uvec{x}\Bigg) \frac{d}{dt}\uvec{v}_j(t)\\
-&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x}+\uvec{CT}_i^K \Bigg]+\uvec{ST}_i
+&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x}\Bigg] - \sum_{K \in K_i} \uvec{CT}_i^K -\uvec{ST}_i
 \end{align*}
 
 \begin{align*}
-\uvec{CT}_i^K=
+\uvec{CT}_i^K=g\int_{\partial K} \varphi_i (\eta^*-\eta\vert_K) \uvec{\nu} d \uvec{\sigma}
 \end{align*}
 
 
 
 \begin{align*}
-\textbf{ST}_i(\uapp):=\sum_{f}\alpha_f  \biggl\llbracket \frac{\partial}{\partial x} \varphi_i\biggr\rrbracket  \biggl\llbracket \frac{\partial}{\partial x} \begin{pmatrix}
-\eta \\
-H v
-\end{pmatrix} \biggr\rrbracket
+\uvec{ST}^{CIP}_i:=\sum_{f}\alpha_f  \biggl\llbracket \frac{\partial}{\partial x} \varphi_i\biggr\rrbracket  \biggl\llbracket \frac{\partial}{\partial x} v \biggr\rrbracket, \quad \uvec{ST}^{LxF}_i:= \sum_{K \in K_i} \alpha_K (\uvec{v}_i-\overline{\uvec{v}}_K)
+\end{align*}
+
+\centering
+
+Last but not least an ODE integrator
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Problem: mass matrix}
+\centering
+
+\begin{align*}
+\textcolor{red}{\sum_{K \in K_i}} & \textcolor{red}{\sum_{\uvec{x}_j \in K} \Bigg(\int_K \varphi_i \varphi_j d \uvec{x}\Bigg)} \frac{d}{dt}\uvec{v}_j(t)\\
+&= -g \sum_{K \in K_i} \Bigg[ \int_K \varphi_i \nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x}\Bigg] - \sum_{K \in K_i} \uvec{CT}_i^K -\uvec{ST}_i
 \end{align*}
 
 
+\begin{align*}
+\textcolor{red}{\mathcal{M}}\frac{d}{dt}\uvec{v}=\uvec{r}
+\end{align*}
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Solutions}
+
+\begin{itemize}
+\item LO mass lumping
+\item DeC Remi\footnote{Abgrall, High order schemes for hyperbolic problems using globally continuous approximation and avoiding mass matrices, 2017} (problems for order 4 on)
+\item \textcolor{red}{Spectral methods $\varphi_i \sim \uvec{x}_i$ ($1$D GLB, $2$D tensor product or Cubature)}
+\end{itemize}
 
 \end{frame}
 
@@ -481,21 +516,108 @@ H v
 
 
 \begin{frame}
-\frametitle{Motivation}
+\frametitle{Price to pay: time-dependent mass matrix}
+
+
+\begin{align*}
+\int_{K(t)} \varphi_i(\uvec{x},t)\varphi_j(\uvec{x},t)d\uvec{x}&=\int_{\widehat{K}} \hphi_i(\uvec{\xi})\hphi_j(\uvec{\xi}) det \uvec{J}(\uvec{\xi},t) d\uvec{\xi}\\
+&\approx \delta_{i,j}\widehat{\omega}_i \textcolor{red}{det \uvec{J}(\uvec{\xi}_i,t)}
+\end{align*}
+
+
+\begin{align*}
+\int_{K(t)}H_h(\uvec{x},t) \varphi_i(\uvec{x},t)\varphi_j(\uvec{x},t)d\uvec{x}&=\int_{\widehat{K}}H_h(\uvec{\xi},t) \hphi_i(\uvec{\xi})\hphi_j(\uvec{\xi}) det \uvec{J}(\uvec{\xi},t) d\uvec{\xi}\\
+&\approx \delta_{i,j}\widehat{\omega}_i \textcolor{red}{ H_h(\uvec{\xi}_i,t) det \uvec{J}(\uvec{\xi}_i,t)}
+\end{align*}
+
+\centering 
+However, only a point evaluation
+
+\end{frame}
 
 
 
+\begin{frame}
+\frametitle{Advantages}
 
-\textbf{Well-balancing} (in particular $\textcolor{red}{\frac{\partial}{\partial t}\uvec{u}\equiv 0 ~ \Leftrightarrow ~ \frac{\partial}{\partial x}\boldsymbol{F}(\uvec{u})=\boldsymbol{S}(x,\uvec{u}) }$)
+\begin{align*}
+\frac{d}{dt}\uvec{x}=\uvec{v}, \quad \frac{d}{dt}\uvec{v}=\uvec{r}, \quad \text{SMC}
+\end{align*}
 
 
 \begin{itemize}
-\visible<2->{\item Refine a lot the mesh $\Rightarrow$ Longer computational time}
-\visible<3->{\item Well-balancing} \visible<4->{$\Rightarrow$ Not easy}
+
+\item Truly arbitrary high order (no problems as for Bernstein and $\beta$-limiting)
+
+\item Extendible to Euler
+
+\item Extendible to multi-D (quads, PGL, tensor products, Cubature)
+
+\item Whatever time integration method.
+
+\end{itemize}
+
+\end{frame}
+
+
+\section{Numerics}
+\frame\sectionpage
+
+
+\begin{frame}
+\frametitle{Numerics, Sod (Sorry for low quality)}
+
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.3\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/reference.png}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.8\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/sod/my_results.png}
+     \end{subfigure}
+\end{figure}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Numerics, Convergence\footnote{Mantri, Oeffner, Ricchiuto, Fully well balanced entropy controlled DGSEM, 2022} ($2p$)}
+
+\begin{align}
+\begin{cases}
+H=2+cos(2\pi x)\\
+v=1
+\end{cases}
+\end{align}
+
+
+
+\begin{figure}
+     \centering
+         \includegraphics[width=0.8\textwidth]{figures/smooth_periodic/conv.png}
+\end{figure}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Numerics, well-balancing}
+
+In particular (in Eulerian) $\textcolor{red}{\frac{\partial}{\partial t}\uvec{u}\equiv 0 ~ \Leftrightarrow ~ \frac{\partial}{\partial x}\boldsymbol{F}(\uvec{u})=\boldsymbol{S}(x,\uvec{u}) }$)
+
+
+\begin{itemize}
+\item Refine a lot the mesh $\Rightarrow$ Longer computational time
+\item Well-balancing 
 \end{itemize}
 
 
-\visible<5->{
+
 \scalebox{0.8}{\begin{minipage}[t]{1.2\textwidth}
 	\begin{beamercolorbox}[sep=0.5em,wd=\textwidth]{blockcolor1} 
 \begin{columns}
@@ -516,10 +638,7 @@ $$\eta=H+B\equiv const$$
     \end{column}
 \end{columns} 
 \end{beamercolorbox}
-\end{minipage}}}
-\centering
-
-\visible<6->{\textcolor{red}{But in general unknown}}
+\end{minipage}}
 
 
 
@@ -527,8 +646,36 @@ $$\eta=H+B\equiv const$$
 
 
 
+\begin{frame}
+\frametitle{Numerics, well-balancing}
+Non-smooth bathymetry, only $C^0$
+
+$$\eta(x)=\begin{cases}
+\eta_{eq}+A\exp{\left(1-\frac{1}{1-\left(\frac{x-6}{0.5}\right)^2}\right)} & 5.5<x<6.5\\
+\eta_{eq} & otherwise
+\end{cases}$$
+with $A=5\cdot 10^{-5}$.
+
+\begin{figure}
+         \centering
+         \includegraphics[width=0.45\textwidth]{figures/lakeatrest/alb_latr_pert_IC.pdf}
+         \caption{Perturbation amplified by $1000$}
+\end{figure}
 
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Numerics, well-balancing}
+
+
+\begin{figure}
+         \centering
+         \includegraphics[width=1.2\textwidth]{figures/lakeatrest/perturbation.png}
+\end{figure}
+
+
+\end{frame}
 
 \section{Continuous FEM}
 \frame\sectionpage

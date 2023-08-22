@@ -1,7 +1,9 @@
-\BOOKMARK [2][]{Outline0.1}{Governing equations and motivation}{}% 1
-\BOOKMARK [2][]{Outline0.2}{Continuous FEM}{}% 2
-\BOOKMARK [2][]{Outline0.3}{Well-balancing}{}% 3
-\BOOKMARK [3][]{Outline0.3.1.25}{Spatial part}{Outline0.3}% 4
-\BOOKMARK [3][]{Outline0.3.2.30}{Stabilization, continuous interior penalty}{Outline0.3}% 5
-\BOOKMARK [2][]{Outline0.4}{Numerical results}{}% 6
-\BOOKMARK [2][]{Outline0.5}{Conclusions}{}% 7
+\BOOKMARK [2][]{Outline0.1}{Governing equations}{}% 1
+\BOOKMARK [2][]{Outline0.2}{Scheme and motivation}{}% 2
+\BOOKMARK [2][]{Outline0.3}{Numerics}{}% 3
+\BOOKMARK [2][]{Outline0.4}{Continuous FEM}{}% 4
+\BOOKMARK [2][]{Outline0.5}{Well-balancing}{}% 5
+\BOOKMARK [3][]{Outline0.5.1.30}{Spatial part}{Outline0.5}% 6
+\BOOKMARK [3][]{Outline0.5.2.35}{Stabilization, continuous interior penalty}{Outline0.5}% 7
+\BOOKMARK [2][]{Outline0.6}{Numerical results}{}% 8
+\BOOKMARK [2][]{Outline0.7}{Conclusions}{}% 9

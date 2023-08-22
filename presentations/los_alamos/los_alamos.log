@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2023.6.1)  21 AUG 2023 16:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2023.6.1)  21 AUG 2023 21:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -998,22 +998,22 @@ LaTeX Warning: Label `SW@cref' multiply defined.
 )
 \openout1 = `los_alamos.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 198.
-LaTeX Font Info:    ... okay on input line 198.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 200.
+LaTeX Font Info:    ... okay on input line 200.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1073,7 +1073,7 @@ e
 ))
 ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box80
-Package hyperref Info: Link coloring OFF on input line 198.
+Package hyperref Info: Link coloring OFF on input line 200.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -1086,9 +1086,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count340
 )
-LaTeX Info: Redefining \ref on input line 198.
-LaTeX Info: Redefining \pageref on input line 198.
-LaTeX Info: Redefining \nameref on input line 198.
+LaTeX Info: Redefining \ref on input line 200.
+LaTeX Info: Redefining \pageref on input line 200.
+LaTeX Info: Redefining \nameref on input line 200.
 
 (./los_alamos.out) (./los_alamos.out)
 \@outlinefile=\write5
@@ -1122,35 +1122,35 @@ Dictionary: translator-theorem-dictionary, Language: English
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  (./los_alamos.nav)
-LaTeX Font Info:    Trying to load font information for U+msa on input line 202
+LaTeX Font Info:    Trying to load font information for U+msa on input line 204
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 202
+LaTeX Font Info:    Trying to load font information for U+msb on input line 204
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 2
-02.
+04.
 
 (/usr/share/texlive/texmf-dist/tex/latex/stmaryrd/Ustmry.fd) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./los_alamos.toc)
-<frontespizio.png, id=89, 1204.5pt x 1197.47375pt>
+<frontespizio.png, id=99, 1204.5pt x 1197.47375pt>
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 219.
+Package pdftex.def Info: frontespizio.png  used on input line 221.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [2
 
  <./frontespizio.png>]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 222.
+Package pdftex.def Info: frontespizio.png  used on input line 224.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [3
 
@@ -1161,11 +1161,11 @@ Package pdftex.def Info: frontespizio.png  used on input line 222.
 No file sslide.tex.
 
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
-(Font)              using `U/stmry/m/n' instead on input line 289.
+(Font)              using `U/stmry/m/n' instead on input line 291.
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 289.
+Package pdftex.def Info: frontespizio.png  used on input line 291.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 [4
 
@@ -1174,377 +1174,409 @@ Package pdftex.def Info: frontespizio.png  used on input line 289.
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 333.
+Package pdftex.def Info: frontespizio.png  used on input line 335.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [5
 
 ]
-<figures/lagrangian_maps.pdf, id=217, 614.295pt x 398.288pt>
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 339.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [6
+
+]
+<figures/lagrangian_maps.pdf, id=256, 614.295pt x 398.288pt>
 File: figures/lagrangian_maps.pdf Graphic file (type pdf)
 <use figures/lagrangian_maps.pdf>
-Package pdftex.def Info: figures/lagrangian_maps.pdf  used on input line 356.
+Package pdftex.def Info: figures/lagrangian_maps.pdf  used on input line 361.
 (pdftex.def)             Requested size: 154.09483pt x 99.906pt.
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 356.
+Package pdftex.def Info: frontespizio.png  used on input line 361.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [6
+ [7
 
  <./figures/lagrangian_maps.pdf>]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 384.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [7
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 420.
+Package pdftex.def Info: frontespizio.png  used on input line 389.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [8
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 451.
+Package pdftex.def Info: frontespizio.png  used on input line 425.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [9
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 478.
+Package pdftex.def Info: frontespizio.png  used on input line 456.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [10
 
 ]
-<lakezurich.jpg, id=357, 3527.1775pt x 2847.63875pt>
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
+Package pdftex.def Info: frontespizio.png  used on input line 482.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[11
-
- <./lakezurich.jpg>]
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[12
+ [11
 
 ]
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
+Package pdftex.def Info: frontespizio.png  used on input line 500.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[13
+ [12
 
 ]
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
+Package pdftex.def Info: frontespizio.png  used on input line 513.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [13
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 536.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+
 [14
 
 ]
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
+Package pdftex.def Info: frontespizio.png  used on input line 560.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[15
-
-]
-File: lakezurich.jpg Graphic file (type jpg)
-<use lakezurich.jpg>
-Package pdftex.def Info: lakezurich.jpg  used on input line 526.
-(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
-
-Overfull \hbox (12.00319pt too wide) in paragraph at lines 526--526
- [] 
- []
-
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 526.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[16
+ [15
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 534.
+Package pdftex.def Info: frontespizio.png  used on input line 564.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [16
+
+]
+<figures/sod/reference.png, id=530, 1927.2pt x 1084.05pt>
+File: figures/sod/reference.png Graphic file (type png)
+<use figures/sod/reference.png>
+Package pdftex.def Info: figures/sod/reference.png  used on input line 584.
+(pdftex.def)             Requested size: 102.73163pt x 57.77858pt.
+<figures/sod/my_results.png, id=531, 1927.2pt x 1084.05pt>
+File: figures/sod/my_results.png Graphic file (type png)
+<use figures/sod/my_results.png>
+Package pdftex.def Info: figures/sod/my_results.png  used on input line 584.
+(pdftex.def)             Requested size: 273.9493pt x 154.08174pt.
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 584.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [17
 
-]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
-[][]  
- []
-
+ <./figures/sod/reference.png> <./figures/sod/my_results.png>]
+<figures/smooth_periodic/conv.png, id=560, 1927.2pt x 1084.05pt>
+File: figures/smooth_periodic/conv.png Graphic file (type png)
+<use figures/smooth_periodic/conv.png>
+Package pdftex.def Info: figures/smooth_periodic/conv.png  used on input line 6
+05.
+(pdftex.def)             Requested size: 273.9493pt x 154.08174pt.
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 605.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[18
+ [18
 
-]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
-[][]  
+ <./figures/smooth_periodic/conv.png>]
+<lakezurich.jpg, id=591, 3527.1775pt x 2847.63875pt>
+File: lakezurich.jpg Graphic file (type jpg)
+<use lakezurich.jpg>
+Package pdftex.def Info: lakezurich.jpg  used on input line 645.
+(pdftex.def)             Requested size: 176.3692pt x 142.39027pt.
+
+Overfull \hbox (12.00319pt too wide) in paragraph at lines 645--645
+ [] 
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 645.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 [19
 
-]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
-[][]  
+ <./lakezurich.jpg>]
+<figures/lakeatrest/alb_latr_pert_IC.pdf, id=621, 395.90533pt x 315.83257pt>
+File: figures/lakeatrest/alb_latr_pert_IC.pdf Graphic file (type pdf)
+<use figures/lakeatrest/alb_latr_pert_IC.pdf>
+Package pdftex.def Info: figures/lakeatrest/alb_latr_pert_IC.pdf  used on input
+ line 666.
+(pdftex.def)             Requested size: 154.09483pt x 122.92842pt.
+
+Overfull \vbox (12.59392pt too high) detected at line 666
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 666.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 [20
 
-]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
-[][]  
+ <./figures/lakeatrest/alb_latr_pert_IC.pdf>]
+<figures/lakeatrest/perturbation.png, id=668, 1927.2pt x 1084.05pt>
+File: figures/lakeatrest/perturbation.png Graphic file (type png)
+<use figures/lakeatrest/perturbation.png>
+Package pdftex.def Info: figures/lakeatrest/perturbation.png  used on input lin
+e 678.
+(pdftex.def)             Requested size: 410.92133pt x 231.13087pt.
+
+Overfull \hbox (68.48601pt too wide) in paragraph at lines 678--678
+ [] 
+ []
+
+
+Overfull \vbox (23.96695pt too high) detected at line 678
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 678.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 [21
 
-]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
-[][]  
- []
-
+ <./figures/lakeatrest/perturbation.png>]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 681.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[22
+ [22
 
 ]
-Overfull \hbox (27.39136pt too wide) in paragraph at lines 569--569
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
 [][]  
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 569.
+Package pdftex.def Info: frontespizio.png  used on input line 716.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 [23
 
 ]
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
+[][]  
+ []
+
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 578.
+Package pdftex.def Info: frontespizio.png  used on input line 716.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [24
+[24
+
+]
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
+[][]  
+ []
+
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 716.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+[25
+
+]
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
+[][]  
+ []
+
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 716.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+[26
+
+]
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
+[][]  
+ []
+
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 716.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+[27
+
+]
+Overfull \hbox (27.39136pt too wide) in paragraph at lines 716--716
+[][]  
+ []
+
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 716.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+[28
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 585.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [25
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 638.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [26
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 638.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [27
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 638.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [28
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 638.
+Package pdftex.def Info: frontespizio.png  used on input line 725.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [29
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 653.
+Package pdftex.def Info: frontespizio.png  used on input line 732.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [30
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 679.
+Package pdftex.def Info: frontespizio.png  used on input line 785.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [31
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 679.
+Package pdftex.def Info: frontespizio.png  used on input line 785.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [32
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 679.
+Package pdftex.def Info: frontespizio.png  used on input line 785.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [33
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 714.
+Package pdftex.def Info: frontespizio.png  used on input line 785.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [34
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 714.
+Package pdftex.def Info: frontespizio.png  used on input line 800.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [35
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 714.
+Package pdftex.def Info: frontespizio.png  used on input line 826.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [36
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 722.
+Package pdftex.def Info: frontespizio.png  used on input line 826.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [37
 
 ]
-<alb_LAKEATREST.pdf, id=1078, 395.90533pt x 315.83257pt>
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 826.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [38
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 861.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [39
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 861.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [40
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 861.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [41
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 869.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [42
+
+]
+<alb_LAKEATREST.pdf, id=1255, 395.90533pt x 315.83257pt>
 File: alb_LAKEATREST.pdf Graphic file (type pdf)
 <use alb_LAKEATREST.pdf>
-Package pdftex.def Info: alb_LAKEATREST.pdf  used on input line 763.
+Package pdftex.def Info: alb_LAKEATREST.pdf  used on input line 910.
 (pdftex.def)             Requested size: 147.9284pt x 118.01282pt.
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 763.
+Package pdftex.def Info: frontespizio.png  used on input line 910.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
 
-[38
+[43
 
  <./alb_LAKEATREST.pdf>]
-<alb_latr_pert_IC.pdf, id=1128, 395.90533pt x 315.83257pt>
+<alb_latr_pert_IC.pdf, id=1305, 395.90533pt x 315.83257pt>
 File: alb_latr_pert_IC.pdf Graphic file (type pdf)
 <use alb_latr_pert_IC.pdf>
-Package pdftex.def Info: alb_latr_pert_IC.pdf  used on input line 784.
+Package pdftex.def Info: alb_latr_pert_IC.pdf  used on input line 931.
 (pdftex.def)             Requested size: 154.09483pt x 122.92842pt.
 
-Overfull \vbox (12.59392pt too high) detected at line 784
+Overfull \vbox (12.59392pt too high) detected at line 931
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 784.
+Package pdftex.def Info: frontespizio.png  used on input line 931.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[39
+[44
 
  <./alb_latr_pert_IC.pdf>]
-<alb_latr_WBp3s14jc.pdf, id=1176, 438.51765pt x 315.83257pt>
+<alb_latr_WBp3s14jc.pdf, id=1352, 438.51765pt x 315.83257pt>
 File: alb_latr_WBp3s14jc.pdf Graphic file (type pdf)
 <use alb_latr_WBp3s14jc.pdf>
-Package pdftex.def Info: alb_latr_WBp3s14jc.pdf  used on input line 824.
+Package pdftex.def Info: alb_latr_WBp3s14jc.pdf  used on input line 971.
 (pdftex.def)             Requested size: 102.73163pt x 73.98933pt.
-<alb_latr_WBp3s14jt.pdf, id=1177, 409.78532pt x 322.65492pt>
+<alb_latr_WBp3s14jt.pdf, id=1353, 409.78532pt x 322.65492pt>
 File: alb_latr_WBp3s14jt.pdf Graphic file (type pdf)
 <use alb_latr_WBp3s14jt.pdf>
-Package pdftex.def Info: alb_latr_WBp3s14jt.pdf  used on input line 824.
+Package pdftex.def Info: alb_latr_WBp3s14jt.pdf  used on input line 971.
 (pdftex.def)             Requested size: 102.73163pt x 80.88507pt.
-<alb_latr_WBp3s14je.pdf, id=1178, 409.78532pt x 322.65492pt>
+<alb_latr_WBp3s14je.pdf, id=1354, 409.78532pt x 322.65492pt>
 File: alb_latr_WBp3s14je.pdf Graphic file (type pdf)
 <use alb_latr_WBp3s14je.pdf>
-Package pdftex.def Info: alb_latr_WBp3s14je.pdf  used on input line 824.
+Package pdftex.def Info: alb_latr_WBp3s14je.pdf  used on input line 971.
 (pdftex.def)             Requested size: 102.73163pt x 80.88507pt.
-<alb_latr_WBp3s14jr.pdf, id=1179, 409.78532pt x 322.65492pt>
+<alb_latr_WBp3s14jr.pdf, id=1355, 409.78532pt x 322.65492pt>
 File: alb_latr_WBp3s14jr.pdf Graphic file (type pdf)
 <use alb_latr_WBp3s14jr.pdf>
-Package pdftex.def Info: alb_latr_WBp3s14jr.pdf  used on input line 824.
+Package pdftex.def Info: alb_latr_WBp3s14jr.pdf  used on input line 971.
 (pdftex.def)             Requested size: 102.73163pt x 80.88507pt.
 
-Overfull \vbox (4.45592pt too high) detected at line 824
+Overfull \vbox (4.45592pt too high) detected at line 971
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 824.
+Package pdftex.def Info: frontespizio.png  used on input line 971.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[40
+[45
 
  <./alb_latr_WBp3s14jc.pdf> <./alb_latr_WBp3s14jt.pdf
 
@@ -1561,97 +1593,99 @@ n: multiple pdfs with page group included in a single page
 >]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 834.
+Package pdftex.def Info: frontespizio.png  used on input line 981.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [41
+ [46
 
 ]
-<sub.pdf, id=1382, 395.90533pt x 315.83257pt>
+<sub.pdf, id=1558, 395.90533pt x 315.83257pt>
 File: sub.pdf Graphic file (type pdf)
 <use sub.pdf>
-Package pdftex.def Info: sub.pdf  used on input line 892.
+Package pdftex.def Info: sub.pdf  used on input line 1039.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<trans.pdf, id=1383, 395.90533pt x 315.83257pt>
+<trans.pdf, id=1559, 395.90533pt x 315.83257pt>
 File: trans.pdf Graphic file (type pdf)
 <use trans.pdf>
-Package pdftex.def Info: trans.pdf  used on input line 892.
+Package pdftex.def Info: trans.pdf  used on input line 1039.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<sup.pdf, id=1384, 395.90533pt x 315.83257pt>
+<sup.pdf, id=1560, 395.90533pt x 315.83257pt>
 File: sup.pdf Graphic file (type pdf)
 <use sup.pdf>
-Package pdftex.def Info: sup.pdf  used on input line 892.
+Package pdftex.def Info: sup.pdf  used on input line 1039.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<alb_sub_convergenceWB-HS.pdf, id=1385, 455.30101pt x 339.66899pt>
+<alb_sub_convergenceWB-HS.pdf, id=1561, 455.30101pt x 339.66899pt>
 File: alb_sub_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_sub_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_sub_convergenceWB-HS.pdf  used on input line 892.
+Package pdftex.def Info: alb_sub_convergenceWB-HS.pdf  used on input line 1039.
+
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
-<alb_trans_convergenceWB-HS.pdf, id=1386, 455.30101pt x 339.66899pt>
+<alb_trans_convergenceWB-HS.pdf, id=1562, 455.30101pt x 339.66899pt>
 File: alb_trans_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_trans_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_trans_convergenceWB-HS.pdf  used on input line 892
-.
+Package pdftex.def Info: alb_trans_convergenceWB-HS.pdf  used on input line 103
+9.
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
-<alb_sup_convergenceWB-HS.pdf, id=1387, 455.30101pt x 339.66899pt>
+<alb_sup_convergenceWB-HS.pdf, id=1563, 455.30101pt x 339.66899pt>
 File: alb_sup_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_sup_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_sup_convergenceWB-HS.pdf  used on input line 892.
+Package pdftex.def Info: alb_sup_convergenceWB-HS.pdf  used on input line 1039.
+
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 
-Overfull \vbox (10.42664pt too high) detected at line 892
+Overfull \vbox (10.42664pt too high) detected at line 1039
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 892.
+Package pdftex.def Info: frontespizio.png  used on input line 1039.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[42
+[47
 
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_sub}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{sub@convergence_comp_jumps_sub}) has been already used, duplicate ignored
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{sub@convergence_comp_jumps_sub}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{convergence_comp_jumps_trans}) has been already used, duplicate ignored
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{convergence_comp_jumps_trans}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{sub@convergence_comp_jumps_trans}) has been already used, duplicate ignored
-
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{convergence_comp_jumps_super}) has been already used, duplicate ignored
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{sub@convergence_comp_jumps_trans}) has been already used, duplicate ignore
+d
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{sub@convergence_comp_jumps_super}) has been already used, duplicate ignored
-
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.892 \end{frame}
-                 pdfTeX warning (ext4): destination with the same identifier (n
-ame{convergence}) has been already used, duplicate ignored
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{convergence_comp_jumps_super}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.892 \end{frame}
-                  <./sub.pdf> <./trans.pdf
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{sub@convergence_comp_jumps_super}) has been already used, duplicate ignore
+d
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.1039 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{convergence}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.1039 \end{frame}
+                   <./sub.pdf> <./trans.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./trans.pdf): PDF inclusion: multiple p
 dfs with page group included in a single page
@@ -1672,32 +1706,32 @@ inclusion: multiple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./alb_sup_convergenceWB-HS.pdf): PDF in
 clusion: multiple pdfs with page group included in a single page
 >]
-<sub_not_smooth.pdf, id=1607, 395.90533pt x 315.83257pt>
+<sub_not_smooth.pdf, id=1783, 395.90533pt x 315.83257pt>
 File: sub_not_smooth.pdf Graphic file (type pdf)
 <use sub_not_smooth.pdf>
-Package pdftex.def Info: sub_not_smooth.pdf  used on input line 924.
+Package pdftex.def Info: sub_not_smooth.pdf  used on input line 1071.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<trans_not_smooth.pdf, id=1608, 395.90533pt x 315.83257pt>
+<trans_not_smooth.pdf, id=1784, 395.90533pt x 315.83257pt>
 File: trans_not_smooth.pdf Graphic file (type pdf)
 <use trans_not_smooth.pdf>
-Package pdftex.def Info: trans_not_smooth.pdf  used on input line 924.
+Package pdftex.def Info: trans_not_smooth.pdf  used on input line 1071.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
-<sup_not_smooth.pdf, id=1609, 395.90533pt x 315.83257pt>
+<sup_not_smooth.pdf, id=1785, 395.90533pt x 315.83257pt>
 File: sup_not_smooth.pdf Graphic file (type pdf)
 <use sup_not_smooth.pdf>
-Package pdftex.def Info: sup_not_smooth.pdf  used on input line 924.
+Package pdftex.def Info: sup_not_smooth.pdf  used on input line 1071.
 (pdftex.def)             Requested size: 102.73163pt x 81.95067pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence})
  has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.924 \end{frame}
-                 
+l.1071 \end{frame}
+                  
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 924.
+Package pdftex.def Info: frontespizio.png  used on input line 1071.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [43
+ [48
 
  <./sub_not_smooth.pdf> <./trans_not_smooth.pdf
 
@@ -1708,31 +1742,31 @@ pdfTeX warning: /usr/bin/pdflatex (file ./trans_not_smooth.pdf): PDF inclusion:
 pdfTeX warning: /usr/bin/pdflatex (file ./sup_not_smooth.pdf): PDF inclusion: m
 ultiple pdfs with page group included in a single page
 >]
-<alb_sup_WBp3s14jc.pdf, id=1688, 444.90088pt x 315.83257pt>
+<alb_sup_WBp3s14jc.pdf, id=1864, 444.90088pt x 315.83257pt>
 File: alb_sup_WBp3s14jc.pdf Graphic file (type pdf)
 <use alb_sup_WBp3s14jc.pdf>
-Package pdftex.def Info: alb_sup_WBp3s14jc.pdf  used on input line 956.
+Package pdftex.def Info: alb_sup_WBp3s14jc.pdf  used on input line 1103.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
-<alb_sup_WBp3s14jt.pdf, id=1689, 444.90088pt x 312.02145pt>
+<alb_sup_WBp3s14jt.pdf, id=1865, 444.90088pt x 312.02145pt>
 File: alb_sup_WBp3s14jt.pdf Graphic file (type pdf)
 <use alb_sup_WBp3s14jt.pdf>
-Package pdftex.def Info: alb_sup_WBp3s14jt.pdf  used on input line 956.
+Package pdftex.def Info: alb_sup_WBp3s14jt.pdf  used on input line 1103.
 (pdftex.def)             Requested size: 95.88147pt x 67.24042pt.
-<alb_sup_WBp3s14je.pdf, id=1690, 438.51765pt x 315.83257pt>
+<alb_sup_WBp3s14je.pdf, id=1866, 438.51765pt x 315.83257pt>
 File: alb_sup_WBp3s14je.pdf Graphic file (type pdf)
 <use alb_sup_WBp3s14je.pdf>
-Package pdftex.def Info: alb_sup_WBp3s14je.pdf  used on input line 956.
+Package pdftex.def Info: alb_sup_WBp3s14je.pdf  used on input line 1103.
 (pdftex.def)             Requested size: 95.88147pt x 69.05446pt.
-<alb_sup_WBp3s14jr.pdf, id=1691, 444.90088pt x 315.83257pt>
+<alb_sup_WBp3s14jr.pdf, id=1867, 444.90088pt x 315.83257pt>
 File: alb_sup_WBp3s14jr.pdf Graphic file (type pdf)
 <use alb_sup_WBp3s14jr.pdf>
-Package pdftex.def Info: alb_sup_WBp3s14jr.pdf  used on input line 956.
+Package pdftex.def Info: alb_sup_WBp3s14jr.pdf  used on input line 1103.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 956.
+Package pdftex.def Info: frontespizio.png  used on input line 1103.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [44
+ [49
 
  <./alb_sup_WBp3s14jc.pdf> <./alb_sup_WBp3s14jt.pdf
 
@@ -1747,41 +1781,41 @@ pdfTeX warning: /usr/bin/pdflatex (file ./alb_sup_WBp3s14je.pdf): PDF inclusion
 pdfTeX warning: /usr/bin/pdflatex (file ./alb_sup_WBp3s14jr.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >]
-<alb_sup_same_scale_WBp3s14jc.pdf, id=1867, 444.90088pt x 315.83257pt>
+<alb_sup_same_scale_WBp3s14jc.pdf, id=2043, 444.90088pt x 315.83257pt>
 File: alb_sup_same_scale_WBp3s14jc.pdf Graphic file (type pdf)
 <use alb_sup_same_scale_WBp3s14jc.pdf>
-Package pdftex.def Info: alb_sup_same_scale_WBp3s14jc.pdf  used on input line 9
-87.
+Package pdftex.def Info: alb_sup_same_scale_WBp3s14jc.pdf  used on input line 1
+134.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
-<alb_sup_same_scale_WBp3s14jt.pdf, id=1868, 444.90088pt x 315.83257pt>
+<alb_sup_same_scale_WBp3s14jt.pdf, id=2044, 444.90088pt x 315.83257pt>
 File: alb_sup_same_scale_WBp3s14jt.pdf Graphic file (type pdf)
 <use alb_sup_same_scale_WBp3s14jt.pdf>
-Package pdftex.def Info: alb_sup_same_scale_WBp3s14jt.pdf  used on input line 9
-87.
+Package pdftex.def Info: alb_sup_same_scale_WBp3s14jt.pdf  used on input line 1
+134.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
-<alb_sup_same_scale_WBp3s14je.pdf, id=1869, 444.90088pt x 315.83257pt>
+<alb_sup_same_scale_WBp3s14je.pdf, id=2045, 444.90088pt x 315.83257pt>
 File: alb_sup_same_scale_WBp3s14je.pdf Graphic file (type pdf)
 <use alb_sup_same_scale_WBp3s14je.pdf>
-Package pdftex.def Info: alb_sup_same_scale_WBp3s14je.pdf  used on input line 9
-87.
+Package pdftex.def Info: alb_sup_same_scale_WBp3s14je.pdf  used on input line 1
+134.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
-<alb_sup_same_scale_WBp3s14jr.pdf, id=1870, 444.90088pt x 315.83257pt>
+<alb_sup_same_scale_WBp3s14jr.pdf, id=2046, 444.90088pt x 315.83257pt>
 File: alb_sup_same_scale_WBp3s14jr.pdf Graphic file (type pdf)
 <use alb_sup_same_scale_WBp3s14jr.pdf>
-Package pdftex.def Info: alb_sup_same_scale_WBp3s14jr.pdf  used on input line 9
-87.
+Package pdftex.def Info: alb_sup_same_scale_WBp3s14jr.pdf  used on input line 1
+134.
 (pdftex.def)             Requested size: 95.88147pt x 68.0617pt.
 pdfTeX warning (ext4): destination with the same identifier (name{pert_super_ju
 mps}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.987 \end{frame}
-                 
+l.1134 \end{frame}
+                  
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 987.
+Package pdftex.def Info: frontespizio.png  used on input line 1134.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [45
+ [50
 
  <./alb_sup_same_scale_WBp3s14jc.pdf> <./alb_sup_same_scale_WBp3s14jt.pdf
 
@@ -1798,28 +1832,28 @@ F inclusion: multiple pdfs with page group included in a single page
 >]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 997.
+Package pdftex.def Info: frontespizio.png  used on input line 1144.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [46
+ [51
 
 ]
-<alb_bases_WBp3s14jrPGL2.pdf, id=2076, 444.90088pt x 312.02145pt>
+<alb_bases_WBp3s14jrPGL2.pdf, id=2252, 444.90088pt x 312.02145pt>
 File: alb_bases_WBp3s14jrPGL2.pdf Graphic file (type pdf)
 <use alb_bases_WBp3s14jrPGL2.pdf>
-Package pdftex.def Info: alb_bases_WBp3s14jrPGL2.pdf  used on input line 1031.
+Package pdftex.def Info: alb_bases_WBp3s14jrPGL2.pdf  used on input line 1178.
 (pdftex.def)             Requested size: 102.73163pt x 72.04431pt.
-<alb_bases_WBp3s14jrPGL3.pdf, id=2077, 444.90088pt x 312.02145pt>
+<alb_bases_WBp3s14jrPGL3.pdf, id=2253, 444.90088pt x 312.02145pt>
 File: alb_bases_WBp3s14jrPGL3.pdf Graphic file (type pdf)
 <use alb_bases_WBp3s14jrPGL3.pdf>
-Package pdftex.def Info: alb_bases_WBp3s14jrPGL3.pdf  used on input line 1031.
+Package pdftex.def Info: alb_bases_WBp3s14jrPGL3.pdf  used on input line 1178.
 (pdftex.def)             Requested size: 102.73163pt x 72.04431pt.
-<alb_bases_WBp3s14jrPGL4.pdf, id=2078, 444.90088pt x 312.02145pt>
+<alb_bases_WBp3s14jrPGL4.pdf, id=2254, 444.90088pt x 312.02145pt>
 File: alb_bases_WBp3s14jrPGL4.pdf Graphic file (type pdf)
 <use alb_bases_WBp3s14jrPGL4.pdf>
-Package pdftex.def Info: alb_bases_WBp3s14jrPGL4.pdf  used on input line 1031.
+Package pdftex.def Info: alb_bases_WBp3s14jrPGL4.pdf  used on input line 1178.
 (pdftex.def)             Requested size: 102.73163pt x 72.04431pt.
 
-Overfull \hbox (21.90005pt too wide) in paragraph at lines 1031--1031
+Overfull \hbox (21.90005pt too wide) in paragraph at lines 1178--1178
 [] [] 
  []
 
@@ -1827,13 +1861,13 @@ pdfTeX warning (ext4): destination with the same identifier (name{convergence})
  has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1031 \end{frame}
+l.1178 \end{frame}
                   
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1031.
+Package pdftex.def Info: frontespizio.png  used on input line 1178.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [47
+ [52
 
  <./alb_bases_WBp3s14jrPGL2.pdf> <./alb_bases_WBp3s14jrPGL3.pdf
 
@@ -1844,47 +1878,47 @@ lusion: multiple pdfs with page group included in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./alb_bases_WBp3s14jrPGL4.pdf): PDF inc
 lusion: multiple pdfs with page group included in a single page
 >]
-<alb_trans_WBp2s14jr.pdf, id=2210, 438.51765pt x 315.83257pt>
+<alb_trans_WBp2s14jr.pdf, id=2387, 438.51765pt x 315.83257pt>
 File: alb_trans_WBp2s14jr.pdf Graphic file (type pdf)
 <use alb_trans_WBp2s14jr.pdf>
-Package pdftex.def Info: alb_trans_WBp2s14jr.pdf  used on input line 1064.
+Package pdftex.def Info: alb_trans_WBp2s14jr.pdf  used on input line 1211.
 (pdftex.def)             Requested size: 136.97203pt x 98.64923pt.
-<alb_sub_WBp2s14jr.pdf, id=2211, 438.51765pt x 315.83257pt>
+<alb_sub_WBp2s14jr.pdf, id=2388, 438.51765pt x 315.83257pt>
 File: alb_sub_WBp2s14jr.pdf Graphic file (type pdf)
 <use alb_sub_WBp2s14jr.pdf>
-Package pdftex.def Info: alb_sub_WBp2s14jr.pdf  used on input line 1064.
+Package pdftex.def Info: alb_sub_WBp2s14jr.pdf  used on input line 1211.
 (pdftex.def)             Requested size: 136.97203pt x 98.64923pt.
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1064.
+Package pdftex.def Info: frontespizio.png  used on input line 1211.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [48
+ [53
 
  <./alb_trans_WBp2s14jr.pdf> <./alb_sub_WBp2s14jr.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./alb_sub_WBp2s14jr.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >]
-<friction/friction_sub.pdf, id=2315, 402.28856pt x 312.02145pt>
+<friction/friction_sub.pdf, id=2491, 402.28856pt x 312.02145pt>
 File: friction/friction_sub.pdf Graphic file (type pdf)
 <use friction/friction_sub.pdf>
-Package pdftex.def Info: friction/friction_sub.pdf  used on input line 1110.
+Package pdftex.def Info: friction/friction_sub.pdf  used on input line 1257.
 (pdftex.def)             Requested size: 136.97203pt x 106.23824pt.
-<alb_sub_fri_WBp2s14jr.pdf, id=2316, 438.51765pt x 315.83257pt>
+<alb_sub_fri_WBp2s14jr.pdf, id=2492, 438.51765pt x 315.83257pt>
 File: alb_sub_fri_WBp2s14jr.pdf Graphic file (type pdf)
 <use alb_sub_fri_WBp2s14jr.pdf>
-Package pdftex.def Info: alb_sub_fri_WBp2s14jr.pdf  used on input line 1110.
+Package pdftex.def Info: alb_sub_fri_WBp2s14jr.pdf  used on input line 1257.
 (pdftex.def)             Requested size: 136.97203pt x 98.64923pt.
 
-Overfull \hbox (21.90005pt too wide) in paragraph at lines 1110--1110
+Overfull \hbox (21.90005pt too wide) in paragraph at lines 1257--1257
 [] [] 
  []
 
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1110.
+Package pdftex.def Info: frontespizio.png  used on input line 1257.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
-[49
+[54
 
  <./friction/friction_sub.pdf> <./alb_sub_fri_WBp2s14jr.pdf
 
@@ -1895,122 +1929,122 @@ sultsWithoutWBmonodimensionalcasesSW<1>}) has been already used, duplicate igno
 red
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{NumericalResultsWithoutWBmonodimensionalcasesSW}) has been already used, d
 uplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
 File: alb_sub_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_sub_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_sub_convergenceWB-HS.pdf  used on input line 1184.
+Package pdftex.def Info: alb_sub_convergenceWB-HS.pdf  used on input line 1331.
 
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_sub}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_sub}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
 File: alb_trans_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_trans_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_trans_convergenceWB-HS.pdf  used on input line 118
-4.
+Package pdftex.def Info: alb_trans_convergenceWB-HS.pdf  used on input line 133
+1.
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_trans}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_trans}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
 File: alb_sup_convergenceWB-HS.pdf Graphic file (type pdf)
 <use alb_sup_convergenceWB-HS.pdf>
-Package pdftex.def Info: alb_sup_convergenceWB-HS.pdf  used on input line 1184.
+Package pdftex.def Info: alb_sup_convergenceWB-HS.pdf  used on input line 1331.
 
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_super}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_super}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
-<alb_sub_convergenceWB-GF.pdf, id=2402, 455.30101pt x 339.64874pt>
+<alb_sub_convergenceWB-GF.pdf, id=2578, 455.30101pt x 339.64874pt>
 File: alb_sub_convergenceWB-GF.pdf Graphic file (type pdf)
 <use alb_sub_convergenceWB-GF.pdf>
-Package pdftex.def Info: alb_sub_convergenceWB-GF.pdf  used on input line 1184.
+Package pdftex.def Info: alb_sub_convergenceWB-GF.pdf  used on input line 1331.
 
 (pdftex.def)             Requested size: 102.73163pt x 76.63533pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_sub}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_sub}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
-<alb_trans_convergenceWB-GF.pdf, id=2403, 455.30101pt x 339.66899pt>
+<alb_trans_convergenceWB-GF.pdf, id=2579, 455.30101pt x 339.66899pt>
 File: alb_trans_convergenceWB-GF.pdf Graphic file (type pdf)
 <use alb_trans_convergenceWB-GF.pdf>
-Package pdftex.def Info: alb_trans_convergenceWB-GF.pdf  used on input line 118
-4.
+Package pdftex.def Info: alb_trans_convergenceWB-GF.pdf  used on input line 133
+1.
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_trans}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_trans}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
-<alb_sup_convergenceWB-GF.pdf, id=2404, 455.30101pt x 339.66899pt>
+<alb_sup_convergenceWB-GF.pdf, id=2580, 455.30101pt x 339.66899pt>
 File: alb_sup_convergenceWB-GF.pdf Graphic file (type pdf)
 <use alb_sup_convergenceWB-GF.pdf>
-Package pdftex.def Info: alb_sup_convergenceWB-GF.pdf  used on input line 1184.
+Package pdftex.def Info: alb_sup_convergenceWB-GF.pdf  used on input line 1331.
 
 (pdftex.def)             Requested size: 102.73163pt x 76.6399pt.
 pdfTeX warning (ext4): destination with the same identifier (name{convergence_c
 omp_jumps_super}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   pdfTeX warning (ext4): destination with the same identifier (
 name{sub@convergence_comp_jumps_super}) has been already used, duplicate ignore
 d
 <to be read again> 
                    \relax 
-l.1184 \end{frame}
+l.1331 \end{frame}
                   
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1184.
+Package pdftex.def Info: frontespizio.png  used on input line 1331.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [50
+ [55
 
  <./alb_sub_convergenceWB-GF.pdf> <./alb_trans_convergenceWB-GF.pdf
 
@@ -2023,68 +2057,68 @@ clusion: multiple pdfs with page group included in a single page
 >]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1189.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [51
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1212.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [52
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1212.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [53
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1212.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [54
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1212.
-(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
- [55
-
-]
-File: frontespizio.png Graphic file (type png)
-<use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1225.
+Package pdftex.def Info: frontespizio.png  used on input line 1336.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [56
 
-]pdfTeX warning (ext4): destination with the same identifier (name{SW<1>}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1290 \end{frame}
-                  pdfTeX warning (ext4): destination with the same identifier (
-name{SW}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.1290 \end{frame}
-                  
+]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1290.
+Package pdftex.def Info: frontespizio.png  used on input line 1359.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [57
 
 ]
 File: frontespizio.png Graphic file (type png)
 <use frontespizio.png>
-Package pdftex.def Info: frontespizio.png  used on input line 1334.
+Package pdftex.def Info: frontespizio.png  used on input line 1359.
 (pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
  [58
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 1359.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [59
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 1359.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [60
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 1372.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [61
+
+]pdfTeX warning (ext4): destination with the same identifier (name{SW<1>}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1437 \end{frame}
+                  pdfTeX warning (ext4): destination with the same identifier (
+name{SW}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1437 \end{frame}
+                  
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 1437.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [62
+
+]
+File: frontespizio.png Graphic file (type png)
+<use frontespizio.png>
+Package pdftex.def Info: frontespizio.png  used on input line 1481.
+(pdftex.def)             Requested size: 28.61635pt x 28.45274pt.
+ [63
 
 ]
 \tf@nav=\write6
@@ -2096,14 +2130,14 @@ Package pdftex.def Info: frontespizio.png  used on input line 1334.
 \tf@snm=\write8
 \openout8 = `los_alamos.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1338.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1338.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1485.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1485.
  (./los_alamos.aux (./sslide.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1338.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1338.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1485.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1485.
 
 Package rerunfilecheck Info: File `los_alamos.out' has not changed.
-(rerunfilecheck)             Checksum: F4E5420D33F16E512970243970C172B5;419.
+(rerunfilecheck)             Checksum: 9A3A0D7B2121C6794E7E666FB6594EC1;503.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -2113,45 +2147,47 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 26276 strings out of 481239
- 522886 string characters out of 5920378
+ 26353 strings out of 481239
+ 524283 string characters out of 5920378
  887417 words of memory out of 5000000
- 40748 multiletter control sequences out of 15000+600000
+ 40806 multiletter control sequences out of 15000+600000
  566879 words of font info for 126 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  58i,20n,67p,777b,1018s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cm
-mib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfso2488.pf
-b></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/texmf/
-fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/c
-m-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb
-></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfss1200.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfss1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss2074.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfsx1440.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/stmaryrd/stmary10.pfb>
-Output written on los_alamos.pdf (58 pages, 2556291 bytes).
+/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfso2488.pfb></usr/
+share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/s
+hare/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/typ
+e1/public/cm-super/sfss1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+fss1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss2074.pfb></usr/sh
+are/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf/fonts/type
+1/public/cm-super/sfsx1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/stmaryrd/stmary10.pfb>
+Output written on los_alamos.pdf (63 pages, 3579849 bytes).
 PDF statistics:
- 2910 PDF objects out of 2984 (max. 8388607)
- 1976 compressed objects within 20 object streams
- 149 named destinations out of 1000 (max. 500000)
- 309 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3094 PDF objects out of 3580 (max. 8388607)
+ 2132 compressed objects within 22 object streams
+ 161 named destinations out of 1000 (max. 500000)
+ 350 words of extra memory for PDF output out of 10000 (max. 10000000)
 
