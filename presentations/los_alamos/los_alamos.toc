@@ -4,8 +4,5 @@
 \beamer@sectionintoc {3}{Numerics}{16}{0}{3}
 \beamer@subsectionintoc {3}{1}{Sod}{17}{0}{3}
 \beamer@subsectionintoc {3}{2}{Smooth periodic}{18}{0}{3}
-\beamer@sectionintoc {4}{Continuous FEM}{25}{0}{4}
-\beamer@sectionintoc {5}{Well-balancing}{33}{0}{5}
-\beamer@subsectionintoc {5}{1}{Spatial part}{34}{0}{5}
-\beamer@subsectionintoc {5}{2}{Stabilization, continuous interior penalty}{39}{0}{5}
-\beamer@sectionintoc {6}{Numerical results}{46}{0}{6}
+\beamer@subsectionintoc {3}{3}{Well-balancing}{20}{0}{3}
+\beamer@subsectionintoc {3}{4}{Supercritical smooth}{25}{0}{3}
