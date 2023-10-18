@@ -359,7 +359,7 @@ print("Timestepping loop")
 DATA.time=0     #Time
 indt=0  #Counter
 
-if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Constant_Slope_Smooth"):
+if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Subcritical_Smooth" or test=="Transcritical_Smooth" or test=="Constant_Slope_Smooth"):
     print()
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print("Warning, running a smooth test with first order limiting!")
