@@ -10,7 +10,6 @@ import numpy as np
 #==============================================================
 class DATA_CLASS:
     def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing):
-                     #test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing
 
         #Somhow it is better to store also the input paramters in DATA
         self.test               = test
@@ -165,17 +164,12 @@ def Analytical_State(x,t,DATA):
     elif DATA.test=="Supercritical_Smooth":
         q0=24.
         hL=2.
-        # print(DATA.g)
-        # quit()
-        # Exact
+        #Exact
         b=Bathymetry(x,DATA)
         p=[1., (b-q0**2/(2.*DATA.g*hL**2) - hL), 0., q0**2/(2.*DATA.g)]
         hvec=np.roots(p)
         H=hvec[1]
         v=q0/H
-
-        # quit()
-
     elif DATA.test=="Subcritical_Smooth":
         q0=4.42
         hL=2.
@@ -227,7 +221,6 @@ def Bathymetry(x,DATA):
             B=0.2*np.exp(1. - 1./(1.-((x-x0)/r)**2.))    
         else:
             B=0.
-
     elif DATA.test=="Lake_At_Rest_Not_Smooth":
         x0=10.
         r=2.
@@ -278,7 +271,6 @@ def Derivative_Bathymetry(x,DATA):
 # Initial condition
 #==============================================================
 def IC(x_H,x_v,t,DATA):
-      #x_H, x_v, 0, DATA
     """
     Fill the fields H, B and v
     """
@@ -289,15 +281,8 @@ def IC(x_H,x_v,t,DATA):
     # v_field[glob_indi_v]
     v_field = np.zeros((len(x_v)))
 
-
-
     N_el, local_nodes_H = x_H.shape
     N_global_nodes_v=len(x_v)
-
-    print(N_el)
-    print(local_nodes_H)
-    print(N_global_nodes_v)
-
 
     if DATA.test=="Sod" or DATA.test=="Sod_smooth":
         for inde in range(N_el):
@@ -330,25 +315,14 @@ def IC(x_H,x_v,t,DATA):
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
         v_field[:]=0.
     elif DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
-        print()
-        print("Here")
-        print(DATA.test)
         for inde in range(N_el):
-            print("Element",inde,"DoFs",x_H[inde,:])
             for indi_l in range(local_nodes_H):
                 vec=Analytical_State(x_H[inde,indi_l],0,DATA)
                 H_field[inde,indi_l] = vec[0]
                 B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
-                print("Coordinate x_H",x_H[inde,indi_l],"; q which sholud be constant",vec[0]*vec[1])
-
-
         for indi_g in range(N_global_nodes_v):
             vec=Analytical_State(x_v[indi_g],0,DATA)
             v_field[indi_g]=vec[1]
-            print("Index", indi_g, "; Coordinate", x_v[indi_g], "; q which must be constant", vec[0]*vec[1])
-
-
-
     else:
         print("Error in test_dependent module, in function function IC, test not available")
         quit()
@@ -387,7 +361,6 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
         for inde in range(N_el):
             for indi in range(local_nodes_H):
                 if DATA.perturbation==0:
-                    # print(DATA.perturbation)
                     pass
                 else:
                     x0=6
@@ -479,10 +452,6 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
     elif DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
             H,v=Analytical_State(x,0,DATA)
             B=Bathymetry(x,DATA)
-            # print(H)
-            # print(v)
-            # print(B)
-            # quit()
     else:
         print("Problems in BC_state, test not available")
         quit()

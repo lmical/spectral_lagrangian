@@ -5,8 +5,8 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Supercritical_Smooth"   #Smooth_periodic, Supercritical_Smooth, Sod, Constant_Slope_Smooth, No_Slope_Smooth
-order_space=4
+test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod, Constant_Slope_Smooth, No_Slope_Smooth
+order_space=5
 time_scheme="DeC"
 jump="j0"                        #jc, j0
 CFL=0.5
@@ -19,7 +19,7 @@ if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
 #
 #
 #==============================================================
-folder="./New/"+test #Results_old SSPRK
+folder="./Results/"+test #Results_old SSPRK
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1

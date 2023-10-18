@@ -40,47 +40,24 @@ def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v
 #==============================================================
 # rhs function for the DeC update of v
 #==============================================================
-def rhs_v_function(H_field,    v_field,    x_v,    B_field,     w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA):
-                  #H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA
-
-    # print("I'm in RHS_v, let's hope. If the bug is anywhere, it is here.")
-
+def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA):
     M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,DATA)
-                                            #w_v,x_v,M_Local_to_Global,local_derivatives_v,DATA
-
-
-    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global, DATA)
-                                             #H_field, B_field, w_v, local_derivatives_H_in_v, M_Local_to_Global, DATA
-
-
+    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global,DATA)
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA)
-                                                               #H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA
-
-
-
 
     if DATA.LaxFriedrichs==True:
         ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,DATA)
-        # print("*****************************")
-        # print("in rhs_v_function, LxF NOT TO BE DEBUGGED")
-        # print("*****************************")
     else:
         ST_i=np.zeros(len(phi_v))
 
     if DATA.jump=="jc":
         phi_jump=lagrangian_scheme.jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA)
-        # print("*****************************")
-        # print("in rhs_v_function, jump NOT TO BE DEBUGGED")
-        # print("*****************************")
     elif DATA.jump=="j0":
         phi_jump=np.zeros(len(phi_v))
     else:
         print("Stop in rhs_v_function in time_stepping module")
         print("Jump not available",DATA.jump)
 
-
-
-    # quit()
 
     return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i-phi_jump)/M_v
 #==============================================================
@@ -90,8 +67,7 @@ def rhs_v_function(H_field,    v_field,    x_v,    B_field,     w_v, local_deriv
 #==============================================================
 # DeC method
 #==============================================================
-def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec):
-              #H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec
+def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA,dec):
 
     #Initialization of the structures
     #p = previous iteration
@@ -118,8 +94,6 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
     rhs_x_v = np.zeros((N_global_nodes_v,dec.M_sub+1))
 
 
-
-
     #Filling p structures with u^{(0)}
     for inds in range(dec.M_sub+1):
         H_p[:,:,inds] = H_field_old[:,:].copy()
@@ -128,38 +102,15 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
         x_v_p[:,inds] = x_v_old[:].copy()
 
 
-
-    # print("INSIDE DeC")
-    # print("N_el",N_el)
-    # print("local_nodes_H",local_nodes_H)
-    # print("global_nodes_v",N_global_nodes_v)
-    # print("M_sub",dec.M_sub)
-
-
-    # print(H_field_old-H_p[:,:,0])
-    # print(H_field_old-H_p[:,:,1])
-    # print(H_field_old-H_p[:,:,2])
-    # print(B_field_old-B_p[:,:,0])
-    # print(B_field_old-B_p[:,:,1])
-    # print(B_field_old-B_p[:,:,2])
-    # print(v_field_old-v_p[:,0])
-    # print(v_field_old-v_p[:,1])
-    # print(v_field_old-v_p[:,2])
-    # print(x_v_old-x_v_p[:,0])
-    # print(x_v_old-x_v_p[:,1])
-    # print(x_v_old-x_v_p[:,2])
-
-
     #Filling a structure in subtimenode 0 (just for the sake of completeness)
-    # H_a[:,:,0] = H_field_old[:,:].copy()
-    # B_a[:,:,0] = B_field_old[:,:].copy()
-    # v_a[:,0]   = v_field_old[:].copy()
-    # x_v_a[:,0] = x_v_old[:].copy()
+    H_a[:,:,0] = H_field_old[:,:].copy()
+    B_a[:,:,0] = B_field_old[:,:].copy()
+    v_a[:,0]   = v_field_old[:].copy()
+    x_v_a[:,0] = x_v_old[:].copy()
 
 
     #DeC iteration loop
     rhs_v[:,0]   = rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
-                                 #H_field,    v_field,    x_v,    B_field,     w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA
     rhs_x_v[:,0] = v_field_old.copy()
 
     for r in range(1,dec.M_sub+1):
@@ -196,7 +147,6 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
     B_field = B_a[:,:,dec.M_sub]
 
     return H_field, v_field, x_v, B_field
-          #H_field, v_field, x_v, B_field
 #==============================================================
 #
 #

@@ -17,8 +17,6 @@ def printing_function(indt,t,H_field,v_field):
     print("Minima H and v:",np.min(H_field),np.min(v_field))
     print("------------------------------------------")
     print()
-    # H_field=100000.
-    # v_field=100000.
 #==============================================================
 #
 #
