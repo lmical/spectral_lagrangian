@@ -331,13 +331,7 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[-1]],DATA)
 
-            # print(N_el-1,x_v[global_indices_v[-1]],q_outside)
             CT_phi_v[-1]=CT_phi_v[-1]+ ( (Hhat+Bhat)-(H_inside+B_inside) ) 
-            # print()
-            # print(CT_phi_v[-1])
-            # if CT_phi_v[-1] != 0:
-            #     print("PORCAMADO",CT_phi_v[-1],DATA.time)
-            #     quit()
         else:
             #Riemann Problem Right
             H_outside = H_field[inde+1,0]                        #First from the right cell
@@ -348,12 +342,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_outside = np.array([H_outside,H_outside*v_both])   #L state
             q_inside  = np.array([H_inside ,H_inside *v_both])   #R state
             if DATA.WB==True:
-                # Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
                 Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
             else:
-                # Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
                 Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
-
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[-1]],DATA)
 
 
