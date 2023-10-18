@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Transcritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Smooth_periodic"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -23,10 +23,12 @@ test               = "Transcritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smo
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 50                        #Number of elements
+N_el               = 40                        #Number of elements
 
 #Space
-order_space        = 3                         #Order in space
+order_space        = 2                         #Order in space
+
+
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -46,9 +48,13 @@ order_space        = 3                         #Order in space
 time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
+
+
 CFL                = 0.5               #CFL
 freq               = 100                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
+
+
 
 
 #Space discretization
@@ -57,10 +63,14 @@ LaxFriedrichs      = False
 WB                 = False
 jump               = "j0"               #j0,    jc
 
+
+
+
+
 #Folder where to store
-folder             = "New_Debug"
+folder             = "New"
 printing           = True
-plotting           = True
+plotting           = False
 storing            = True
 
 
@@ -150,6 +160,44 @@ for indi in range(N_local_nodes_v):
 
 
 
+print("Number of elements",N_el)
+print("Order space",order_space)
+print("Time scheme",time_scheme)
+print("Order time" ,order_space)
+print("CFL",CFL)
+print("LxF", LaxFriedrichs)
+print("jump", jump)
+print("degree H", degree_H)
+print("degree v", degree_v)
+print("N_local_nodes_H", N_local_nodes_H)
+print("N_local_nodes_v", N_local_nodes_v)
+print("Local_nodes_H",local_nodes_H)
+print("Local_nodes_v",local_nodes_v)
+print("H")
+for indi in range(len(local_nodes_H)):
+    print(local_nodes_H[indi],w_H[indi])
+print("v")
+for indi in range(len(local_nodes_v)):
+    print(local_nodes_v[indi],w_v[indi])
+
+print("local derivatives H")
+print(local_derivatives_H)
+print("local derivatives v")
+print(local_derivatives_v)
+print()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #--------------------------------------------------------------
 #I don't know if they are needed, I compute them
@@ -160,10 +208,18 @@ for indi in range(N_local_nodes_H):
     local_values_H_in_v[indi,:] = reference_element.lagrange_basis(local_nodes_H,local_nodes_v,indi)
 
 
+print("local_values_H_in_v")
+print(local_values_H_in_v)
+
+
 #Local_values_v_in_H
 local_values_v_in_H=np.zeros((N_local_nodes_v,N_local_nodes_H)) #phi_v(x_H)
 for indi in range(N_local_nodes_v):
     local_values_v_in_H[indi,:] = reference_element.lagrange_basis(local_nodes_v,local_nodes_H,indi)
+
+print()
+print("local_values_v_in_H")
+print(local_values_v_in_H)
 
 
 
@@ -173,10 +229,21 @@ for indi in range(N_local_nodes_H):
     local_derivatives_H_in_v[indi,:] = reference_element.lagrange_deriv(local_nodes_H,local_nodes_v,indi)
 
 
+print("local_derivatives_H_in_v")
+print(local_derivatives_H_in_v)
+
+
+
+
 #Local_derivatives_v_in_H
 local_derivatives_v_in_H=np.zeros((N_local_nodes_v,N_local_nodes_H)) #d phi_v(x_H)
 for indi in range(N_local_nodes_v):
     local_derivatives_v_in_H[indi,:] = reference_element.lagrange_deriv(local_nodes_v,local_nodes_H,indi)
+
+print("local_derivatives_v_in_H")
+print(local_derivatives_v_in_H)
+
+
 
 
 
@@ -203,30 +270,30 @@ for indi in range(N_local_nodes_v):
 # print(local_derivatives_v)
 # quit()
 #--------------------------------------------------------------
-# psi=reference_element.basis_functions("PGLB",degree_H)
-# for indi in range(len(local_nodes_H)):
-#     if np.linalg.norm(psi[indi](local_nodes_v)-local_values_H_in_v[indi,:])>1e-14:
-#         print("Problem")
-#         quit()
+psi=reference_element.basis_functions("PGLB",degree_H)
+for indi in range(len(local_nodes_H)):
+    if np.linalg.norm(psi[indi](local_nodes_v)-local_values_H_in_v[indi,:])>1e-14:
+        print("Problem")
+        quit()
 
-# phi=reference_element.basis_functions("PGLB",degree_v)
-# for indi in range(len(local_nodes_v)):
-#     if np.linalg.norm(phi[indi](local_nodes_H)-local_values_v_in_H[indi,:])>1e-14:
-#         print("Problem")
-#         quit()
+phi=reference_element.basis_functions("PGLB",degree_v)
+for indi in range(len(local_nodes_v)):
+    if np.linalg.norm(phi[indi](local_nodes_H)-local_values_v_in_H[indi,:])>1e-14:
+        print("Problem")
+        quit()
 
 
-# dpsi=reference_element.derivative_basis_functions("PGLB",degree_H)
-# for indi in range(len(local_nodes_H)):
-#     if np.linalg.norm(dpsi[indi](local_nodes_v)-local_derivatives_H_in_v[indi,:])>1e-14:
-#         print("Problem")
-#         quit()
+dpsi=reference_element.derivative_basis_functions("PGLB",degree_H)
+for indi in range(len(local_nodes_H)):
+    if np.linalg.norm(dpsi[indi](local_nodes_v)-local_derivatives_H_in_v[indi,:])>1e-14:
+        print("Problem")
+        quit()
 
-# dphi=reference_element.derivative_basis_functions("PGLB",degree_v)
-# for indi in range(len(local_nodes_v)):
-#     if np.linalg.norm(dphi[indi](local_nodes_H)-local_derivatives_v_in_H[indi,:])>1e-14:
-#         print("Problem")
-#         quit()
+dphi=reference_element.derivative_basis_functions("PGLB",degree_v)
+for indi in range(len(local_nodes_v)):
+    if np.linalg.norm(dphi[indi](local_nodes_H)-local_derivatives_v_in_H[indi,:])>1e-14:
+        print("Problem")
+        quit()
 #--------------------------------------------------------------
 
 
@@ -268,6 +335,17 @@ if time_scheme=="DeC":
     # print("NB: The matrix must be transposed")
     # quit()
     #--------------------------------------------------------------
+
+
+
+print(dec.M_sub)
+print(dec.n_subNodes)
+print(dec.n_iter) 
+print(dec.nodes_type)
+print(dec.beta)
+print(dec.theta) 
+
+
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
@@ -279,6 +357,10 @@ DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,or
 # print("periodicity",DATA.periodic)
 # quit()
 #--------------------------------------------------------------
+print(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing)
+print(DATA.test,DATA.perturbation,DATA.N_el,DATA.order_space,DATA.time_scheme,DATA.order_time,DATA.CFL,DATA.freq,DATA.N_max_iter,DATA.scheme,DATA.LaxFriedrichs,DATA.WB,DATA.jump,DATA.folder,DATA.printing,DATA.plotting,DATA.storing)
+
+
 #==============================================================
 #
 #
@@ -287,23 +369,37 @@ DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,or
 print("------------------------------------------")
 print("Mesh initialization")
 x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh.build_mesh(DATA,N_el,local_nodes_H,local_nodes_v)
+#x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces
+
+
+
+
+
+
+
+
+
 #----------------------------------------------
-# print("Local nodes H", local_nodes_H)
-# print("Local nodes v", local_nodes_v)
-# print("degree H", degree_H)
-# print("degree v", degree_v)
-# print("Total DoFs v", N_global_nodes_v)
-# print("x_H",x_H)
-# print("x_v",x_v)
-# print("Local to Global",M_Local_to_Global)
-# for indi_g in range(N_global_nodes_v):
-#     print("DoF",indi_g)
-#     print("Contained by",v_Global_to_Local[indi_g].N_el_containing_node, "elements")
-#     print("...and these are",v_Global_to_Local[indi_g].vec_el)
-#     print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
-#     print()
-# print(M_faces)
+print("Local nodes H", local_nodes_H)
+print("Local nodes v", local_nodes_v)
+print("degree H", degree_H)
+print("degree v", degree_v)
+print("Total DoFs v", N_global_nodes_v)
+print("x_H",x_H)
+print("x_v",x_v)
+
+print("Local to Global",M_Local_to_Global)
+for indi_g in range(N_global_nodes_v):
+    print("DoF",indi_g)
+    print("Contained by",v_Global_to_Local[indi_g].N_el_containing_node, "elements")
+    print("...and these are",v_Global_to_Local[indi_g].vec_el)
+    print("...and the local DoF in these is",v_Global_to_Local[indi_g].vec_indi_l)
+    print()
+print(M_faces)
 #----------------------------------------------
+
+
+
 #==============================================================
 #
 #
@@ -312,12 +408,61 @@ x_H, x_v, M_Local_to_Global, v_Global_to_Local, N_global_nodes_v, M_faces = mesh
 print("------------------------------------------")
 print("Variables initialization")
 H_field, B_field, v_field = test_dependent.IC(x_H, x_v, 0, DATA)
+#H_field, B_field, v_field
+H_field_safety_check = H_field.copy()
+B_field_safety_check = B_field.copy()
+v_field_safety_check = v_field.copy()
+
+
+
+
+
+
+
 H_field, v_field, DATA = test_dependent.insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA)
+
+
+
+
+
+# To make sure that insert_perturbation is doing nothing
+# print(H_field_safety_check-H_field)
+# print(B_field_safety_check-B_field)
+# print(v_field_safety_check-v_field)
+
+# IC seems ok
+# print(H_field)
+# print(v_field)
+# print(B_field)
+
+
+
+
 
 #Getting the field on the reference element for strong mass conservation
 # Hhat_i = H_i(0)*det J(x_i,0)
 # J(xi,0) = grad_xi x (xi,0) = sum_j x_j(0) grad_xi phi_j (xi)
 Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+                                                          #H_field,x_v,local_derivatives_v_in_H,M_Local_to_Global
+
+
+
+# print("I'M HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+# quit()
+
+
+print( np.linalg.norm(H_field-Hhat_field/(x_v[N_local_nodes_v-1]-x_v[0])) )
+# print(H_field)
+# print(Hhat_field)
+
+#NB: Hhat smaller because it has to balance the passage from dx to [0,1]
+# print(N_local_nodes_v)
+# print(x_v[N_local_nodes_v-1])
+# quit()
+
+
+
+
 #----------------------------------------------
 # plt.plot(x_v,v_field)
 # plt.show()
@@ -325,14 +470,52 @@ Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_der
 #     plt.plot(x_H[inde,:],H_field[inde,:])
 # plt.show()
 #----------------------------------------------
-# H_field_test=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
-# if (np.linalg.norm(H_field-H_field_test)>1e-14):
-#     print("I'm in main. Problem in strong_mass_conservation")
-#     quit()
+H_field_test=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+                                                       #Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global
+if (np.linalg.norm(H_field-H_field_test)>1e-14):
+    print("I'm in main. Problem in strong_mass_conservation")
+    quit()
+
+
+
+
+# x_v=np.linspace(DATA.xL,DATA.xR,N_el*degree_v+1)
+# Hhat_field1=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# #NB: It is not a simple linear rescaling because I changed the x_v vector
+# # print(H_field-Hhat_field1/(x_v[N_local_nodes_v-1]-x_v[0]))
+# H_field1=lagrangian_scheme.strong_mass_conservation(Hhat_field1,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# # print(H_field-H_field1)
+# # quit()
+# Hhat_field2=lagrangian_scheme.get_Hhat_on_reference_element(H_field1,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# H_field2=lagrangian_scheme.strong_mass_conservation(Hhat_field2,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+
+# print(Hhat_field2-Hhat_field1)
+# print(H_field2-H_field1)
+
+# quit()
+# # Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# # # print(H_field)
+# # # print(Hhat_field)
+# # # print(H_field-Hhat_field/(x_v[N_local_nodes_v-1]-x_v[0]))
+# # Hstar=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# # print(H_field-Hstar)
+
+# # Hhat_field2 = Hhat_field.copy()
+# # H_field2    = Hstar.copy()
+# # Hhat_field=lagrangian_scheme.get_Hhat_on_reference_element(H_field2,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# # H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field2,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+# # print(H_field-H_field2)
+# # print(Hhat_field-Hhat_field2)
+# # print("Perfect")
+# quit()
 #==============================================================
 #
 #
 #
+
+
+
+
 #==============================================================
 # Testing some structures
 # M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v)
@@ -359,6 +542,8 @@ print("Timestepping loop")
 DATA.time=0     #Time
 indt=0  #Counter
 
+
+
 if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Constant_Slope_Smooth"):
     print()
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -373,26 +558,75 @@ if printing==True:
     output.printing_function(indt,DATA.time,H_field,v_field)
 if plotting==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
+                                 #x_v,local_values_v_in_H,M_Local_to_Global
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
     output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
+
+
+
+# print(H_field)
+# print(v_field)
+# x_v=np.linspace(DATA.xL,DATA.xR,N_el*degree_v+1)
+x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
+H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
+# print(x_H)
+# quit()
+
+# print(x_H)
+# print(H_field)
+# print(H_in_x_v[::(N_local_nodes_v-1)])
+# quit()
+
+
+#I'm here: before time stepping, let's hope to find the bug here! Please :/
 
 while(DATA.time<DATA.T):
     #Computation of the time step
     dt=DATA.T-DATA.time
     dt_max=lagrangian_scheme.Compute_Time_Step(H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL)
+                                              #H_field,v_field,x_v,M_Local_to_Global,DATA,degree_v,CFL
     DATA.dt=min(dt,dt_max)
 
-    #Store solution in the previous time step
-    x_v_old=x_v
-    H_field_old=H_field
-    v_field_old=v_field
-    B_field_old=B_field
+    # print(dt-DATA.dt,dt_max-DATA.dt)
 
+
+
+    #CHECKED UNTIL HERE
+
+    #Store solution in the previous time step
+    x_v_old=x_v.copy()
+    H_field_old=H_field.copy()
+    v_field_old=v_field.copy()
+    B_field_old=B_field.copy()
+
+
+    # print(x_v_old)
+    # print(H_field)
+    # print(v_field_old)
+    # print(B_field)
+    # print()
+    # print(H_field+B_field)
+
+    # quit()
 
     if time_scheme=="Euler":
         H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
     elif time_scheme=="DeC":
+
         H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec)
+                                                               #H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec
+
+        #They have been updated
+        # print(np.linalg.norm(x_v-x_v_old)        )
+        # print(np.linalg.norm(H_field-H_field_old))
+        # print(np.linalg.norm(v_field-v_field_old))
+        # print(np.linalg.norm(B_field-B_field_old))
+        #Check compatibility of B_field
+        # x_H_debug=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
+        # B_debug=lagrangian_scheme.get_B(x_H_debug,DATA)
+        # print(np.linalg.norm(B_field-B_debug)) #OK
+        # quit()
+
     elif time_scheme=="SSPRK4":
         H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
     else:
@@ -405,6 +639,8 @@ while(DATA.time<DATA.T):
     DATA.time=DATA.time+DATA.dt
     indt=indt+1
 
+    # print(DATA.time)
+
     #Only every freq timesteps
     if (indt%freq==0):
         #Printing and plotting IC
@@ -415,6 +651,14 @@ while(DATA.time<DATA.T):
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
             output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
 
+
+    # x_v[5]=x_v[6]
+    if np.all(np.diff(x_v) > 0):
+        # print("OK! No entanglement")
+        pass
+    else:
+        print("PROBLEM")
+        quit()
 
     if indt>=N_max_iter:
         print("Total number of iterations reached", indt, N_max_iter)

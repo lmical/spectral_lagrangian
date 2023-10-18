@@ -5,8 +5,8 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Supercritical_Smooth"   #Supercritical_Smooth
-order_space=3
+test="Smooth_periodic"   #Supercritical_Smooth #Smooth_periodic
+order_space=2
 time_scheme="DeC"
 jump="j0"                        #jc, j0
 CFL=0.5
@@ -16,7 +16,7 @@ LxF=False
 #
 #
 #==============================================================
-folder="./New_Results/"+test
+folder="./New/"+test
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1
