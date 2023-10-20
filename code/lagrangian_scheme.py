@@ -289,9 +289,9 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_outside = np.array([H_outside,H_outside*v_outside])  #L state
             q_inside  = np.array([H_inside ,H_inside *v_inside])   #R state
             if DATA.WB==True:
-                Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, v_outside, DATA.g)
+                Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, v_inside, DATA.g)
             else:
-                Hhat, HUhat = Riemann_solver.shallow_water_hll(q_outside, q_inside, v_outside, DATA.g)
+                Hhat, HUhat = Riemann_solver.shallow_water_hll(q_outside, q_inside, v_inside, DATA.g)
                 Bhat = test_dependent.Bathymetry(x_v[0],DATA)
             CT_phi_v[0]=CT_phi_v[0]- ( (Hhat+Bhat)-(H_inside+B_inside) ) #IMPORTANT: - sign because of normal
         else:
@@ -324,10 +324,10 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
             q_inside  = np.array([H_inside ,H_inside *v_inside])  #R state
             if DATA.WB==True:
                 # Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
-                Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, v_outside, DATA.g)
+                Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, v_inside, DATA.g)
             else:
                 # Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
-                Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, v_outside, DATA.g)
+                Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, v_inside, DATA.g)
 
                 Bhat = test_dependent.Bathymetry(x_v[global_indices_v[-1]],DATA)
 
