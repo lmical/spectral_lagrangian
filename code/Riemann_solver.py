@@ -6,7 +6,7 @@ import numpy as np
 # HLL from: http://www.clawpack.org/riemann_book/html/Shallow_water_approximate.html
 # NB: Riemann solver in conserved variables
 #==============================================================
-def shallow_water_hll(q_l, q_r, grav=9.81):
+def shallow_water_hll(q_l, q_r, xi, grav):
     """
     HLLE approximate solver for the shallow water equations.
     """
@@ -33,7 +33,6 @@ def shallow_water_hll(q_l, q_r, grav=9.81):
     hu_m = (hu_r*u_r - hu_l*u_l + 0.5*grav*(h_r**2 - h_l**2) \
             - s2*hu_r + s1*hu_l)/(s1-s2)
     
-    xi=0.
 
     h_out  = (xi<s1)*h_l + (s1<=xi)*(xi<=s2)*h_m + (s2<xi)*h_r
     hu_out = (xi<s1)*hu_l + (s1<=xi)*(xi<=s2)*hu_m + (s2<xi)*hu_r
@@ -48,7 +47,7 @@ def shallow_water_hll(q_l, q_r, grav=9.81):
 # Modification from: A simple well-balanced and positive numerical scheme for the shallow-water system 
 # NB: Riemann solver in conserved variables
 #==============================================================
-def shallow_water_hll_WB(q_l, q_r, b_l, b_r, grav=9.81):
+def shallow_water_hll_WB(q_l, q_r, b_l, b_r, xi, grav):
     """
     HLLE approximate solver for the shallow water equations.
     With a WB modification
@@ -76,7 +75,6 @@ def shallow_water_hll_WB(q_l, q_r, b_l, b_r, grav=9.81):
     hu_m = (hu_r*u_r - hu_l*u_l + 0.5*grav*(h_r**2 - h_l**2) \
             - s2*hu_r + s1*hu_l)/(s1-s2)
     
-    xi=0.
 
     if xi<s1:
         h_out=h_l
