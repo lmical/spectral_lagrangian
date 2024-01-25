@@ -19,7 +19,7 @@ if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
 #
 #
 #==============================================================
-folder="./Results/"+test #Results_old SSPRK
+folder="./Results/"+test 
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1
@@ -181,8 +181,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         params = {'mathtext.default': 'regular' }   
         plt.xlabel("$N_{elements}$")
         plt.ylabel("$L^1$ error")
-        plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"pdf", format="pdf", bbox_inches="tight")
-        # plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+"png",dpi=600)
+        plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".pdf", format="pdf", bbox_inches="tight")
+        # plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".png",dpi=600)
         # plt.show()
 
 
