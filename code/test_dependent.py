@@ -123,6 +123,19 @@ class DATA_CLASS:
             self.g=9.81
             # Analytical solution
             self.analytical_solution=True
+        elif test=="Thacker": #Thacker oscillations, 4.2.1 Planar surface in a parabola without friction in swasher
+            L=4
+            # Extrema
+            self.xL=0
+            self.xR=L
+            # Final time
+            self.T=10.0303 #5 periods
+            # Periodicity of the mesh
+            self.periodic=False
+            # gravity
+            self.g=9.81
+            # Analytical solution
+            self.analytical_solution=True
         else:
             print("Error in class DATA_CLASS, in test_dependent, test not available")
             quit()
@@ -194,6 +207,20 @@ def Analytical_State(x,t,DATA):
         else:
             H=hvec[1]
         v=q0/H
+    elif DATA.test=="Thacker":
+        #Parameters
+        a=1; h0=0.5; L=4
+        #Locations of wet/dry interfaces at time t        
+        x1=-0.5*np.cos( np.sqrt(2.*DATA.g*h0)/a*t )-a+0.5*L
+        x2=-0.5*np.cos( np.sqrt(2.*DATA.g*h0)/a*t )+a+0.5*L
+
+        H=1e-6
+        v=0
+        B=np.sqrt( 2.*DATA.g*h0 )/( 2*a )
+        if (x>x1) and (x<x2):
+            H=-h0 * ( ( 1/a*(x-0.5*L) + B/(np.sqrt(2.*DATA.g*h0))*np.cos( np.sqrt(2.*DATA.g*h0)/a*t ) )**2 - 1. )
+            v=B*np.sin( np.sqrt(2.*DATA.g*h0)/a*t )
+
     else:
         print("Error in function Analytical_State in test_dependent module, test not available")
         quit()
@@ -229,6 +256,9 @@ def Bathymetry(x,DATA):
             B=0.2-0.05*(x-x0)**2    
         else:
             B=0.
+    elif DATA.test=="Thacker":
+        a=1; h0=0.5; L=4
+        B=h0*( 1/a**2 * (x-0.5*L)**2 - 1 )
     else:
         print("Error in function Bathymetry, test not available")
         quit()
@@ -259,6 +289,10 @@ def Derivative_Bathymetry(x,DATA):
             dB=-2*0.05*(x-x0)    
         else:
             dB=0.
+    elif DATA.test=="Thacker":
+        a=1; h0=0.5; L=4
+        dB=h0 * 1/a**2 * (x-0.5*L)*2
+
     else:
         print("Error in function Derivative_Bathymetry, test not available")
         quit()
@@ -323,8 +357,17 @@ def IC(x_H,x_v,t,DATA):
         for indi_g in range(N_global_nodes_v):
             vec=Analytical_State(x_v[indi_g],0,DATA)
             v_field[indi_g]=vec[1]
+    elif DATA.test=="Thacker":
+        for inde in range(N_el):
+            for indi_l in range(local_nodes_H):
+                vec=Analytical_State(x_H[inde,indi_l],0,DATA)
+                H_field[inde,indi_l] = vec[0]
+                B_field[inde,indi_l] = Bathymetry(x_H[inde,indi_l],DATA)
+        for indi_g in range(N_global_nodes_v):
+            vec=Analytical_State(x_v[indi_g],0,DATA)
+            v_field[indi_g]=vec[1]
     else:
-        print("Error in test_dependent module, in function function IC, test not available")
+        print("Error in test_dependent module, in function IC, test not available")
         quit()
     return H_field, B_field, v_field
 #==============================================================
@@ -353,7 +396,7 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
     """
 
     N_el, local_nodes_H = x_H.shape
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic" or DATA.test=="Thacker":
         if DATA.perturbation!= 0:
             print("No perturbation provided for such test",DATA.test)
             quit()
@@ -452,6 +495,10 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
     elif DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
             H,v=Analytical_State(x,0,DATA)
             B=Bathymetry(x,DATA)
+    elif DATA.test=="Thacker":
+        H=1e-6
+        v=0.
+        B=Bathymetry(x,DATA)
     else:
         print("Problems in BC_state, test not available")
         quit()

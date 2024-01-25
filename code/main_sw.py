@@ -19,6 +19,7 @@ test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smo
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
                                                 #"Transcritical_Smooth", "Transcritical_Not_Smooth"
                                                 #"Constant_Slope_Smooth"
+                                                #"Thacker"
 
 
 perturbation       = 0                          #Perturbation
