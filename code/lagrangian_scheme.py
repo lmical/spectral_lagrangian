@@ -364,13 +364,13 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 # Local computation for the Lax-Friedrichs stabilization
 # NB: Uses Lax_Friedrichs_K
 #==============================================================
-def Lax_Friedrichs_K(v_local,Hmax):
+def Lax_Friedrichs_K(v_local,Hmax,DATA):
     """
     Computation
     phi^K_i=alpha (c_i-cbar_K)
     """
     #N_local_nodes_v=len(v_local)
-    alpha=np.max(np.absolute(v_local)+1e-6)+np.sqrt(9.81*Hmax)
+    alpha=np.max(np.absolute(v_local)+1e-6)+np.sqrt(DATA.g*Hmax) 
     vbar=np.average(v_local)
     ST_i_K=alpha*(v_local-vbar)
     return ST_i_K
@@ -399,7 +399,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,DATA):
         Hmax=0
         global_indices_v=M_Local_to_Global[inde,:]
         v_local=v_field[global_indices_v]
-        ST_i_K=Lax_Friedrichs_K(v_local,Hmax)
+        ST_i_K=Lax_Friedrichs_K(v_local,Hmax,DATA)
         for indi in range(N_local_nodes_v):
             ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
