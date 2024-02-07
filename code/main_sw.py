@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -24,10 +24,10 @@ test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smo
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 10                        #Number of elements
+N_el               = 4000                        #Number of elements
 
 #Space
-order_space        = 2                         #Order in space
+order_space        = 1                         #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -44,22 +44,22 @@ order_space        = 2                         #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
+time_scheme        = "Euler"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 100                #Frequency for saving the solution
+freq               = 1000                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = False
+LaxFriedrichs      = True
 WB                 = False
 jump               = "j0"               #j0,    jc
 
 #Folder where to store
-folder             = "Results"
+folder             = "Results_Conservative_Formulation"
 printing           = True
 plotting           = False
 storing            = True
@@ -391,11 +391,11 @@ while(DATA.time<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA)
     elif time_scheme=="DeC":
-        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA, dec)
+        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA, dec)
     elif time_scheme=="SSPRK4":
-        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA)
     else:
         print("Time scheme not available")
         quit()

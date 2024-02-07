@@ -8,12 +8,12 @@ import DeC
 #==============================================================
 # Euler method
 #==============================================================
-def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA):
+def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA):
     #Update
     #x
     x_v=x_v_old+DATA.dt*v_field_old
     #v
-    v_field=v_field_old+DATA.dt*rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    v_field=v_field_old+DATA.dt*rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     #H, with strong mass conservation
     H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
     #B
@@ -40,13 +40,13 @@ def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v
 #==============================================================
 # rhs function for the DeC update of v
 #==============================================================
-def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA):
-    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,DATA)
-    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global,DATA)
+def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA):
+    M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,H_field,local_values_H_in_v,DATA)
+    phi_v=lagrangian_scheme.Space_Residuals_v(H_field, B_field, w_v,local_derivatives_H_in_v,M_Local_to_Global,local_values_H_in_v,DATA)
     CT_phi_v=lagrangian_scheme.Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Global, M_faces, x_v, DATA)
 
     if DATA.LaxFriedrichs==True:
-        ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,DATA)
+        ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,DATA)
     else:
         ST_i=np.zeros(len(phi_v))
 
@@ -67,7 +67,7 @@ def rhs_v_function(H_field,v_field,x_v,B_field, w_v, local_derivatives_v, local_
 #==============================================================
 # DeC method
 #==============================================================
-def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA,dec):
+def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA,dec):
 
     #Initialization of the structures
     #p = previous iteration
@@ -110,7 +110,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
 
 
     #DeC iteration loop
-    rhs_v[:,0]   = rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v[:,0]   = rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v[:,0] = v_field_old.copy()
 
     for r in range(1,dec.M_sub+1):
@@ -125,7 +125,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
 
         if k>1:
             for r in range(1,dec.M_sub+1):
-                rhs_v[:,r]   = rhs_v_function(H_p[:,:,r],v_p[:,r],x_v_p[:,r],B_p[:,:,r], w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+                rhs_v[:,r]   = rhs_v_function(H_p[:,:,r],v_p[:,r],x_v_p[:,r],B_p[:,:,r], w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
                 rhs_x_v[:,r] = v_p[:,r].copy()
         if k < dec.n_iter:
             for m in range(1,dec.M_sub+1):
@@ -154,7 +154,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
 #==============================================================
 # SSPRK4 method
 #==============================================================
-def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, DATA):
+def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA):
 
     #Initialization of the structures
 
@@ -177,7 +177,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
 
     # CALL FVTimeDerivative(tStage)
 
-    rhs_v   = rhs_v_function(H_0,v_0,x_v_0,B_0, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v   = rhs_v_function(H_0,v_0,x_v_0,B_0, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v = v_0.copy()
 
     # K1(1:nVar,1:nElemsX,1:nElemsY) = &
@@ -200,7 +200,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
 
     # CALL FVTimeDerivative(tStage)
 
-    rhs_v   = rhs_v_function(H_1,v_1,x_v_1,B_1, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v   = rhs_v_function(H_1,v_1,x_v_1,B_1, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v = v_1.copy()
 
     # K2(1:nVar,1:nElemsX,1:nElemsY) = &
@@ -224,7 +224,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
 
     # CALL FVTimeDerivative(tStage)
 
-    rhs_v   = rhs_v_function(H_2,v_2,x_v_2,B_2, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v   = rhs_v_function(H_2,v_2,x_v_2,B_2, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v = v_2.copy()
 
     # K3(1:nVar,1:nElemsX,1:nElemsY) = &
@@ -248,7 +248,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
 
     # CALL FVTimeDerivative(tStage)
 
-    rhs_v   = rhs_v_function(H_3,v_3,x_v_3,B_3, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v   = rhs_v_function(H_3,v_3,x_v_3,B_3, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v = v_3.copy()
 
     # K4(1:nVar,1:nElemsX,1:nElemsY) = &
@@ -276,7 +276,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
 
     # CALL FVTimeDerivative(tStage)
 
-    rhs_v   = rhs_v_function(H_4,v_4,x_v_4,B_4, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, DATA)
+    rhs_v   = rhs_v_function(H_4,v_4,x_v_4,B_4, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     rhs_x_v = v_4.copy()
 
 
