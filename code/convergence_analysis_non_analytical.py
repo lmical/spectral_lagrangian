@@ -8,7 +8,8 @@ import os
 test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod, Constant_Slope_Smooth, No_Slope_Smooth
 order_space=5
 time_scheme="DeC"
-jump="j0"                        #jc, j0
+jump_CIP_in_v="j0"                        #jc, j0
+jump_eta_in_x=True
 CFL=0.5
 LxF=False
 perturbation=0
@@ -19,7 +20,7 @@ if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
 #
 #
 #==============================================================
-folder="./Results_Conservative_Formulation/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation
+folder="./Results_Jump_H/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1
@@ -30,7 +31,7 @@ local_DoFs_v=degree_v+1
 if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
     count=0
     errorfiles=[]
-    fileword="values_pert"+str(perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+time_scheme+"_LxF"+str(LxF)+"_"+jump+"_"+"CFL"+str(CFL)
+    fileword="values_pert"+str(perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+time_scheme+"_LxF"+str(LxF)+"_"+jump_CIP_in_v+"_jeta"+str(jump_eta_in_x)+"_"+"CFL"+str(CFL)
     for file in os.listdir(folder): #CONDITION: Is there more than 1 error files?
         if file.startswith(fileword):
             count=count+1

@@ -9,7 +9,7 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,folder,printing,plotting,storing):
 
         #Somhow it is better to store also the input paramters in DATA
         self.test               = test
@@ -24,7 +24,8 @@ class DATA_CLASS:
         self.scheme             = scheme
         self.LaxFriedrichs      = LaxFriedrichs
         self.WB                 = WB
-        self.jump               = jump
+        self.jump_CIP_in_v      = jump_CIP_in_v
+        self.jump_eta_in_x      = jump_eta_in_x
         self.folder             = folder
         self.printing           = printing
         self.plotting           = plotting
@@ -34,10 +35,13 @@ class DATA_CLASS:
 
         if order_space==1: 
             self.delta_CIP=0.119
+            self.alpha_jump_eta=1.
         elif order_space==2:
             self.delta_CIP=3.46e-03
+            self.alpha_jump_eta=1.
         elif order_space>=3:
             self.delta_CIP=1.13e-04          
+            self.alpha_jump_eta=1.
 
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema
@@ -45,6 +49,18 @@ class DATA_CLASS:
             self.xR=1
             # Final time
             self.T=0.1
+            # Periodicity of the mesh
+            self.periodic=False
+            # gravity
+            self.g=9.81
+            # Analytical solution
+            self.analytical_solution=False
+        elif test=="Sod_Transcritical_Expansion": #Sod_Transcritical_Expansion
+            # Extrema
+            self.xL=0
+            self.xR=2
+            # Final time
+            self.T=0.08
             # Periodicity of the mesh
             self.periodic=False
             # gravity
@@ -164,6 +180,12 @@ def Analytical_State(x,t,DATA):
             H=0.2+0.8*np.exp(1. - 1./(1.-((x-r0)/(r1-r0))**2))    
         else:
             H=0.2
+    elif DATA.test=="Sod_Transcritical_Expansion": 
+        v=0.
+        if x<=1.:
+            H=10.
+        else:
+            H=1.
     elif DATA.test=="Smooth_periodic":
         H=2+np.cos(2*np.pi*x)
         v=1.
@@ -234,7 +256,7 @@ def Analytical_State(x,t,DATA):
 # Bathymetry in a point x
 #==============================================================
 def Bathymetry(x,DATA):
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic"  or DATA.test=="No_Slope_Smooth":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Sod_Transcritical_Expansion" or DATA.test=="Smooth_periodic"  or DATA.test=="No_Slope_Smooth":
         B=0.
     elif DATA.test=="Constant_Slope_Smooth":
         offset=6
@@ -271,7 +293,7 @@ def Bathymetry(x,DATA):
 # Derivative of the bathymetry in a point x
 #==============================================================
 def Derivative_Bathymetry(x,DATA):
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Sod_Transcritical_Expansion" or DATA.test=="Smooth_periodic":
         dB=0.
     elif DATA.test=="Lake_At_Rest_Smooth" or DATA.test=="Supercritical_Smooth" or DATA.test=="Subcritical_Smooth" or DATA.test=="Transcritical_Smooth":
         x0=10.
@@ -318,7 +340,7 @@ def IC(x_H,x_v,t,DATA):
     N_el, local_nodes_H = x_H.shape
     N_global_nodes_v=len(x_v)
 
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Sod_Transcritical_Expansion":
         for inde in range(N_el):
             for indi_l in range(local_nodes_H):
                 vec=Analytical_State(x_H[inde,indi_l],0,DATA)
@@ -396,7 +418,7 @@ def insert_perturbation(x_H, x_v, H_field, B_field, v_field, DATA):
     """
 
     N_el, local_nodes_H = x_H.shape
-    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Smooth_periodic" or DATA.test=="Thacker":
+    if DATA.test=="Sod" or DATA.test=="Sod_smooth" or DATA.test=="Sod_Transcritical_Expansion" or DATA.test=="Smooth_periodic" or DATA.test=="Thacker":
         if DATA.perturbation!= 0:
             print("No perturbation provided for such test",DATA.test)
             quit()
@@ -470,6 +492,15 @@ def BC_state(DATA,x,H_inside, B_inside, v_inside, H_other_side, B_other_side, v_
             v=0.
         else:
             H=0.2
+            B=0.
+            v=0.
+    elif DATA.test=="Sod_Transcritical_Expansion":
+        if boundary=="L":
+            H=10.
+            B=0.
+            v=0.
+        else:
+            H=1.
             B=0.
             v=0.
     elif DATA.test=="Constant_Slope_Smooth":

@@ -63,7 +63,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
     fig.tight_layout()
 
     if DATA.storing==True and storing_info==True:
-        plt.savefig(DATA.folder+"/"+DATA.test+"/pic_values_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
+        plt.savefig(DATA.folder+"/"+DATA.test+"/pic_values_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
 
     # plt.show()
 #==============================================================
@@ -75,7 +75,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 # indi, x_v, v, H, q, eta
 #==============================================================
 def storing(H_field, v_field, x_v, B_field, H_in_x_v, B_in_x_v, M_Local_to_Global, DATA):
-    f=open(DATA.folder+"/"+DATA.test+"/values_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
+    f=open(DATA.folder+"/"+DATA.test+"/values_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
     f.write(" indi,                  x_v,                   v,                   H,                   q,                 eta\n")
     for indi in range(len(v_field)):
         towrite=format(indi, '5d')+",     "+format(x_v[indi], '.14f')+",    "+format(v_field[indi], '.14f')+",    "+format(H_in_x_v[indi], '.14f')+",    "+format(H_in_x_v[indi]*v_field[indi], '.14f')+",    "+format(H_in_x_v[indi]+B_in_x_v[indi], '.14f')+",\n"
@@ -172,7 +172,7 @@ def compute_error(H_field, v_field, x_v, x_H, H_in_x_v, M_Local_to_Global, w_H, 
 
 
 
-    f=open(DATA.folder+"/"+DATA.test+"/errors_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
+    f=open(DATA.folder+"/"+DATA.test+"/errors_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
     f.write(" N_el,       L^1(v),       L^1(H),       L^1(q),      ||v||_2,      ||H||_2,\n")
     towrite=format(N_el, '5d')+",    "+format(errorv, '.3e')+",    "+format(errorH, '.3e')+",    "+format(errorq, '.3e')+",    "+format(errorvbis, '.3e')+",    "+format(errorHbis, '.3e')+",\n"
     f.write(towrite)
@@ -253,6 +253,6 @@ def plot_error(H_field, v_field, x_v, x_H, H_in_x_v, DATA):
     fig.tight_layout()
 
     if DATA.storing==True:
-        plt.savefig(DATA.folder+"/"+DATA.test+"/pic_errors_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
+        plt.savefig(DATA.folder+"/"+DATA.test+"/pic_errors_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
 
     # plt.show()

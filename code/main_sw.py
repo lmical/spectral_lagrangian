@@ -19,12 +19,13 @@ test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic",
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
                                                 #"Transcritical_Smooth", "Transcritical_Not_Smooth"
                                                 #"Constant_Slope_Smooth"
+                                                #"Sod_Tanscritical_Expansion"
                                                 #"Thacker"
 
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 4000                        #Number of elements
+N_el               = 500                        #Number of elements
 
 #Space
 order_space        = 1                         #Order in space
@@ -48,7 +49,7 @@ time_scheme        = "Euler"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 1000                #Frequency for saving the solution
+freq               = 500                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
@@ -56,10 +57,11 @@ N_max_iter         = 1000000             #Maximal number of iterations
 scheme             = "Galerkin"
 LaxFriedrichs      = True
 WB                 = False
-jump               = "j0"               #j0,    jc
+jump_CIP_in_v      = "j0"               #j0,    jc
+jump_eta_in_x      = True #NB: It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
 
 #Folder where to store
-folder             = "Results_Conservative_Formulation"
+folder             = "Results_Jump_H"
 printing           = True
 plotting           = False
 storing            = True
@@ -92,11 +94,19 @@ if len(sys.argv)>5:
         print("Impossible to get LxF imput from keyboard")
         quit()
 if len(sys.argv)>6:
-    jump=sys.argv[6]
+    jump_CIP_in_v=sys.argv[6]
 if len(sys.argv)>7:
-    CFL=float(sys.argv[7])
+    if sys.argv[7]=="True":
+        jump_eta_in_x=True
+    elif sys.argv[7]=="False":
+        jump_eta_in_x=False
+    else:
+        print("Impossible to get jump_eta_in_x imput from keyboard")
+        quit()
 if len(sys.argv)>8:
-    N_el=int(sys.argv[8])
+    CFL=float(sys.argv[8])
+if len(sys.argv)>9:
+    N_el=int(sys.argv[9])
 
 
 #==============================================================
@@ -116,7 +126,8 @@ print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
 print("Lax-Friedrichs: ", LaxFriedrichs)
-print("Jump: ", jump)
+print("CIP jump in v: ", jump_CIP_in_v)
+print("Jump of H in x: ", jump_eta_in_x)
 print("CFL: ", CFL)
 print("Frequency for storing the data: ", freq)
 print("Maximal number of iterations: ", N_max_iter)
@@ -272,7 +283,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump,folder,printing,plotting,storing)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,folder,printing,plotting,storing)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)

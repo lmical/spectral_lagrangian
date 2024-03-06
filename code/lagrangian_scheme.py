@@ -587,8 +587,13 @@ def get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global):
     H_in_x_v[-1]=H_in_x_v[-1]*2
 
     return H_in_x_v
-
-
+#==============================================================
+#
+#
+#
+#==============================================================
+# Burman stabilization on v
+#==============================================================
 def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA): 
 
     #In local_derivatives_v we have
@@ -666,3 +671,40 @@ def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces
         phi_jump[-1]=phi_jump[0]
 
     return phi_jump
+#==============================================================
+#
+#
+#
+#==============================================================
+# Jump of eta for the stabilization of the evolution of x_v
+#==============================================================
+def jump_eta_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA):
+
+    jump_eta_contribution=np.zeros(len(v_field))
+    eta_field=H_field+B_field
+
+    N_f=len(M_faces)
+
+    #Loop on the faces
+    for indf in range(N_f):
+        #Element left and element right
+        el_L=M_faces[indf][0]
+        el_R=M_faces[indf][1]
+        if el_L==-1 or el_R==-1:
+            #Not in the interior, skip
+            continue
+        else:
+            jump_eta=eta_field[el_R,0]-eta_field[el_L,-1]
+            global_index_v=M_Local_to_Global[el_R,0]
+            v=v_field[global_index_v]
+            H=0.5*(H_field[el_R,0]+H_field[el_L,-1]) #ALERT, be careful when H is small
+            sr=np.sqrt(DATA.g*H) #Omitting velocity part #+np.abs(v)
+            jump_eta_contribution[global_index_v]=jump_eta/H*sr*DATA.alpha_jump_eta #NB: Other ingerdients, e.g., spectral radius due to dimensional consistency
+
+
+    #NB: if periodic we have to take care of the last node
+    if DATA.periodic:
+        jump_eta_contribution[-1]=jump_eta_contribution[0]
+
+
+    return jump_eta_contribution

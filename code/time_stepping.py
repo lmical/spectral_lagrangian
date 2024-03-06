@@ -11,7 +11,7 @@ import DeC
 def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA):
     #Update
     #x
-    x_v=x_v_old+DATA.dt*v_field_old
+    x_v=x_v_old+DATA.dt*rhs_x_v_function(H_field_old,v_field_old,B_field_old,M_Local_to_Global,M_faces,DATA)
     #v
     v_field=v_field_old+DATA.dt*rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
     #H, with strong mass conservation
@@ -50,16 +50,32 @@ def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, loc
     else:
         ST_i=np.zeros(len(phi_v))
 
-    if DATA.jump=="jc":
+    if DATA.jump_CIP_in_v=="jc":
         phi_jump=lagrangian_scheme.jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces,H_field,DATA)
-    elif DATA.jump=="j0":
+    elif DATA.jump_CIP_in_v=="j0":
         phi_jump=np.zeros(len(phi_v))
     else:
         print("Stop in rhs_v_function in time_stepping module")
-        print("Jump not available",DATA.jump)
+        print("Jump not available",DATA.jump_CIP_in_v)
 
 
     return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i-phi_jump)/M_v
+#==============================================================
+#
+#
+#
+#==============================================================
+# rhs function for the DeC update of x
+# NB: It is in principle v but I also add the jump of eta to provide some "limiting"
+#==============================================================
+def rhs_x_v_function(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA):
+    
+    if DATA.jump_eta_in_x==True:
+        jump_eta_contribution=lagrangian_scheme.jump_eta_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA)
+    else:
+        jump_eta_contribution=np.zeros(len(v_field))
+
+    return v_field-jump_eta_contribution
 #==============================================================
 #
 #
@@ -111,7 +127,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
 
     #DeC iteration loop
     rhs_v[:,0]   = rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v[:,0] = v_field_old.copy()
+    rhs_x_v[:,0] = rhs_x_v_function(H_field_old,v_field_old,B_field_old,M_Local_to_Global,M_faces,DATA)     
 
     for r in range(1,dec.M_sub+1):
         rhs_v[:,r]   = rhs_v[:,0].copy()
@@ -126,7 +142,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
         if k>1:
             for r in range(1,dec.M_sub+1):
                 rhs_v[:,r]   = rhs_v_function(H_p[:,:,r],v_p[:,r],x_v_p[:,r],B_p[:,:,r], w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-                rhs_x_v[:,r] = v_p[:,r].copy()
+                rhs_x_v[:,r] = rhs_x_v_function(H_p[:,:,r],v_p[:,r],B_p[:,:,r],M_Local_to_Global,M_faces,DATA) 
         if k < dec.n_iter:
             for m in range(1,dec.M_sub+1):
                 v_a[:,m] = v_field_old[:] + DATA.dt*sum([dec.theta[r,m]*rhs_v[:,r] for r in range(dec.M_sub+1)])
@@ -178,7 +194,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # CALL FVTimeDerivative(tStage)
 
     rhs_v   = rhs_v_function(H_0,v_0,x_v_0,B_0, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v = v_0.copy()
+    rhs_x_v = rhs_x_v_function(H_0,v_0,B_0,M_Local_to_Global,M_faces,DATA)
 
     # K1(1:nVar,1:nElemsX,1:nElemsY) = &
     #     1.00000000000000*K0(1:nVar,1:nElemsX,1:nElemsY) &
@@ -201,7 +217,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # CALL FVTimeDerivative(tStage)
 
     rhs_v   = rhs_v_function(H_1,v_1,x_v_1,B_1, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v = v_1.copy()
+    rhs_x_v = rhs_x_v_function(H_1,v_1,B_1,M_Local_to_Global,M_faces,DATA)
 
     # K2(1:nVar,1:nElemsX,1:nElemsY) = &
     #     0.44437049406734*K0(1:nVar,1:nElemsX,1:nElemsY) &
@@ -225,7 +241,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # CALL FVTimeDerivative(tStage)
 
     rhs_v   = rhs_v_function(H_2,v_2,x_v_2,B_2, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v = v_2.copy()
+    rhs_x_v = rhs_x_v_function(H_2,v_2,B_2,M_Local_to_Global,M_faces,DATA)
 
     # K3(1:nVar,1:nElemsX,1:nElemsY) = &
     #     0.62010185138540*K0(1:nVar,1:nElemsX,1:nElemsY) &
@@ -249,7 +265,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # CALL FVTimeDerivative(tStage)
 
     rhs_v   = rhs_v_function(H_3,v_3,x_v_3,B_3, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v = v_3.copy()
+    rhs_x_v = rhs_x_v_function(H_3,v_3,B_3,M_Local_to_Global,M_faces,DATA)
 
     # K4(1:nVar,1:nElemsX,1:nElemsY) = &
     #     0.17807995410773*K0(1:nVar,1:nElemsX,1:nElemsY) &
@@ -266,8 +282,8 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # U(1:nVar,1:nElemsX,1:nElemsY)  = K4(1:nVar,1:nElemsX,1:nElemsY)
     # K5(1:nVar,1:nElemsX,1:nElemsY) = Ut(1:nVar,1:nElemsX,1:nElemsY)
 
-    rhs_v_old=rhs_v.copy()
-    rhs_x_v_old    =rhs_x_v.copy()
+    rhs_v_old   = rhs_v.copy()
+    rhs_x_v_old = rhs_x_v.copy()
 
     #--------------------!
     # Fifth Stage        !
@@ -277,7 +293,7 @@ def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_
     # CALL FVTimeDerivative(tStage)
 
     rhs_v   = rhs_v_function(H_4,v_4,x_v_4,B_4, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    rhs_x_v = v_4.copy()
+    rhs_x_v = rhs_x_v_function(H_4,v_4,B_4,M_Local_to_Global,M_faces,DATA)
 
 
     # U(1:nVar,1:nElemsX,1:nElemsY)  = &

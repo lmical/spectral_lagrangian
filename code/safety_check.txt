@@ -3,4 +3,13 @@ Maxima 2.832056705418884 3.117555829584785
 Minima 1.8071586397502206 -1.1588062461866406
 Average 2.1870605003419694 0.9991889159722934
 
-python3 main_sw.py Smooth_periodic 0 2 DeC True jc 0.5 50
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc False 0.5 50
+
+
+Smooth_periodic N_el 50 order_space 2 CFL 0.5
+Maxima 2.832052056339582 3.118553617547305
+Minima 1.807164916706162 -1.1603015458805892
+Average 2.1871340465241635 0.9993464838197933
+
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc True 0.5 50
+
