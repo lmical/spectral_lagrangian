@@ -411,9 +411,9 @@ while for the  internal DoFs of the cells one has no coupling contribution.
 \section{Stabilization}
 
 I have coded Burman on the velocity but it is not needed.
-The coupling term seem to guarantee stability.
+The coupling terms seem to guarantee stability.
 The convergence rates are obtained without Burman.
-And Burman does not help with shocks.
+%And Burman does not help with shocks.
 
 %\begin{align}
 %\uvec{ST}_i(\uapp)=\sum_f\sum_{r=1}^R \alpha_{f,r} \Bigg\llbracket \frac{\partial^r}{\partial x^r} \varphi_i \Bigg\rrbracket \cdot \Bigg\llbracket \frac{\partial^r}{\partial x^r} 
@@ -431,6 +431,18 @@ In the other cases, whenever something from outside the domain is needed, I use 
 
 \section{Time discretization}
 I use DeC with GLB nodes with accuracy corresponding to the one of the space discretization.
+
+I use a CFL of the type
+
+\begin{align}
+	\Delta t=\frac{C}{2(M+1)+1}\frac{\Delta x}{\lambda_{max}},
+\end{align}
+where $M+1$ is the polynomial degree of $v_h$, $\lambda_{max}$ is the maximum wave speed in the domain and $C$ is a constant that I set to $0.5$.
+
+
+%dt_max=min(dt_max,dx/(max_sound_speed+max_abs_v))
+%dt_max=dt_max/(2*degree_v+1)*CFL
+
 
 \section{Tests}
 
@@ -824,23 +836,23 @@ Results reported in Figure~\ref{fig:LatR_perturbation}. They are OK.
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.40\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{figures/25_LAKEATRESTNONSMOOTH.pdf}\caption{Initial total height and bathymetry. The perturbation is amplified by a factor $10^3$ in order to make it visible}
 	\end{subfigure}
-	\begin{subfigure}{0.40\textwidth}
+	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{figures/31_LatRNSWBp3s14jt.pdf}\caption{Reference results with WB-HS and jr in the Eulerian paper with PGL and $30$ elements for the coarse mesh and $128$ for the refined one}
 	\end{subfigure}\\
-	\begin{subfigure}{0.60\textwidth}
-		\includegraphics[trim= 0 0 0 180, clip,width=\textwidth]{figures/LatRnS_P1P2_N_el00120.pdf}\caption{P1P2 120 elements}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[trim= 0 0 200 180, clip,width=\textwidth]{figures/LatRnS_P1P2_N_el00120.pdf}\caption{P1P2 120 elements}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[trim= 0 0 200 180, clip,width=\textwidth]{figures/LatRnS_P2P3_N_el00060.pdf}\caption{P2P3 60 elements}
 	\end{subfigure}\\
-	\begin{subfigure}{0.60\textwidth}
-		\includegraphics[trim= 0 0 0 180, clip,width=\textwidth]{figures/LatRnS_P2P3_N_el00060.pdf}\caption{P2P3 60 elements}
-	\end{subfigure}\\
-	\begin{subfigure}{0.60\textwidth}
-		\includegraphics[trim= 0 0 0 180, clip,width=\textwidth]{figures/LatRnS_P3P4_N_el00040.pdf}\caption{P3P4 40 elements}
-	\end{subfigure}\\
-	\begin{subfigure}{0.60\textwidth}
-		\includegraphics[trim= 0 0 0 180, clip,width=\textwidth]{figures/LatRnS_P4P5_N_el00030.pdf}\caption{P4P5 30 elements}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[trim= 0 0 200 180, clip,width=\textwidth]{figures/LatRnS_P3P4_N_el00040.pdf}\caption{P3P4 40 elements}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[trim= 0 0 200 180, clip,width=\textwidth]{figures/LatRnS_P4P5_N_el00030.pdf}\caption{P4P5 30 elements}
 	\end{subfigure}
 	\caption{Perturbation of lake at rest: initial condition and results}\label{fig:LatR_perturbation}
 \end{figure}
@@ -848,7 +860,19 @@ Results reported in Figure~\ref{fig:LatR_perturbation}. They are OK.
 
 
 \subsection{Shocks}
-We are stuck here at the moment. I consider Sod in the domain $\Omega:=(0,1)$
+In order to handle shocks, I add a further stabilization contribution
+\begin{equation}
+	\frac{d}{dt}\uvec{v}_i(t)=-\frac{1}{\sum_{K \in K_i} H^K(\uvec{x}_i,t) M^K_{\varphi_i}(t)}\left(g \sum_{K \in K_i} \int_K \varphi_i H_h\nabla_{\uvec{x}}(H_h+B_h)  d\uvec{x} + \sum_{K \in K_i}\uvec{CT}^K_i(\uvec{u}_h) + \sum_{K \in K_i}\uvec{ST}^K_i(\uvec{u}_h)\right).
+\end{equation}
+I consider LxF
+\begin{align}
+	\uvec{ST}^K_i(\uvec{u}_h):=\alpha H_K^{max}(v_i-\overline{v}_K),
+\end{align}
+where $\alpha$ is the maximum local wave speed in the cell $K$ and $H_K^{max}:=\max_{\uvec{x}\in K}H_h(h,t)$ is added for dimensional consistency.
+
+\subsubsection{Sod}
+
+I consider Sod in the domain $\Omega:=(0,1)$
 \begin{align}
 	H(x,0):=\begin{cases}
 		1, \quad \text{if}~x\leq 0.5,\\
@@ -857,9 +881,132 @@ We are stuck here at the moment. I consider Sod in the domain $\Omega:=(0,1)$
 \end{align}
 with Dirichlet boundary conditions. The final time is set to be $T_f:=0.1.$
 
-The results are consistent but there is some oscillation in $v$ and I cannot get rid of it.
+In Figure~\ref{fig:sod}, I report my results and a reference (some thesis I found online).
+Same results for P3P4, which is omitted.
+\textcolor{red}{\textbf{Now, there are no spurious oscillations in the velocity. So, the next step is to find a criterion to understand where to add LxF locally.}}
 
 
+
+
+\begin{figure}
+	\centering
+	\scalebox{0.8}{%
+		\begin{minipage}{\textwidth}
+			\centering
+			\begin{subfigure}{0.90\textwidth}
+				\includegraphics[width=\textwidth]{figures/sod.png}
+				\caption{Reference $H$ and $v$}
+			\end{subfigure}\\
+			%
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P0P1_Euler_N_el00100.pdf}
+				\caption{P0P1 Euler 100 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P0P1_Euler_N_el00200.pdf}
+				\caption{P0P1 Euler 200 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P0P1_Euler_N_el00500.pdf}
+				\caption{P0P1 Euler 500 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P0P1_Euler_N_el01000.pdf}
+				\caption{P0P1 Euler 1000 elements}
+			\end{subfigure}\\
+			\vspace{2.em}
+			%
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P1P2_DeC_N_el00100.pdf}
+				\caption{P1P2 DeC2 100 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P1P2_DeC_N_el00200.pdf}
+				\caption{P1P2 DeC2 200 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P1P2_DeC_N_el00500.pdf}
+				\caption{P1P2 DeC2 500 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P1P2_DeC_N_el01000.pdf}
+				\caption{P1P2 DeC2 1000 elements}
+			\end{subfigure}\\
+			\vspace{2.em}
+			%
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P2P3_DeC_N_el00100.pdf}
+				\caption{P2P3 DeC3 100 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P2P3_DeC_N_el00200.pdf}
+				\caption{P2P3 DeC3 200 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P2P3_DeC_N_el00500.pdf}
+				\caption{P2P3 DeC3 500 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/sod/P2P3_DeC_N_el01000.pdf}
+				\caption{P2P3 DeC3 1000 elements}
+			\end{subfigure}
+		\end{minipage}%
+	}
+	\caption{Sod}\label{fig:sod}
+\end{figure}
+
+
+\subsubsection{Transcritical expansion}
+
+
+The results are OK also in this case. They are reported in Figure~\ref{fig:transcritical_expansion}.
+
+The simulation explodes from order 3 on.
+\textcolor{red}{\textbf{So, besides adding LxF locally, it would be better to switch to order 2 or 1 in where a shock is detected. Even though, there were no problems with Sod for all orders.}}
+
+
+\begin{figure}
+	\centering
+	\scalebox{0.8}{%
+		\begin{minipage}{\textwidth}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P0P1_Euler_N_el00100.pdf}
+				\caption{P0P1 Euler 100 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P0P1_Euler_N_el00200.pdf}
+				\caption{P0P1 Euler 200 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P0P1_Euler_N_el00500.pdf}
+				\caption{P0P1 Euler 500 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P0P1_Euler_N_el01000.pdf}
+				\caption{P0P1 Euler 1000 elements}
+			\end{subfigure}\\
+			\vspace{2.em}
+			%
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P1P2_DeC_N_el00100.pdf}
+				\caption{P1P2 DeC2 100 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P1P2_DeC_N_el00200.pdf}
+				\caption{P1P2 DeC2 200 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P1P2_DeC_N_el00500.pdf}
+				\caption{P1P2 DeC2 500 elements}
+			\end{subfigure}
+			\begin{subfigure}{0.45\textwidth}
+				\includegraphics[trim= 0 180 0 0, clip,width=\textwidth]{figures/transcritical_expansion/P1P2_DeC_N_el01000.pdf}
+				\caption{P1P2 DeC2 1000 elements}
+			\end{subfigure}
+		\end{minipage}%
+	}
+	\caption{Transcritical expansion}\label{fig:transcritical_expansion}
+\end{figure}
 
 
 
