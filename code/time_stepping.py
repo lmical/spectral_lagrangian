@@ -14,8 +14,38 @@ def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v
     x_v=x_v_old+DATA.dt*rhs_x_v_function(H_field_old,v_field_old,B_field_old,M_Local_to_Global,M_faces,DATA)
     #v
     v_field=v_field_old+DATA.dt*rhs_v_function(H_field_old,v_field_old,x_v_old,B_field_old, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA)
-    #H, with strong mass conservation
-    H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+    if DATA.jump_eta_in_H==False:
+        #H, with strong mass conservation
+        H_field=lagrangian_scheme.strong_mass_conservation(Hhat_field,x_v,local_derivatives_v_in_H,M_Local_to_Global)
+    else:
+        #H, limit of ALE formulation
+        #detJH_i^{n+1}=detJH_i^{n}+dt*[psi_i(x_R)*alpha_R*[[H^{n}]]_R-psi_i(x_L)*alpha_L*[[H^{n}]]_L]
+
+        J_in_H_old    = lagrangian_scheme.get_J_in_H(x_v_old,local_derivatives_v_in_H,M_Local_to_Global)
+        detJ_in_H_old = J_in_H_old #NB: Because 1D
+        detJH_old     = detJ_in_H_old*H_field_old
+
+        #NB: Now detJ*H is not anymore Hhat because there are these extra jumps
+        detJH         = detJH_old+DATA.dt*rhs_detJH_function(H_field_old,v_field_old,B_field_old, M_Local_to_Global,M_faces,x_v_old,DATA)
+
+
+        #NB: J_in_H is at new time (same time as H_field), so computed through the updated x_v
+        J_in_H    = lagrangian_scheme.get_J_in_H(x_v,local_derivatives_v_in_H,M_Local_to_Global)
+        detJ_in_H = J_in_H #NB: Because 1D
+        H_field   = detJH/detJ_in_H
+
+
+        #---------------------------------------
+        #SAFETY CHECK
+        #---------------------------------------
+        #NB: If no jump contribution (ALE-like) is added then it must be detJH=Hhat_field 
+        #---------------------------------------
+        # if np.linalg.norm(detJH-Hhat_field)>1e-15:
+        #     print(np.linalg.norm(detJH-Hhat_field))
+        #     print("Error")
+        #     quit()
+        #---------------------------------------
+
     #B
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     B_field=lagrangian_scheme.get_B(x_H,DATA)
@@ -38,7 +68,7 @@ def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v
 #
 #
 #==============================================================
-# rhs function for the DeC update of v
+# rhs function for the update of v
 #==============================================================
 def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, local_derivatives_H_in_v, M_Local_to_Global, M_faces, local_values_H_in_v, DATA):
     M_v=lagrangian_scheme.Lumped_Mass_Matrix(w_v,x_v,M_Local_to_Global,local_derivatives_v,H_field,local_values_H_in_v,DATA)
@@ -65,17 +95,30 @@ def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, loc
 #
 #
 #==============================================================
-# rhs function for the DeC update of x
+# rhs function for the update of x
 # NB: It is in principle v but I also add the jump of eta to provide some "limiting"
 #==============================================================
 def rhs_x_v_function(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA):
     
     if DATA.jump_eta_in_x==True:
-        jump_eta_contribution=lagrangian_scheme.jump_eta_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA)
+        jump_eta_contribution=lagrangian_scheme.jump_eta_in_x_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA)
     else:
         jump_eta_contribution=np.zeros(len(v_field))
 
     return v_field-jump_eta_contribution
+#==============================================================
+#
+#
+#
+#==============================================================
+# rhs function for the ALE-like update of JH
+# NB: It is made by the jump contribution of eta
+#==============================================================
+def rhs_detJH_function(H_field,v_field,B_field, M_Local_to_Global,M_faces,x_v,DATA):
+    
+    jump_eta_contribution=lagrangian_scheme.jump_eta_in_JH_ALE_like_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,x_v,DATA)
+
+    return jump_eta_contribution
 #==============================================================
 #
 #

@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Transcritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -25,10 +25,10 @@ test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic",
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 500                        #Number of elements
+N_el               = 10                        #Number of elements
 
 #Space
-order_space        = 1                         #Order in space
+order_space        = 5                         #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -45,23 +45,24 @@ order_space        = 1                         #Order in space
 #--------------------------------------------------------------
 
 #Time
-time_scheme        = "Euler"             #Time scheme #"Euler" "DeC" "SSPRK4"
+time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 500                #Frequency for saving the solution
+freq               = 200                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = True
+LaxFriedrichs      = False
 WB                 = False
 jump_CIP_in_v      = "j0"               #j0,    jc
-jump_eta_in_x      = True #NB: It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
+jump_eta_in_x      = False #NB: It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
+jump_eta_in_H      = False 
 
 #Folder where to store
-folder             = "Results_Jump_H"
+folder             = "Results_Debug" #"Results_Conservative_Formulation" #"Results_Jump_H" 
 printing           = True
 plotting           = False
 storing            = True
@@ -104,9 +105,17 @@ if len(sys.argv)>7:
         print("Impossible to get jump_eta_in_x imput from keyboard")
         quit()
 if len(sys.argv)>8:
-    CFL=float(sys.argv[8])
+    if sys.argv[8]=="True":
+        jump_eta_in_H=True
+    elif sys.argv[8]=="False":
+        jump_eta_in_H=False
+    else:
+        print("Impossible to get jump_eta_in_H imput from keyboard")
+        quit()
 if len(sys.argv)>9:
-    N_el=int(sys.argv[9])
+    CFL=float(sys.argv[9])
+if len(sys.argv)>10:
+    N_el=int(sys.argv[10])
 
 
 #==============================================================
@@ -126,8 +135,9 @@ print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
 print("Lax-Friedrichs: ", LaxFriedrichs)
-print("CIP jump in v: ", jump_CIP_in_v)
-print("Jump of H in x: ", jump_eta_in_x)
+print("CIP jump in in update of v: ", jump_CIP_in_v)
+print("Jump of eta in update of x: ", jump_eta_in_x)
+print("Jump of eta in update of H: ", jump_eta_in_H)
 print("CFL: ", CFL)
 print("Frequency for storing the data: ", freq)
 print("Maximal number of iterations: ", N_max_iter)
@@ -283,7 +293,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,folder,printing,plotting,storing)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)

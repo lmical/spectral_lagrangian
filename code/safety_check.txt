@@ -3,7 +3,14 @@ Maxima 2.832056705418884 3.117555829584785
 Minima 1.8071586397502206 -1.1588062461866406
 Average 2.1870605003419694 0.9991889159722934
 
-python3 main_sw.py Smooth_periodic 0 2 DeC True jc False 0.5 50
+
+#After removing H_max=0 in LxF and 1e-6 in v
+
+Maxima 2.7517992785048477 2.9822115316629616
+Minima 1.8235670897517742 -1.012785982136234
+Average 2.1563517330783175 0.9991684052261097
+
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc False False 0.5 50
 
 
 Smooth_periodic N_el 50 order_space 2 CFL 0.5
@@ -11,5 +18,18 @@ Maxima 2.832052056339582 3.118553617547305
 Minima 1.807164916706162 -1.1603015458805892
 Average 2.1871340465241635 0.9993464838197933
 
-python3 main_sw.py Smooth_periodic 0 2 DeC True jc True 0.5 50
+#After removing H_max=0 in LxF and 1e-6 in v
+
+Maxima 2.7518502996764713 2.9841212948486935
+Minima 1.8252234021808078 -1.0155048595067302
+Average 2.1565936206390433 0.9993009903986393
+
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc True False 0.5 50
+
+
+
+
+
+
+python3 main_sw.py Smooth_periodic 0 2 DeC True jc True True 0.5 50
 

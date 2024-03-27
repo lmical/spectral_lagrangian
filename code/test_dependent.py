@@ -9,7 +9,7 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,folder,printing,plotting,storing):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing):
 
         #Somhow it is better to store also the input paramters in DATA
         self.test               = test
@@ -26,6 +26,7 @@ class DATA_CLASS:
         self.WB                 = WB
         self.jump_CIP_in_v      = jump_CIP_in_v
         self.jump_eta_in_x      = jump_eta_in_x
+        self.jump_eta_in_H      = jump_eta_in_H
         self.folder             = folder
         self.printing           = printing
         self.plotting           = plotting
@@ -35,13 +36,16 @@ class DATA_CLASS:
 
         if order_space==1: 
             self.delta_CIP=0.119
-            self.alpha_jump_eta=1.
+            self.alpha_jump_eta_in_x=1.
+            self.alpha_jump_eta_in_H=1.
         elif order_space==2:
             self.delta_CIP=3.46e-03
-            self.alpha_jump_eta=1.
+            self.alpha_jump_eta_in_x=1.
+            self.alpha_jump_eta_in_H=1.
         elif order_space>=3:
             self.delta_CIP=1.13e-04          
-            self.alpha_jump_eta=1.
+            self.alpha_jump_eta_in_x=1.
+            self.alpha_jump_eta_in_H=1.
 
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema

@@ -395,7 +395,8 @@ def Lax_Friedrichs_K(v_local,Hmax,H_local,in_v_local_values_H,DATA):
     phi^K_i=alpha (c_i-cbar_K)*H_i
     """
     #N_local_nodes_v=len(v_local)
-    alpha=np.max(np.absolute(v_local)+1e-6)+np.sqrt(DATA.g*Hmax) 
+    # alpha=np.max(np.absolute(v_local)+1e-6)+np.sqrt(DATA.g*Hmax) 
+    alpha=np.max(np.absolute(v_local))+np.sqrt(DATA.g*Hmax) 
     vbar=np.average(v_local)
     local_nodes_v=len(v_local)
 
@@ -435,7 +436,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,DAT
     for inde in range(N_el):
 
         Hmax=max(H_field[inde,:])
-        Hmax=0
+        # Hmax=0 #ALERT<- THIS WAS A BUG
         global_indices_v=M_Local_to_Global[inde,:]
         v_local=v_field[global_indices_v]
         H_local=H_field[inde,:]
@@ -678,7 +679,7 @@ def jump_stabilization(v_field,x_v,local_derivatives_v,M_Local_to_Global,M_faces
 #==============================================================
 # Jump of eta for the stabilization of the evolution of x_v
 #==============================================================
-def jump_eta_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA):
+def jump_eta_in_x_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA):
 
     jump_eta_contribution=np.zeros(len(v_field))
     eta_field=H_field+B_field
@@ -699,12 +700,145 @@ def jump_eta_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,DATA)
             v=v_field[global_index_v]
             H=0.5*(H_field[el_R,0]+H_field[el_L,-1]) #ALERT, be careful when H is small
             sr=np.sqrt(DATA.g*H) #Omitting velocity part #+np.abs(v)
-            jump_eta_contribution[global_index_v]=jump_eta/H*sr*DATA.alpha_jump_eta #NB: Other ingerdients, e.g., spectral radius due to dimensional consistency
+            jump_eta_contribution[global_index_v]=jump_eta/H*sr*DATA.alpha_jump_eta_in_x #NB: Other ingerdients, e.g., spectral radius due to dimensional consistency
 
 
     #NB: if periodic we have to take care of the last node
     if DATA.periodic:
         jump_eta_contribution[-1]=jump_eta_contribution[0]
+
+
+    return jump_eta_contribution
+#==============================================================
+#
+#
+#
+#==============================================================
+# Get the Jacobian of the displacement in x_H for the ALE-like update of H
+#==============================================================
+def get_J_in_H(x_v,local_derivatives_v_in_H,M_Local_to_Global):
+    """
+    Getting the Jacobian in x_H from x_v
+     J(xi,t) = grad_xi x (xi,t) = sum_j x_j(t) grad_xi phi_j (xi)
+    """
+
+    N_el, local_nodes_v = M_Local_to_Global.shape
+
+    local_nodes_v, local_nodes_H = local_derivatives_v_in_H.shape
+
+    J_in_H=np.zeros((N_el,local_nodes_H))
+
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+        x_v_local=x_v[global_indices_v]
+        in_H_local_derivatives_v=local_derivatives_v_in_H.transpose()
+        #----------------------------------
+        # print(x_v_local)
+        # print(local_derivatives_v_in_H)
+        # print(in_H_local_derivatives_v)
+        # print(N_el,local_nodes_H,local_nodes_v)
+        # quit()
+        #----------------------------------
+        for indi in range(local_nodes_H):
+            # d_xi x(xi,t)
+            d_xi_x=sum(in_H_local_derivatives_v[indi,:]*x_v_local)
+
+            J_in_H[inde,indi] = d_xi_x
+
+    #----------------------------------
+    # print(J_in_H)
+    # quit()
+    #----------------------------------
+
+    return J_in_H
+#==============================================================
+#
+#
+#
+#==============================================================
+# Jump of eta for the ALE-like update of JH
+#==============================================================
+def jump_eta_in_JH_ALE_like_computation(H_field,v_field,B_field,M_Local_to_Global,M_faces,x_v,DATA):
+
+    N_el, local_nodes_H = H_field.shape
+    jump_eta_contribution=np.zeros(H_field.shape)
+    eta_field=H_field+B_field
+
+    N_f=len(M_faces)
+
+    #Loop on the faces
+    for indf in range(N_f):
+        #Element left and element right
+        el_L=M_faces[indf][0]
+        el_R=M_faces[indf][1]
+        if el_L==-1 or el_R==-1:
+            #Not in the interior, skip
+            continue
+        else:
+            jump_eta=eta_field[el_R,0]-eta_field[el_L,-1]
+            global_index_v=M_Local_to_Global[el_R,0]
+            v=v_field[global_index_v]
+            H=0.5*(H_field[el_R,0]+H_field[el_L,-1]) #ALERT, be careful when H is small
+            sr=np.sqrt(DATA.g*H) #Omitting velocity part #+np.abs(v)
+
+            #at the left of the interface, it is a right contribution for cell el_L
+            jump_eta_contribution[el_L,-1]=sr*jump_eta*DATA.alpha_jump_eta_in_H
+
+            #at the right of the interface, it is a left contribution for cell el_R
+            jump_eta_contribution[el_R,0]=-sr*jump_eta*DATA.alpha_jump_eta_in_H #NB: sign -
+
+
+
+    #NB: if periodic we have to take care of the last node
+    if not(DATA.periodic):
+        #Left boundary
+        #outside  L
+        #inside   R
+        H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[0], H_field[0,0], B_field[0,0], v_field[0], H_field[-1,-1], B_field[-1,-1], v_field[-1],"L")
+        H_inside  = H_field[0,0]                            #First from the current cell
+        B_inside  = B_field[0,0]                            #First from the current cell
+        v_inside  = v_field[0]                              #v_continuous from first node of the current cell
+        q_outside = np.array([H_outside,H_outside*v_outside])  #L state
+        q_inside  = np.array([H_inside ,H_inside *v_inside])   #R state
+
+        if DATA.WB==True:
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_outside, q_inside, B_outside, B_inside, v_inside, DATA.g)
+        else:
+            Hhat, HUhat = Riemann_solver.shallow_water_hll(q_outside, q_inside, v_inside, DATA.g)
+            Bhat = test_dependent.Bathymetry(x_v[0],DATA)
+
+        jump_eta=eta_field[0,0]-(Hhat+Bhat) #R-L
+        v=v_field[0]
+        H=0.5*(H_field[0,0]+Hhat) #ALERT, be careful when H is small
+        sr=np.sqrt(DATA.g*H) #Omitting velocity part #+np.abs(v)
+
+        #Add contribution
+        jump_eta_contribution[0,0]=-sr*jump_eta*DATA.alpha_jump_eta_in_H #NB: sign -
+
+        #Right boundary
+        #inside    L
+        #outside   R
+        H_outside, B_outside, v_outside = test_dependent.BC_state(DATA, x_v[-1], H_field[-1,-1], B_field[-1,-1], v_field[-1] ,H_field[0,0], B_field[0,0], v_field[0],"R")
+        H_inside  = H_field[-1,-1]                          #Last from the current cell
+        B_inside  = B_field[-1,-1]                          #Last from the current cell
+        v_inside  = v_field[-1]             #v_continuous from last node of the current cell
+        q_outside = np.array([H_outside,H_outside*v_outside]) #L state
+        q_inside  = np.array([H_inside ,H_inside *v_inside])  #R state
+        if DATA.WB==True:
+            # Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, DATA.g)
+            Hhat, HUhat, Bhat=Riemann_solver.shallow_water_hll_WB(q_inside, q_outside, B_inside, B_outside, v_inside, DATA.g)
+        else:
+            # Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, DATA.g)
+            Hhat, HUhat = Riemann_solver.shallow_water_hll(q_inside, q_outside, v_inside, DATA.g)
+            Bhat = test_dependent.Bathymetry(x_v[-1],DATA)
+            
+        jump_eta=(Hhat+Bhat)-eta_field[-1,-1] #R-L
+        v=v_field[-1]
+        H=0.5*(H_field[-1,-1]+Hhat) #ALERT, be careful when H is small
+        sr=np.sqrt(DATA.g*H) #Omitting velocity part #+np.abs(v)
+
+        #Add contribution
+        jump_eta_contribution[-1,-1]=sr*jump_eta*DATA.alpha_jump_eta_in_H #NB: sign +
 
 
     return jump_eta_contribution
