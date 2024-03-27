@@ -34,6 +34,8 @@ def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v
         detJ_in_H = J_in_H #NB: Because 1D
         H_field   = detJH/detJ_in_H
 
+        print("Feature not 100% validated even if it should be OK. But it did not work well actually.")
+        quit()
 
         #---------------------------------------
         #SAFETY CHECK

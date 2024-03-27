@@ -13,22 +13,22 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Transcritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
                                                 #"Transcritical_Smooth", "Transcritical_Not_Smooth"
                                                 #"Constant_Slope_Smooth"
-                                                #"Sod_Tanscritical_Expansion"
+                                                #"Sod_Transcritical_Expansion"
                                                 #"Thacker"
 
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 10                        #Number of elements
+N_el               = 20                        #Number of elements
 
 #Space
-order_space        = 5                         #Order in space
+order_space        = 5                        #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -49,7 +49,7 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 200                #Frequency for saving the solution
+freq               = 500                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
@@ -59,10 +59,10 @@ LaxFriedrichs      = False
 WB                 = False
 jump_CIP_in_v      = "j0"               #j0,    jc
 jump_eta_in_x      = False #NB: It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
-jump_eta_in_H      = False 
+jump_eta_in_H      = False #NB: Only available for Euler and it does not seem to work well.
 
 #Folder where to store
-folder             = "Results_Debug" #"Results_Conservative_Formulation" #"Results_Jump_H" 
+folder             = "Results" #"Results_Conservative_Formulation" #"Results_Jump_H" 
 printing           = True
 plotting           = False
 storing            = True

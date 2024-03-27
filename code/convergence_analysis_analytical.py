@@ -5,11 +5,11 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Transcritical_Smooth"   #Supercritical_Smooth #Subcritical_Smooth #Transcritical_Smooth
+test="Supercritical_Smooth"   #Supercritical_Smooth #Subcritical_Smooth #Transcritical_Smooth
 order_space=5
 time_scheme="DeC"
 jump_CIP_in_v="j0"                        #jc, j0
-jump_eta_in_x=True
+jump_eta_in_x=False
 CFL=0.5
 LxF=False
 #==============================================================
@@ -17,7 +17,7 @@ LxF=False
 #
 #
 #==============================================================
-folder="./Results_Jump_H/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation
+folder="./Results/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation #Results
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1

@@ -9,7 +9,7 @@ test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod, Constant_S
 order_space=5
 time_scheme="DeC"
 jump_CIP_in_v="j0"                        #jc, j0
-jump_eta_in_x=True
+jump_eta_in_x=False
 CFL=0.5
 LxF=False
 perturbation=0
@@ -20,7 +20,7 @@ if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
 #
 #
 #==============================================================
-folder="./Results_Jump_H/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation
+folder="./Results/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation #Results
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1

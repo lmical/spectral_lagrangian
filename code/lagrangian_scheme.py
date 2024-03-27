@@ -403,8 +403,8 @@ def Lax_Friedrichs_K(v_local,Hmax,H_local,in_v_local_values_H,DATA):
     ST_i_K=np.zeros(local_nodes_v)
 
     for indi in range(local_nodes_v):
-        H_i=np.sum(in_v_local_values_H[indi,:]*H_local) #TO BE DROPPED WHEN DRY
-        ST_i_K[indi]=alpha*(v_local[indi]-vbar)*H_i
+        # H_i=np.sum(in_v_local_values_H[indi,:]*H_local) #TO BE DROPPED WHEN DRY
+        ST_i_K[indi]=alpha*(v_local[indi]-vbar)*Hmax #NB: Hmax ensures conservation, H_i not because it is point dependent
 
     return ST_i_K
 #==============================================================
