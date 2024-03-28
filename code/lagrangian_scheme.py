@@ -875,8 +875,14 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_
 
         dv = v_local[-1]   - v_local[0]
         dx = x_v_local[-1] - x_v_local[0]
-        Hbar=np.sum(w_H*H_local*J_in_H_local)/dx 
-        c=np.sqrt(DATA.g*Hbar)
+
+        #AVERAGE
+        # Hbar=np.sum(w_H*H_local*J_in_H_local)/dx 
+        # c=np.sqrt(DATA.g*Hbar)
+
+        #MINIMUM
+        Hmin=np.min(H_local) 
+        c=np.sqrt(DATA.g*Hmin)
 
         if( dv < -DATA.K_limiter*dx*c ):
             TroubledCells[inde]=1

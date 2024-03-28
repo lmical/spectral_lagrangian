@@ -76,16 +76,8 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 #==============================================================
 def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info):
 
-    N_el, N_local_nodes_H = x_H.shape
-    degree_H=N_local_nodes_H-1
-    degree_v=degree_H+1
-
 
     TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_in_H,DATA)
-
-
-
-
 
     N_el, N_local_nodes_H = x_H.shape
     degree_H=N_local_nodes_H-1
