@@ -88,8 +88,15 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
 
     #H
     for inde in range(N_el):
-        plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
-        plt.plot(x_H[inde,:],TroubledCells[inde]*np.ones(N_local_nodes_H))
+        if TroubledCells[inde]==0:
+            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color="k")
+        elif TroubledCells[inde]==1:
+            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color="r")
+        elif TroubledCells[inde]==2:
+            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color='orange')
+        else:
+            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            quit()
     plt.title("H")
     plt.xlabel("x")
     plt.grid()

@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod_Transcritical_Expansion"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -25,10 +25,10 @@ test               = "Sod_Transcritical_Expansion"     #Test: "Sod", "Sod_smooth
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 100                        #Number of elements
+N_el               = 200                        #Number of elements
 
 #Space
-order_space        = 2                        #Order in space
+order_space        = 3                        #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -49,13 +49,13 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 500                #Frequency for saving the solution
+freq               = 100                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = "ShockDetection_tn"    #"Disabled" #"Active" #"ShockDetection" (activated in troubled cells and neighbours) #"ShockDetection_tn" (Same but detection only at time t_n)
+LaxFriedrichs      = "ShockDetector_tn"    #"Disabled" #"Active" #"ShockDetector" (activated in troubled cells and neighbours) #"ShockDetector_tn" (Same but detection only at time t_n)
 WB                 = False
 jump_CIP_in_v      = "j0"               #j0,    jc
 jump_eta_in_x      = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
@@ -64,7 +64,7 @@ jump_eta_in_H      = False #NB: KEEP FALSE #Only available for Euler and it does
 #Folder where to store
 folder             = "Results" #"Results_Conservative_Formulation" #"Results_Jump_H" 
 printing           = True
-plotting           = True
+plotting           = False
 storing            = True
 
 
