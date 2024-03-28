@@ -413,10 +413,12 @@ def Lax_Friedrichs_K(v_local,H_local,DATA):
 # Lax-Friedrichs stabilization
 # NB: Uses Lax_Friedrichs_K
 #==============================================================
-def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,DATA):
+def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,TroubledCells,DATA):
     """
     Computation
     phi_i=sum_{K in K_i} alpha (c_i-cbar_K) * H_i
+
+    #NB: In TroubledCells marked as 1 or 2
     """
 
     N_global_nodes_v=len(v_field)
@@ -433,12 +435,13 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,DAT
 
     for inde in range(N_el):
 
-        global_indices_v=M_Local_to_Global[inde,:]
-        v_local=v_field[global_indices_v]
-        H_local=H_field[inde,:]
-        ST_i_K=Lax_Friedrichs_K(v_local,H_local,DATA)
-        for indi in range(N_local_nodes_v):
-            ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
+        if TroubledCells[inde]!=0: #Limit only if 1 or 2
+            global_indices_v=M_Local_to_Global[inde,:]
+            v_local=v_field[global_indices_v]
+            H_local=H_field[inde,:]
+            ST_i_K=Lax_Friedrichs_K(v_local,H_local,DATA)
+            for indi in range(N_local_nodes_v):
+                ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
     if DATA.periodic==True:
         ST_i[0]=ST_i[0]+ST_i[-1]
@@ -838,3 +841,65 @@ def jump_eta_in_JH_ALE_like_computation(H_field,v_field,B_field,M_Local_to_Globa
 
 
     return jump_eta_contribution
+#==============================================================
+#
+#
+#
+#==============================================================
+# Shock detection based on divergence of velocity
+# Reference: High order direct Arbitrary-Lagrangian-Eulerian (ALE) PN PM schemes with WENO Adaptive-Order reconstruction on unstructured meshes - Walter Boscheri, Dinshaw S. Balsara
+#==============================================================
+def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA):
+    """
+    Shock detector based on the divergence of the velocity.
+    Essentially, we detect a shock in a cell if
+    dv<-K*c
+    with dv=v_R-v_L and c=sqrt(g*Hbar)
+
+    NB: Also neighbouring cells of a troubled cell are limited
+    """
+    N_el, local_nodes_H = H_field.shape
+    TroubledCells=np.zeros(N_el)
+
+    #First loop actual troubled
+
+    #Loop on the elements
+    for inde in range(N_el):
+        #Local quantities
+        global_indices_v=M_Local_to_Global[inde,:]
+        x_v_local=x_v[global_indices_v]
+        v_local=v_field[global_indices_v]
+        H_local=H_field[inde,:]
+
+        dv = v_local[-1]   - v_local[0]
+        dx = x_v_local[-1] - x_v_local[0]
+        Hbar=np.sum(w_H*H_local)
+        c=np.sqrt(DATA.g*Hbar)
+
+        if( dv/dx < -DATA.K_limiter*dx*c ):
+            TroubledCells[inde]=1
+
+    #Second loop close to troubled
+
+    #Loop on the elements skipping boundaries
+    for inde in range(N_el):
+        if TroubledCells[inde]==1:
+            if inde!=0: #We have a left cell
+                if TroubledCells[inde-1]!=1:
+                    TroubledCells[inde-1]=2
+            if inde!=N_el-1: #We have a right cell
+                if TroubledCells[inde+1]!=1:
+                    TroubledCells[inde+1]=2
+
+    #Periodic BCs
+    if DATA.periodic:
+        if TroubledCells[0]==1: #If first cell is troubled
+            if TroubledCells[N_el-1]!=1:    
+                TroubledCells[N_el-1]=2
+
+        if TroubledCells[N_el-1]==1: #If lasst cell is troubled
+            if TroubledCells[0]!=1:    
+                TroubledCells[0]=2
+
+
+    return TroubledCells

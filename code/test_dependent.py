@@ -33,6 +33,7 @@ class DATA_CLASS:
         self.storing            = storing
         self.time               = 0.       
         self.dt                 = 0.        
+        self.K_limiter          = 0.1 #Coefficient for divergence criterion         
 
         if order_space==1: 
             self.delta_CIP=0.119
@@ -46,6 +47,8 @@ class DATA_CLASS:
             self.delta_CIP=1.13e-04          
             self.alpha_jump_eta_in_x=1.
             self.alpha_jump_eta_in_H=1.
+
+
 
         if test=="Sod" or test=="Sod_smooth": #Sod
             # Extrema

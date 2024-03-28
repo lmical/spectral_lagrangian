@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Sod_Transcritical_Expansion"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -25,10 +25,10 @@ test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smo
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 20                        #Number of elements
+N_el               = 100                        #Number of elements
 
 #Space
-order_space        = 5                        #Order in space
+order_space        = 2                        #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -55,11 +55,11 @@ N_max_iter         = 1000000             #Maximal number of iterations
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = False
+LaxFriedrichs      = "Active"    #"Disabled", "Active", "ShockDetection" (activated only in troubled cells and neighbours)
 WB                 = False
 jump_CIP_in_v      = "j0"               #j0,    jc
-jump_eta_in_x      = False #NB: It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
-jump_eta_in_H      = False #NB: Only available for Euler and it does not seem to work well.
+jump_eta_in_x      = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
+jump_eta_in_H      = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
 
 #Folder where to store
 folder             = "Results" #"Results_Conservative_Formulation" #"Results_Jump_H" 
@@ -87,13 +87,7 @@ if len(sys.argv)>4:
     if time_scheme=="DeC":
         order_time=order_space
 if len(sys.argv)>5:
-    if sys.argv[5]=="True":
-        LaxFriedrichs=True
-    elif sys.argv[5]=="False":
-        LaxFriedrichs=False
-    else:
-        print("Impossible to get LxF imput from keyboard")
-        quit()
+    LaxFriedrichs=sys.argv[5]
 if len(sys.argv)>6:
     jump_CIP_in_v=sys.argv[6]
 if len(sys.argv)>7:
@@ -381,7 +375,7 @@ print("Timestepping loop")
 DATA.time=0     #Time
 indt=0  #Counter
 
-if (LaxFriedrichs==True) and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Subcritical_Smooth" or test=="Transcritical_Smooth" or test=="Constant_Slope_Smooth"):
+if (LaxFriedrichs=="Active" or LaxFriedrichs=="ShockDetection") and (test=="Smooth_periodic" or test=="Lake_At_Rest_Smooth" or test=="Supercritical_Smooth" or test=="Subcritical_Smooth" or test=="Transcritical_Smooth" or test=="Constant_Slope_Smooth"):
     print()
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print("Warning, running a smooth test with first order limiting!")
@@ -412,11 +406,11 @@ while(DATA.time<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA)
     elif time_scheme=="DeC":
-        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA, dec)
+        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA, dec)
     elif time_scheme=="SSPRK4":
-        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, DATA)
+        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA)
     else:
         print("Time scheme not available")
         quit()
