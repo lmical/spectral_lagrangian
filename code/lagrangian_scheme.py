@@ -876,7 +876,7 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA):
         Hbar=np.sum(w_H*H_local)
         c=np.sqrt(DATA.g*Hbar)
 
-        if( dv/dx < -DATA.K_limiter*dx*c ):
+        if( dv < -DATA.K_limiter*dx*c ):
             TroubledCells[inde]=1
 
     #Second loop close to troubled

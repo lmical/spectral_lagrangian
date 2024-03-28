@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import test_dependent
+import lagrangian_scheme
 
 #==============================================================
 # Function to print some infos
@@ -64,6 +65,42 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 
     if DATA.storing==True and storing_info==True:
         plt.savefig(DATA.folder+"/"+DATA.test+"/pic_values_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
+
+    plt.show()
+#==============================================================
+#
+#
+#
+#==============================================================
+# Function to plot Shock Detector
+#==============================================================
+def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,DATA,storing_info):
+
+    N_el, N_local_nodes_H = x_H.shape
+    degree_H=N_local_nodes_H-1
+    degree_v=degree_H+1
+
+
+    TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA)
+
+    fig=plt.figure()
+    plt.suptitle(DATA.test)
+
+    #H
+    for inde in range(N_el):
+        plt.plot(x_H[inde,:],H_field[inde,:], marker="*")
+        plt.plot(x_H[inde,:],TroubledCells[inde]*np.ones(N_local_nodes_H))
+    plt.title("H")
+    plt.xlabel("x")
+    plt.grid()
+    # plt.ylabel("y")
+    # plt.legend("H")
+
+
+    fig.tight_layout()
+
+    if DATA.storing==True and storing_info==True:
+        plt.savefig(DATA.folder+"/"+DATA.test+"/pic_ShockDetector_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
 
     plt.show()
 #==============================================================
