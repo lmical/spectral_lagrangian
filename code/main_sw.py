@@ -55,7 +55,7 @@ N_max_iter         = 1000000             #Maximal number of iterations
 
 #Space discretization
 scheme             = "Galerkin"
-LaxFriedrichs      = "Active"    #"Disabled", "Active", "ShockDetection" (activated only in troubled cells and neighbours)
+LaxFriedrichs      = "ShockDetection_tn"    #"Disabled" #"Active" #"ShockDetection" (activated in troubled cells and neighbours) #"ShockDetection_tn" (Same but detection only at time t_n)
 WB                 = False
 jump_CIP_in_v      = "j0"               #j0,    jc
 jump_eta_in_x      = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
