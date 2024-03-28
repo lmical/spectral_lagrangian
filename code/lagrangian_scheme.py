@@ -849,7 +849,7 @@ def jump_eta_in_JH_ALE_like_computation(H_field,v_field,B_field,M_Local_to_Globa
 # Shock detection based on divergence of velocity
 # Reference: High order direct Arbitrary-Lagrangian-Eulerian (ALE) PN PM schemes with WENO Adaptive-Order reconstruction on unstructured meshes - Walter Boscheri, Dinshaw S. Balsara
 #==============================================================
-def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA):
+def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_in_H,DATA):
     """
     Shock detector based on the divergence of the velocity.
     Essentially, we detect a shock in a cell if
@@ -862,6 +862,7 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA):
     TroubledCells=np.zeros(N_el)
 
     #First loop actual troubled
+    J_in_H = get_J_in_H(x_v,local_derivatives_v_in_H,M_Local_to_Global)
 
     #Loop on the elements
     for inde in range(N_el):
@@ -870,10 +871,11 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA):
         x_v_local=x_v[global_indices_v]
         v_local=v_field[global_indices_v]
         H_local=H_field[inde,:]
+        J_in_H_local=J_in_H[inde,:]
 
         dv = v_local[-1]   - v_local[0]
         dx = x_v_local[-1] - x_v_local[0]
-        Hbar=np.sum(w_H*H_local)
+        Hbar=np.sum(w_H*H_local*J_in_H_local)/dx 
         c=np.sqrt(DATA.g*Hbar)
 
         if( dv < -DATA.K_limiter*dx*c ):

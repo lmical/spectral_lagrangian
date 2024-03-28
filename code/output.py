@@ -74,40 +74,105 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 #==============================================================
 # Function to plot Shock Detector
 #==============================================================
-def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,DATA,storing_info):
+def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info):
 
     N_el, N_local_nodes_H = x_H.shape
     degree_H=N_local_nodes_H-1
     degree_v=degree_H+1
 
 
-    TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,DATA)
+    TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_in_H,DATA)
 
-    fig=plt.figure()
-    plt.suptitle(DATA.test)
+
+
+
+
+    N_el, N_local_nodes_H = x_H.shape
+    degree_H=N_local_nodes_H-1
+    degree_v=degree_H+1
+
+    fig, axs = plt.subplots(2,2) #Array of subplots
+    fig.suptitle(DATA.test)
+
+
+
+
 
     #H
     for inde in range(N_el):
         if TroubledCells[inde]==0:
-            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color="k")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="k")
         elif TroubledCells[inde]==1:
-            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color="r")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="r")
         elif TroubledCells[inde]==2:
-            plt.plot(x_H[inde,:],H_field[inde,:], marker="*",color='orange')
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
-    plt.title("H")
-    plt.xlabel("x")
-    plt.grid()
-    # plt.ylabel("y")
-    # plt.legend("H")
+    axs[0,0].set_title("H")
+    axs[0,0].set_xlabel("x")
+    axs[0,0].grid()
+    # axs[0,0].set_ylabel("y")
+    # axs[0,0].legend("H")
 
+    #v
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+        x_v_local=x_v[global_indices_v]
+        v_local=v_field[global_indices_v]
+        if TroubledCells[inde]==0:
+            axs[0,1].plot(x_v_local,v_local, marker="*",color="k")
+        elif TroubledCells[inde]==1:
+            axs[0,1].plot(x_v_local,v_local, marker="*",color="r")
+        elif TroubledCells[inde]==2:
+            axs[0,1].plot(x_v_local,v_local, marker="*",color='orange')
+        else:
+            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            quit()
+    axs[0,1].set_title("v")
+    axs[0,1].set_xlabel("x")
+    axs[0,1].grid()
+
+    #eta
+    for inde in range(N_el):
+        if TroubledCells[inde]==0:
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="k")
+        elif TroubledCells[inde]==1:
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="r")
+        elif TroubledCells[inde]==2:
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color='orange')
+        else:
+            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            quit()
+    axs[1,0].set_title("\eta")
+    axs[1,0].set_xlabel("x")
+    axs[1,0].grid()
+
+    #q
+    q_field=v_field*H_in_x_v
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+        x_v_local=x_v[global_indices_v]
+        q_local=q_field[global_indices_v]
+        if TroubledCells[inde]==0:
+            axs[1,1].plot(x_v_local,q_local, marker="*",color="k")
+        elif TroubledCells[inde]==1:
+            axs[1,1].plot(x_v_local,q_local, marker="*",color="r")
+        elif TroubledCells[inde]==2:
+            axs[1,1].plot(x_v_local,q_local, marker="*",color='orange')
+        else:
+            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            quit()
+    axs[1,1].set_title("q")
+    axs[1,1].set_xlabel("x")
+    axs[1,1].grid()
 
     fig.tight_layout()
 
+
     if DATA.storing==True and storing_info==True:
         plt.savefig(DATA.folder+"/"+DATA.test+"/pic_ShockDetector_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
+
 
     plt.show()
 #==============================================================
