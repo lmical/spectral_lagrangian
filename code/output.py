@@ -35,7 +35,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 
     #H
     for inde in range(N_el):
-        axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*")
+        axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".")
     axs[0,0].set_title("H")
     axs[0,0].set_xlabel("x")
     axs[0,0].grid()
@@ -50,7 +50,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 
     #eta
     for inde in range(N_el):
-        axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*")
+        axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".")
     axs[1,0].set_title("\eta")
     axs[1,0].set_xlabel("x")
     axs[1,0].grid()
@@ -101,11 +101,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
     #H
     for inde in range(N_el):
         if TroubledCells[inde]==0:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="k")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color="k")
         elif TroubledCells[inde]==1:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="r")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color="r")
         elif TroubledCells[inde]>1:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color='orange')
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -121,11 +121,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
         x_v_local=x_v[global_indices_v]
         v_local=v_field[global_indices_v]
         if TroubledCells[inde]==0:
-            axs[0,1].plot(x_v_local,v_local, marker="*",color="k")
+            axs[0,1].plot(x_v_local,v_local, marker=".",color="k")
         elif TroubledCells[inde]==1:
-            axs[0,1].plot(x_v_local,v_local, marker="*",color="r")
+            axs[0,1].plot(x_v_local,v_local, marker=".",color="r")
         elif TroubledCells[inde]>1:
-            axs[0,1].plot(x_v_local,v_local, marker="*",color='orange')
+            axs[0,1].plot(x_v_local,v_local, marker=".",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -136,11 +136,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
     #eta
     for inde in range(N_el):
         if TroubledCells[inde]==0:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="k")
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color="k")
         elif TroubledCells[inde]==1:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="r")
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color="r")
         elif TroubledCells[inde]>1:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color='orange')
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -155,11 +155,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
         x_v_local=x_v[global_indices_v]
         q_local=q_field[global_indices_v]
         if TroubledCells[inde]==0:
-            axs[1,1].plot(x_v_local,q_local, marker="*",color="k")
+            axs[1,1].plot(x_v_local,q_local, marker=".",color="k")
         elif TroubledCells[inde]==1:
-            axs[1,1].plot(x_v_local,q_local, marker="*",color="r")
+            axs[1,1].plot(x_v_local,q_local, marker=".",color="r")
         elif TroubledCells[inde]>1:
-            axs[1,1].plot(x_v_local,q_local, marker="*",color='orange')
+            axs[1,1].plot(x_v_local,q_local, marker=".",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -366,7 +366,7 @@ def plot_error(H_field, v_field, x_v, x_H, H_in_x_v, DATA):
 
     #H
     for inde in range(N_el):
-        axs[0].plot(x_H[inde,:],errorH[inde,:], marker="*")
+        axs[0].plot(x_H[inde,:],errorH[inde,:], marker=".")
     axs[0].set_title("H")
     axs[0].set_xlabel("x")
     axs[0].grid()

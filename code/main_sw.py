@@ -439,7 +439,7 @@ while(DATA.time<DATA.T):
         if plotting==True:
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-            # output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
+            output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
             output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=False)
 
 
@@ -457,7 +457,7 @@ if storing==True:
     #Final plot to save
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-    # output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
+    output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
     output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=True)
 
     #Storing the final solution
