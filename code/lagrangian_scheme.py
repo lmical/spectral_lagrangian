@@ -891,26 +891,32 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_
             TroubledCells[inde]=1
 
     #Second loop close to troubled
+    if DATA.N_limited_neighbours==0:
+        pass
+    else:
+        NLN=DATA.N_limited_neighbours
+        #We perform now a loop DATA.N_limited_neighbours times and each time we extend the stencil of limited cells by 1
+        for indl in range(NLN):
 
-    #Loop on the elements skipping boundaries
-    for inde in range(N_el):
-        if TroubledCells[inde]==1:
-            if inde!=0: #We have a left cell
-                if TroubledCells[inde-1]!=1:
-                    TroubledCells[inde-1]=2
-            if inde!=N_el-1: #We have a right cell
-                if TroubledCells[inde+1]!=1:
-                    TroubledCells[inde+1]=2
+            #Loop on the elements skipping boundaries
+            for inde in range(N_el):
+                if TroubledCells[inde]==indl+1: 
+                    if inde!=0: #We have a left cell
+                        if TroubledCells[inde-1]==0:
+                            TroubledCells[inde-1]=indl+2
+                    if inde!=N_el-1: #We have a right cell
+                        if TroubledCells[inde+1]==0:
+                            TroubledCells[inde+1]=indl+2
 
-    #Periodic BCs
-    if DATA.periodic:
-        if TroubledCells[0]==1: #If first cell is troubled
-            if TroubledCells[N_el-1]!=1:    
-                TroubledCells[N_el-1]=2
+            #Periodic BCs
+            if DATA.periodic:
+                if TroubledCells[0]==indl+1: #If first cell is troubled
+                    if TroubledCells[N_el-1]==0:    
+                        TroubledCells[N_el-1]=indl+2
 
-        if TroubledCells[N_el-1]==1: #If lasst cell is troubled
-            if TroubledCells[0]!=1:    
-                TroubledCells[0]=2
+                if TroubledCells[N_el-1]!=0: #If lasst cell is troubled
+                    if TroubledCells[0]==indl+1:    
+                        TroubledCells[0]=indl+2
 
 
     return TroubledCells

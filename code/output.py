@@ -104,7 +104,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="k")
         elif TroubledCells[inde]==1:
             axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color="r")
-        elif TroubledCells[inde]==2:
+        elif TroubledCells[inde]>1:
             axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker="*",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
@@ -124,7 +124,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[0,1].plot(x_v_local,v_local, marker="*",color="k")
         elif TroubledCells[inde]==1:
             axs[0,1].plot(x_v_local,v_local, marker="*",color="r")
-        elif TroubledCells[inde]==2:
+        elif TroubledCells[inde]>1:
             axs[0,1].plot(x_v_local,v_local, marker="*",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
@@ -139,7 +139,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="k")
         elif TroubledCells[inde]==1:
             axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color="r")
-        elif TroubledCells[inde]==2:
+        elif TroubledCells[inde]>1:
             axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker="*",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
@@ -158,7 +158,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[1,1].plot(x_v_local,q_local, marker="*",color="k")
         elif TroubledCells[inde]==1:
             axs[1,1].plot(x_v_local,q_local, marker="*",color="r")
-        elif TroubledCells[inde]==2:
+        elif TroubledCells[inde]>1:
             axs[1,1].plot(x_v_local,q_local, marker="*",color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
