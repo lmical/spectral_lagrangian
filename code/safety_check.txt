@@ -3,21 +3,20 @@ Maxima 2.737741247944046 2.982040948544126
 Minima 1.8206985692942812 -1.0122079223139757
 Average 2.1543878374549505 0.9976420556307531
 
-python3 main_sw.py Smooth_periodic 0 2 DeC Active jc False False 0.5 50
+python3 main_sw.py Smooth_periodic 0 2 DeC Active 0.0 0 jc False False 0.5 50
 
 
 Smooth_periodic N_el 50 order_space 2 CFL 0.5
-Maxima 2.7995216699645837 3.05978094015402
-Minima 1.8154447302629628 -1.0765875514045422
-Average 2.174084164140323 1.0001845359864399
+Maxima 2.7995373976328235 3.059790603190967
+Minima 1.8154695246142805 -1.0766117288046826
+Average 2.1740842821835433 1.0001838921599313
 
-python3 main_sw.py Smooth_periodic 0 2 DeC ShockDetector jc False False 0.5 50
-
+python3 main_sw.py Smooth_periodic 0 2 DeC ShockDetector_divV 0.1 1 jc False False 0.5 50
 
 
 Smooth_periodic N_el 50 order_space 2 CFL 0.5
-Maxima 2.7995301182917527 3.059826286832566
-Minima 1.8154261943389125 -1.0765826775027272
-Average 2.174085726963589 1.0001844002783977
+Maxima 2.7995426745342593 3.0598165266172126
+Minima 1.8154613577320458 -1.0766090092693366
+Average 2.174085638902919 1.0001843995315316
 
-python3 main_sw.py Smooth_periodic 0 2 DeC ShockDetector_tn jc False False 0.5 50
+python3 main_sw.py Smooth_periodic 0 2 DeC ShockDetector_divV_tn 0.1 1 jc False False 0.5 50
