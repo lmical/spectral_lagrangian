@@ -10,7 +10,7 @@ import DeC
 #==============================================================
 def Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA):
 
-    if DATA.LaxFriedrichs=="ShockDetector_tn":
+    if DATA.LaxFriedrichs=="ShockDetector_divV_tn":
         TroubledCells_tn=lagrangian_scheme.ShockDetector(v_field_old,M_Local_to_Global,H_field_old,x_v_old,w_H,local_derivatives_v_in_H,DATA)
     else:
         N_el=H_field_old.shape[0]
@@ -88,12 +88,12 @@ def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, loc
 
     if DATA.LaxFriedrichs=="Disabled":
         ST_i=np.zeros(len(phi_v))
-    elif DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="ShockDetector" or DATA.LaxFriedrichs=="ShockDetector_tn":
+    elif DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
         if DATA.LaxFriedrichs=="Active":
             TroubledCells=np.ones(H_field.shape[0])
-        elif DATA.LaxFriedrichs=="ShockDetector":
+        elif DATA.LaxFriedrichs=="ShockDetector_divV":
             TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_in_H,DATA)
-        elif DATA.LaxFriedrichs=="ShockDetector_tn":
+        elif DATA.LaxFriedrichs=="ShockDetector_divV_tn":
             #Keep the input TroubledCells
             TroubledCells=TroubledCells_tn
         ST_i=lagrangian_scheme.Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,TroubledCells,DATA)
@@ -150,7 +150,7 @@ def rhs_detJH_function(H_field,v_field,B_field, M_Local_to_Global,M_faces,x_v,DA
 #==============================================================
 def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA,dec):
 
-    if DATA.LaxFriedrichs=="ShockDetector_tn":
+    if DATA.LaxFriedrichs=="ShockDetector_divV_tn":
         TroubledCells_tn=lagrangian_scheme.ShockDetector(v_field_old,M_Local_to_Global,H_field_old,x_v_old,w_H,local_derivatives_v_in_H,DATA)
     else:
         N_el=H_field_old.shape[0]
@@ -243,7 +243,7 @@ def DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, 
 #==============================================================
 def SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA):
 
-    if DATA.LaxFriedrichs=="ShockDetector_tn":
+    if DATA.LaxFriedrichs=="ShockDetector_divV_tn":
         TroubledCells_tn=lagrangian_scheme.ShockDetector(v_field_old,M_Local_to_Global,H_field_old,x_v_old,w_H,local_derivatives_v_in_H,DATA)
     else:
         N_el=H_field_old.shape[0]

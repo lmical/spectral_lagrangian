@@ -9,31 +9,33 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing):
 
         #Somhow it is better to store also the input paramters in DATA
-        self.test               = test
-        self.perturbation       = perturbation
-        self.N_el               = N_el
-        self.order_space        = order_space
-        self.time_scheme        = time_scheme
-        self.order_time         = order_time
-        self.CFL                = CFL           
-        self.freq               = freq              
-        self.N_max_iter         = N_max_iter             
-        self.scheme             = scheme
-        self.LaxFriedrichs      = LaxFriedrichs
-        self.WB                 = WB
-        self.jump_CIP_in_v      = jump_CIP_in_v
-        self.jump_eta_in_x      = jump_eta_in_x
-        self.jump_eta_in_H      = jump_eta_in_H
-        self.folder             = folder
-        self.printing           = printing
-        self.plotting           = plotting
-        self.storing            = storing
-        self.time               = 0.       
-        self.dt                 = 0.        
-        self.K_limiter          = 0.1 #Coefficient for divergence criterion         
+        self.test                 = test
+        self.perturbation         = perturbation
+        self.N_el                 = N_el
+        self.order_space          = order_space
+        self.time_scheme          = time_scheme
+        self.order_time           = order_time
+        self.CFL                  = CFL           
+        self.freq                 = freq              
+        self.N_max_iter           = N_max_iter             
+        self.scheme               = scheme
+        self.LaxFriedrichs        = LaxFriedrichs
+        self.WB                   = WB
+        self.jump_CIP_in_v        = jump_CIP_in_v
+        self.jump_eta_in_x        = jump_eta_in_x
+        self.jump_eta_in_H        = jump_eta_in_H
+        self.folder               = folder
+        self.printing             = printing
+        self.plotting             = plotting
+        self.storing              = storing
+        self.time                 = 0.       
+        self.dt                   = 0.        
+        self.K_limiter_divV       = K_limiter_divV
+        self.N_limited_neighbours = N_limited_neighbours
+
 
         if order_space==1: 
             self.delta_CIP=0.119

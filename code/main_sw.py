@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -25,10 +25,10 @@ test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic",
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 200                        #Number of elements
+N_el               = 10                        #Number of elements
 
 #Space
-order_space        = 3                        #Order in space
+order_space        = 5                        #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -54,12 +54,14 @@ N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
-scheme             = "Galerkin"
-LaxFriedrichs      = "ShockDetector_tn"    #"Disabled" #"Active" #"ShockDetector" (activated in troubled cells and neighbours) #"ShockDetector_tn" (Same but detection only at time t_n)
-WB                 = False
-jump_CIP_in_v      = "j0"               #j0,    jc
-jump_eta_in_x      = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
-jump_eta_in_H      = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
+scheme               = "Galerkin"
+LaxFriedrichs        = "Disabled"    #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
+K_limiter_divV       = 0.1           #Constant for the limiter on div v
+N_limited_neighbours = 1             #Number of limited neighbours
+WB                   = False
+jump_CIP_in_v        = "j0"               #j0,    jc
+jump_eta_in_x        = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
+jump_eta_in_H        = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
 
 #Folder where to store
 folder             = "Results" #"Results_Conservative_Formulation" #"Results_Jump_H" 
@@ -89,27 +91,31 @@ if len(sys.argv)>4:
 if len(sys.argv)>5:
     LaxFriedrichs=sys.argv[5]
 if len(sys.argv)>6:
-    jump_CIP_in_v=sys.argv[6]
+    K_limiter_divV==float(sys.argv[6])
 if len(sys.argv)>7:
-    if sys.argv[7]=="True":
+    N_limited_neighbours=int(sys.argv[7])
+if len(sys.argv)>8:
+    jump_CIP_in_v=sys.argv[8]
+if len(sys.argv)>9:
+    if sys.argv[9]=="True":
         jump_eta_in_x=True
-    elif sys.argv[7]=="False":
+    elif sys.argv[9]=="False":
         jump_eta_in_x=False
     else:
         print("Impossible to get jump_eta_in_x imput from keyboard")
         quit()
-if len(sys.argv)>8:
-    if sys.argv[8]=="True":
+if len(sys.argv)>10:
+    if sys.argv[10]=="True":
         jump_eta_in_H=True
-    elif sys.argv[8]=="False":
+    elif sys.argv[10]=="False":
         jump_eta_in_H=False
     else:
         print("Impossible to get jump_eta_in_H imput from keyboard")
         quit()
-if len(sys.argv)>9:
-    CFL=float(sys.argv[9])
-if len(sys.argv)>10:
-    N_el=int(sys.argv[10])
+if len(sys.argv)>11:
+    CFL=float(sys.argv[11])
+if len(sys.argv)>12:
+    N_el=int(sys.argv[12])
 
 
 #==============================================================
@@ -129,6 +135,9 @@ print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
 print("Lax-Friedrichs: ", LaxFriedrichs)
+if LaxFriedrichs=="ShockDetector_divV" or LaxFriedrichs=="ShockDetector_divV_tn":
+    print("...with K", K_limiter_divV)
+    print("...with number of limited neighbours", N_limited_neighbours)
 print("CIP jump in in update of v: ", jump_CIP_in_v)
 print("Jump of eta in update of x: ", jump_eta_in_x)
 print("Jump of eta in update of H: ", jump_eta_in_H)
@@ -287,7 +296,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)
@@ -430,7 +439,7 @@ while(DATA.time<DATA.T):
         if plotting==True:
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
-            output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
+            # output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
             output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=False)
 
 
