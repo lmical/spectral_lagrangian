@@ -435,7 +435,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
 
     for inde in range(N_el):
 
-        if TroubledCells[inde]!=0: #Limit only if 1 or 2
+        if TroubledCells[inde]!=0: #Limit only if >0
             global_indices_v=M_Local_to_Global[inde,:]
             v_local=v_field[global_indices_v]
             H_local=H_field[inde,:]
@@ -886,6 +886,31 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_
         #MINIMUM
         Hmin=np.min(H_local) 
         c=np.sqrt(DATA.g*Hmin)
+
+        #NB: We have to find the local minimum taking into account neighbouring cells
+
+        if inde!=0: #There exists a neighbour at left
+            indl=inde-1
+        else: 
+            if DATA.periodic:
+                indl=N_el-1
+            else:
+                indl=inde #So that the minimum does not change when compared to inde
+
+        if inde!=N_el-1: #There exists a neighbour at right
+            indr=inde+1
+        else: 
+            if DATA.periodic:
+                indr=0
+            else:
+                indr=inde #So that the minimum does not change when compared to inde
+
+        HminL=np.min(H_field[indl,:])
+        HminR=np.min(H_field[indr,:])
+
+        cL=np.sqrt(DATA.g*HminL)
+        cR=np.sqrt(DATA.g*HminR)
+        c=np.min([c,cL,cR])
 
         if( dv < -DATA.K_limiter_divV*dx*c ):
             TroubledCells[inde]=1
