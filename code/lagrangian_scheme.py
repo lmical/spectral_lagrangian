@@ -389,21 +389,31 @@ def Coupling_Terms_Space_Residuals_v(H_field, B_field, v_field, M_Local_to_Globa
 # Local computation for the Lax-Friedrichs stabilization
 # NB: Uses Lax_Friedrichs_K
 #==============================================================
-def Lax_Friedrichs_K(v_local,H_local,DATA):
+def Lax_Friedrichs_K(v_local,H_local,H_in_v_local,DATA):
     """
     Computation
-    phi^K_i=alpha (c_i-cbar_K)*Hmax
+    phi^K_i=alpha (v_i-vbar_K)*Hmax
+
+    Or...
+    phi^K_i=alpha (Hv_i-Hvbar_K)
     """
     Hmax=np.max(H_local)
     alpha=np.max(np.absolute(v_local))+np.sqrt(DATA.g*Hmax) 
-    vbar=np.average(v_local)
-    local_nodes_v=len(v_local)
 
+    #Option 1
+    vbar=np.average(v_local)
+
+    #Option 1
+    Hv_local=v_local*H_in_v_local
+    Hvbar=np.average(Hv_local)
+
+    local_nodes_v=len(v_local)
     ST_i_K=np.zeros(local_nodes_v)
 
     for indi in range(local_nodes_v):
         ST_i_K[indi]=alpha*(v_local[indi]-vbar)*Hmax #NB: Hmax ensures conservation, H_i not because it is point dependent #TO BE DROPPED WHEN DRY
-        
+        # ST_i_K[indi]=alpha*(Hv_local[indi]-Hvbar)
+
     return ST_i_K
 #==============================================================
 #
@@ -430,7 +440,6 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
     #I transpose it to have in each row a specifc x_i_v and in the columns the basis functions
     in_v_local_values_H=local_values_H_in_v.transpose()
 
-
     ST_i=np.zeros(N_global_nodes_v)
 
     for inde in range(N_el):
@@ -439,7 +448,22 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
             global_indices_v=M_Local_to_Global[inde,:]
             v_local=v_field[global_indices_v]
             H_local=H_field[inde,:]
-            ST_i_K=Lax_Friedrichs_K(v_local,H_local,DATA)
+            H_in_v_local=np.zeros(N_local_nodes_v)
+
+            for indi in range(N_local_nodes_v):
+                H_in_v_local[indi]=np.sum(in_v_local_values_H[indi,:]*H_local)
+
+            #------------------------
+            #SAFETY CHECK
+            #------------------------
+            # print(local_values_H_in_v)
+            # print(in_v_local_values_H)
+            # print(H_local)
+            # print(H_in_v_local)
+            # quit()
+            #------------------------
+
+            ST_i_K=Lax_Friedrichs_K(v_local,H_local,H_in_v_local,DATA)
             for indi in range(N_local_nodes_v):
                 ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
