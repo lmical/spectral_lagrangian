@@ -64,7 +64,7 @@ jump_eta_in_x        = False #NB: KEEP FALSE #It does its job but not to be used
 jump_eta_in_H        = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
 
 #Folder where to store
-folder             = "Results" #"Results_Conservative_Formulation" #"Results_Jump_H" 
+folder             = "Results_Mario" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results"
 printing           = True
 plotting           = False
 storing            = True
@@ -91,7 +91,7 @@ if len(sys.argv)>4:
 if len(sys.argv)>5:
     LaxFriedrichs=sys.argv[5]
 if len(sys.argv)>6:
-    K_limiter_divV==float(sys.argv[6])
+    K_limiter_divV=float(sys.argv[6])
 if len(sys.argv)>7:
     N_limited_neighbours=int(sys.argv[7])
 if len(sys.argv)>8:

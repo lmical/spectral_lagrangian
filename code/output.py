@@ -95,17 +95,19 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
     fig.suptitle(DATA.test)
 
 
-
-
+    if degree_H==0:
+        marker_choice="." #Otherwise H is not plotted
+    else:
+        marker_choice=" "
 
     #H
     for inde in range(N_el):
         if TroubledCells[inde]==0:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color="k")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color="k")
         elif TroubledCells[inde]==1:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color="r")
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
-            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=".",color='orange')
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -121,11 +123,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
         x_v_local=x_v[global_indices_v]
         v_local=v_field[global_indices_v]
         if TroubledCells[inde]==0:
-            axs[0,1].plot(x_v_local,v_local, marker=".",color="k")
+            axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color="k")
         elif TroubledCells[inde]==1:
-            axs[0,1].plot(x_v_local,v_local, marker=".",color="r")
+            axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
-            axs[0,1].plot(x_v_local,v_local, marker=".",color='orange')
+            axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -136,11 +138,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
     #eta
     for inde in range(N_el):
         if TroubledCells[inde]==0:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color="k")
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color="k")
         elif TroubledCells[inde]==1:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color="r")
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
-            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=".",color='orange')
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
@@ -155,11 +157,11 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
         x_v_local=x_v[global_indices_v]
         q_local=q_field[global_indices_v]
         if TroubledCells[inde]==0:
-            axs[1,1].plot(x_v_local,q_local, marker=".",color="k")
+            axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color="k")
         elif TroubledCells[inde]==1:
-            axs[1,1].plot(x_v_local,q_local, marker=".",color="r")
+            axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
-            axs[1,1].plot(x_v_local,q_local, marker=".",color='orange')
+            axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color='orange')
         else:
             print("Impossible, adimssible values for TroubledCells are 0,1,2")
             quit()
