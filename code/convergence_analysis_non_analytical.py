@@ -5,22 +5,25 @@ import os
 #==============================================================
 # INPUT
 #==============================================================
-test="Smooth_periodic"   #Smooth_periodic, Supercritical_Smooth, Sod, Constant_Slope_Smooth, No_Slope_Smooth
-order_space=5
-time_scheme="DeC"
-jump_CIP_in_v="j0"                        #jc, j0
-jump_eta_in_x=False
-CFL=0.5
-LxF=False
+test="Smooth_periodic"      #Smooth_periodic, Supercritical_Smooth, Subcritical_Smooth, Transcritical_Smooth
 perturbation=0
-if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
-    perturbation=1
+order_space=2
+time_scheme="DeC"           #Time scheme #"Euler" "DeC" "SSPRK4"
+LaxFriedrichs="Disabled"    #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
+K_limiter_divV=0.1          #0.1 #8  #Important only if ShockDetector_divV_tn or ShockDetector_divV 
+N_limited_neighbours=2      #1   #2  #Important only if ShockDetector_divV_tn or ShockDetector_divV     
+jump_CIP_in_v="j0"          #Keep "j0", not needed, but in case there is jc
+jump_eta_in_x=False         #Keep False, not HO #Stopping term
+jump_eta_in_H=False         #Keep False, not HO #ALE-like
+CFL=0.5
+# if test=="Constant_Slope_Smooth" or test=="No_Slope_Smooth":
+#     perturbation=1
 #==============================================================
 #
 #
 #
 #==============================================================
-folder="./Results/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation #Results
+folder="./New_Results/"+test #Results_Conservative_Formulation #Results_Non_Conservative_Formulation #Results
 degree_H=order_space-1
 degree_v=order_space
 local_DoFs_H=degree_H+1
@@ -31,7 +34,10 @@ local_DoFs_v=degree_v+1
 if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
     count=0
     errorfiles=[]
-    fileword="values_pert"+str(perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+time_scheme+"_LxF"+str(LxF)+"_"+jump_CIP_in_v+"_jeta"+str(jump_eta_in_x)+"_"+"CFL"+str(CFL)
+    if LaxFriedrichs=="Active" or LaxFriedrichs=="Disabled":
+        fileword="values_pert"+str(perturbation)+"_"+"P"+str(order_space-1)+"P"+str(order_space)+"_"+time_scheme+"_LxF"+str(LaxFriedrichs)+"_"+jump_CIP_in_v+"_jeta"+str(jump_eta_in_x)+"_CFL"+str(CFL)
+    elif LaxFriedrichs=="ShockDetector_divV" or LaxFriedrichs=="ShockDetector_divV_tn":
+        fileword="values_pert"+str(perturbation)+"_"+"P"+str(order_space-1)+"P"+str(order_space)+"_"+time_scheme+"_LxF"+str(LaxFriedrichs)+"_K"+str(K_limiter_divV)+"_NLimitedNeighbours"+str(N_limited_neighbours)+"_"+jump_CIP_in_v+"_jeta"+str(jump_eta_in_x)+"_CFL"+str(CFL)
     for file in os.listdir(folder): #CONDITION: Is there more than 1 error files?
         if file.startswith(fileword):
             count=count+1
@@ -149,7 +155,7 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         errors[:,4]=errors_vec_eta.copy()
 
         #Opening the file to write the rates of convergence
-        fid = open(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".tex",'w')
+        fid = open(folder+"/experimental_convergence_"+fileword+".tex",'w')
         print("    N         Error x     Order x         Error v     Order v         Error H     Order H         Error q     Order q      Error \eta  Order \eta")
         fid.write("  N   & Error x  &  Order x & Error v  &  Order v   & Error H  &  Order H & Error q  &  Order q   & Error \eta  &  Order \eta\\ \n")  
         for indi in range(len(errors)): #Process the files
@@ -182,8 +188,8 @@ if os.path.isdir(folder):  #CONDITION: Is it a folder? If yes go on
         params = {'mathtext.default': 'regular' }   
         plt.xlabel("$N_{elements}$")
         plt.ylabel("$L^1$ error")
-        plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".pdf", format="pdf", bbox_inches="tight")
-        # plt.savefig(folder+"/experimental_convergence_"+"P"+str(degree_H)+"P"+str(degree_v)+".png",dpi=600)
+        plt.savefig(folder+"/experimental_convergence_"+fileword+".pdf", format="pdf", bbox_inches="tight")
+        # plt.savefig(folder+"/experimental_convergence_"+fileword+".png",dpi=600)
         # plt.show()
 
 

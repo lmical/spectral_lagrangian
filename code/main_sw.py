@@ -64,7 +64,7 @@ jump_eta_in_x        = False #NB: KEEP FALSE #It does its job but not to be used
 jump_eta_in_H        = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
 
 #Folder where to store
-folder             = "Results_Mario" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results"
+folder             = "New_Results" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results"
 printing           = True
 plotting           = False
 storing            = True

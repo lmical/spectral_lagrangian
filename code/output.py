@@ -74,7 +74,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
             print(DATA.LaxFriedrichs)
             quit()
 
-    plt.show()
+    # plt.show()
 #==============================================================
 #
 #
@@ -184,7 +184,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
 
 
 
-    plt.show()
+    # plt.show()
 #==============================================================
 #
 #
