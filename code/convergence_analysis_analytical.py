@@ -7,14 +7,14 @@ import os
 #==============================================================
 test="Supercritical_Smooth"      #Supercritical_Smooth, Subcritical_Smooth, Transcritical_Smooth
 perturbation=0
-order_space=2
-time_scheme="DeC"           #Time scheme #"Euler" "DeC" "SSPRK4"
-LaxFriedrichs="Disabled"    #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
-K_limiter_divV=0.1          #0.1 #8  #Important only if ShockDetector_divV_tn or ShockDetector_divV 
-N_limited_neighbours=2      #1   #2  #Important only if ShockDetector_divV_tn or ShockDetector_divV     
-jump_CIP_in_v="j0"          #Keep "j0", not needed, but in case there is jc
-jump_eta_in_x=False         #Keep False, not HO #Stopping term
-jump_eta_in_H=False         #Keep False, not HO #ALE-like
+order_space=5
+time_scheme="DeC"                           #Time scheme #"Euler" "DeC" "SSPRK4"
+LaxFriedrichs="Disabled"       #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
+K_limiter_divV=0.1                          #0.1 #8  #Important only if ShockDetector_divV_tn or ShockDetector_divV 
+N_limited_neighbours=2                      #1   #2  #Important only if ShockDetector_divV_tn or ShockDetector_divV     
+jump_CIP_in_v="j0"                          #Keep "j0", not needed, but in case there is jc
+jump_eta_in_x=False                         #Keep False, not HO #Stopping term
+jump_eta_in_H=False                         #Keep False, not HO #ALE-like
 CFL=0.5
 #==============================================================
 #
