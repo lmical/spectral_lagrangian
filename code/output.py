@@ -67,7 +67,7 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
     if DATA.storing==True and storing_info==True:
         if DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="Disabled":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_values_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
-        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
+        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn" or DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_values_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_K"+str(DATA.K_limiter_divV)+"_NLimitedNeighbours"+str(DATA.N_limited_neighbours)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
         else:
             print("Invalid LxF option in plotting_function")
@@ -82,10 +82,13 @@ def plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing
 #==============================================================
 # Function to plot Shock Detector
 #==============================================================
-def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info):
+def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,TroubledCells_memory,DATA,storing_info):
 
 
     TroubledCells=lagrangian_scheme.ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_in_H,DATA)
+    if DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
+        TroubledCells=lagrangian_scheme.MergeTroubledCells(TroubledCells,TroubledCells_memory,DATA)
+
 
     N_el, N_local_nodes_H = x_H.shape
     degree_H=N_local_nodes_H-1
@@ -108,8 +111,10 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
             axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color='orange')
+        elif TroubledCells[inde]<=-1:
+            axs[0,0].plot(x_H[inde,:],H_field[inde,:], marker=marker_choice,color='green')
         else:
-            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            print("Invalid adimssible value for TroubledCells")
             quit()
     axs[0,0].set_title("H")
     axs[0,0].set_xlabel("x")
@@ -128,8 +133,10 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
             axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color='orange')
+        elif TroubledCells[inde]<=-1:
+            axs[0,1].plot(x_v_local,v_local, marker=marker_choice,color='green')
         else:
-            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            print("Invalid adimssible value for TroubledCells")
             quit()
     axs[0,1].set_title("v")
     axs[0,1].set_xlabel("x")
@@ -143,8 +150,10 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
             axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color='orange')
+        elif TroubledCells[inde]<=-1:
+            axs[1,0].plot(x_H[inde,:],H_field[inde,:]+B_field[inde,:], marker=marker_choice,color='green')
         else:
-            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            print("Invalid adimssible value for TroubledCells")
             quit()
     axs[1,0].set_title("\eta")
     axs[1,0].set_xlabel("x")
@@ -162,8 +171,10 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
             axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color="r")
         elif TroubledCells[inde]>1:
             axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color='orange')
+        elif TroubledCells[inde]<=-1:
+            axs[1,1].plot(x_v_local,q_local, marker=marker_choice,color='green')
         else:
-            print("Impossible, adimssible values for TroubledCells are 0,1,2")
+            print("Invalid adimssible value for TroubledCells")
             quit()
     axs[1,1].set_title("q")
     axs[1,1].set_xlabel("x")
@@ -175,7 +186,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
     if DATA.storing==True and storing_info==True:
         if DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="Disabled":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_ShockDetector_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
-        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
+        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn" or DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_ShockDetector_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_K"+str(DATA.K_limiter_divV)+"_NLimitedNeighbours"+str(DATA.N_limited_neighbours)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
         else:
             print("Invalid LxF option in ShockDetector")
@@ -198,7 +209,7 @@ def storing(H_field, v_field, x_v, B_field, H_in_x_v, B_in_x_v, M_Local_to_Globa
     #SAVE
     if DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="Disabled":
         f=open(DATA.folder+"/"+DATA.test+"/values_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
-    elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
+    elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn" or DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
         f=open(DATA.folder+"/"+DATA.test+"/values_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_K"+str(DATA.K_limiter_divV)+"_NLimitedNeighbours"+str(DATA.N_limited_neighbours)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
     else:
         print("Invalid LxF option in storing")
@@ -304,7 +315,7 @@ def compute_error(H_field, v_field, x_v, x_H, H_in_x_v, M_Local_to_Global, w_H, 
     #SAVE
     if DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="Disabled":
         f=open(DATA.folder+"/"+DATA.test+"/errors_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
-    elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
+    elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn" or DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
         f=open(DATA.folder+"/"+DATA.test+"/errors_pert"+str(DATA.perturbation)+"_"+"P"+str(DATA.order_space-1)+"P"+str(DATA.order_space)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_K"+str(DATA.K_limiter_divV)+"_NLimitedNeighbours"+str(DATA.N_limited_neighbours)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".dat","w+")
     else:
         print("Invalid LxF option in storing")
@@ -394,7 +405,7 @@ def plot_error(H_field, v_field, x_v, x_H, H_in_x_v, DATA):
     if DATA.storing==True:
         if DATA.LaxFriedrichs=="Active" or DATA.LaxFriedrichs=="Disabled":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_errors_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
-        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn":
+        elif DATA.LaxFriedrichs=="ShockDetector_divV" or DATA.LaxFriedrichs=="ShockDetector_divV_tn" or DATA.LaxFriedrichs=="ShockDetector_divV_tn_memory":
             plt.savefig(DATA.folder+"/"+DATA.test+"/pic_errors_pert"+str(DATA.perturbation)+"_"+"P"+str(degree_H)+"P"+str(degree_v)+"_"+DATA.time_scheme+"_LxF"+str(DATA.LaxFriedrichs)+"_K"+str(DATA.K_limiter_divV)+"_NLimitedNeighbours"+str(DATA.N_limited_neighbours)+"_"+DATA.jump_CIP_in_v+"_jeta"+str(DATA.jump_eta_in_x)+"_CFL"+str(DATA.CFL)+"_N_el"+"{:05d}".format(DATA.N_el)+".pdf", format="pdf", bbox_inches="tight")
         else:
             print("Invalid LxF option in plot_error")

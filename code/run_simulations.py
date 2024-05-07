@@ -7,11 +7,11 @@ import sys
 
 
 
-test="Sod_Transcritical_Expansion"       #Sod_Transcritical_Expansion #Sod   #Smooth_periodic, Supercritical_Smooth, Subcritical_Smooth, Transcritical_Smooth
+test="Smooth_periodic"                   #Sod_Transcritical_Expansion #Sod   #Smooth_periodic, Supercritical_Smooth, Subcritical_Smooth, Transcritical_Smooth
 perturbation=0
-order_space=3
-time_scheme="SSPRK4"                     #Time scheme #"Euler" "DeC" "SSPRK4"
-LaxFriedrichs="ShockDetector_divV_tn"    #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
+order_space=2
+time_scheme="DeC"                        #Time scheme #"Euler" "DeC" "SSPRK4"
+LaxFriedrichs="Active"                   #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
 K_limiter_divV=0.1                       #0.1 #8   #Important only if ShockDetector_divV_tn or ShockDetector_divV
 N_limited_neighbours=2                   #1   #2   #Important only if ShockDetector_divV_tn or ShockDetector_divV
 jump_CIP_in_v="j0"                       #Keep "j0", not needed, but in case there is jc
@@ -71,7 +71,7 @@ instruction +="python3 main_sw.py  "+test\
 
 if test in ["Sod","Sod_Transcritical_Expansion"]:
     elements=[100,200] #Shock    
-elif test in ["Supercritical_Smooth","Subcritical_Smooth","Transcritical_Smooth"]:
+elif test in ["Supercritical_Smooth","Subcritical_Smooth","Transcritical_Smooth","Smooth_periodic"]:
     elements=[10,20,40,80,160,320] #Convergence analysis
 else:
     print("STOP, careful with elements")

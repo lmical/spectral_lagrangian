@@ -49,22 +49,26 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 100                #Frequency for saving the solution
+freq               = 1000                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme               = "Galerkin"
-LaxFriedrichs        = "Disabled"    #"Disabled" #"Active" #"ShockDetector_divV" (activated in troubled cells and neighbours) #"ShockDetector_divV_tn" (Same but detection only at time t_n)
+LaxFriedrichs        = "ShockDetector_divV_tn_memory"  #"Disabled" #"Active" 
+                                                       #"ShockDetector_divV" activated in troubled cells and neighbours 
+                                                       #"ShockDetector_divV_tn" Same but detection only at time t_n
+                                                       #"ShockDetector_divV_tn_memory" Analogous to ShockDetector_divV_tn but if one cell was flagged at the previous time step, it will be flagged also at the next one
+                                                
 K_limiter_divV       = 0.1           #Constant for the limiter on div v
-N_limited_neighbours = 1             #Number of limited neighbours
+N_limited_neighbours = 2             #Number of limited neighbours
 WB                   = False
 jump_CIP_in_v        = "j0"               #j0,    jc
 jump_eta_in_x        = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
 jump_eta_in_H        = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
 
 #Folder where to store
-folder             = "New_Results" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results"
+folder             = "Debug" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results" #New_Results
 printing           = True
 plotting           = False
 storing            = True
@@ -135,7 +139,7 @@ print("Time scheme: ", time_scheme)
 if time_scheme=="DeC":
     print("...with order:", order_time)
 print("Lax-Friedrichs: ", LaxFriedrichs)
-if LaxFriedrichs=="ShockDetector_divV" or LaxFriedrichs=="ShockDetector_divV_tn":
+if LaxFriedrichs=="ShockDetector_divV" or LaxFriedrichs=="ShockDetector_divV_tn" or LaxFriedrichs=="ShockDetector_divV_tn_memory":
     print("...with K", K_limiter_divV)
     print("...with number of limited neighbours", N_limited_neighbours)
 print("CIP jump in in update of v: ", jump_CIP_in_v)
@@ -393,6 +397,10 @@ if (LaxFriedrichs=="Active" or LaxFriedrichs=="ShockDetection") and (test=="Smoo
     print()
 
 
+#No troubled cells from the previous time step at the beginning
+TroubledCells_memory=np.zeros(N_el)
+
+
 #Printing and plotting IC
 if printing==True:
     output.printing_function(indt,DATA.time,H_field,v_field)
@@ -400,7 +408,9 @@ if plotting==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global) #Not necessary, but called for coherence
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
     output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
-    output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=False)
+    output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,TroubledCells_memory,DATA,storing_info=False)
+
+
 
 while(DATA.time<DATA.T):
     #Computation of the time step
@@ -416,15 +426,14 @@ while(DATA.time<DATA.T):
 
 
     if time_scheme=="Euler":
-        H_field, v_field, x_v, B_field=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA)
+        H_field, v_field, x_v, B_field, TroubledCells_memory=time_stepping.Euler_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, TroubledCells_memory, DATA)
     elif time_scheme=="DeC":
-        H_field, v_field, x_v, B_field=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA, dec)
+        H_field, v_field, x_v, B_field, TroubledCells_memory=time_stepping.DeC_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, TroubledCells_memory, DATA, dec)
     elif time_scheme=="SSPRK4":
-        H_field, v_field, x_v, B_field=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, DATA)
+        H_field, v_field, x_v, B_field, TroubledCells_memory=time_stepping.SSPRK4_method(H_field_old, v_field_old, x_v_old, B_field_old, Hhat_field, w_v, local_derivatives_v, local_derivatives_H_in_v, local_derivatives_v_in_H, M_Local_to_Global, local_values_v_in_H, M_faces, local_values_H_in_v, w_H, TroubledCells_memory, DATA)
     else:
         print("Time scheme not available")
         quit()
-
 
 
     #t
@@ -440,7 +449,7 @@ while(DATA.time<DATA.T):
             x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
             H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
             output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=False)
-            output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=False)
+            output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,TroubledCells_memory,DATA,storing_info=False)
 
 
     if indt>=N_max_iter:
@@ -458,7 +467,7 @@ if storing==True:
     x_H=lagrangian_scheme.get_x_H(x_v,local_values_v_in_H,M_Local_to_Global)
     H_in_x_v=lagrangian_scheme.get_H_in_x_v(H_field,x_v,local_values_H_in_v,M_Local_to_Global)
     output.plotting_function(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,DATA,storing_info=True)
-    output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,DATA,storing_info=True)
+    output.plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local_to_Global,w_H,local_derivatives_v_in_H,TroubledCells_memory,DATA,storing_info=True)
 
     #Storing the final solution
     #indi, x_v, v, H, q, eta

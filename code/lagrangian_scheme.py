@@ -428,7 +428,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
     Computation
     phi_i=sum_{K in K_i} alpha (c_i-cbar_K) * H_i
 
-    #NB: In TroubledCells marked as 1 or 2
+    #NB: In TroubledCells marked as 1 or >1 or -1 or <-1
     """
 
     N_global_nodes_v=len(v_field)
@@ -444,7 +444,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
 
     for inde in range(N_el):
 
-        if TroubledCells[inde]!=0: #Limit only if >0
+        if TroubledCells[inde]!=0: #Limit only if not 0
             global_indices_v=M_Local_to_Global[inde,:]
             v_local=v_field[global_indices_v]
             H_local=H_field[inde,:]
@@ -463,7 +463,7 @@ def Lax_Friedrichs(v_field,M_Local_to_Global,H_field,x_v,local_values_H_in_v,Tro
             # quit()
             #------------------------
 
-            ST_i_K=Lax_Friedrichs_K(v_local,H_local,H_in_v_local,DATA)
+            ST_i_K=Lax_Friedrichs_K(v_local,H_local,H_in_v_local,DATA)#/abs(TroubledCells[inde]) #Alert
             for indi in range(N_local_nodes_v):
                 ST_i[global_indices_v[indi]]=ST_i[global_indices_v[indi]]+ST_i_K[indi]
 
@@ -963,9 +963,66 @@ def ShockDetector(v_field,M_Local_to_Global,H_field,x_v,w_H,local_derivatives_v_
                     if TroubledCells[N_el-1]==0:    
                         TroubledCells[N_el-1]=indl+2
 
-                if TroubledCells[N_el-1]!=0: #If lasst cell is troubled
-                    if TroubledCells[0]==indl+1:    
+                if TroubledCells[N_el-1]==indl+1: #If last cell is troubled
+                    if TroubledCells[0]==0:    
                         TroubledCells[0]=indl+2
 
 
     return TroubledCells
+#==============================================================
+#
+#
+#
+#==============================================================
+# Merging TroubledCells with TroubledCells_memory
+#==============================================================
+def MergeTroubledCells(TroubledCells,TroubledCells_memory,DATA):
+    """
+    Merging TroubledCells with TroubledCells_memory
+    1  troubled
+    >1 close to trouble in TroubledCells
+    -1 troubled in the past but not now
+    <-1 close to troubled in the past
+    """
+
+
+    N_el=DATA.N_el
+    FinalTroubledCells=TroubledCells.copy() #Let us start by the detected troubled cells
+
+    #Now we merge them with the ones of the previous time step
+
+    #Loop on the elements
+    for inde in range(N_el):
+        if TroubledCells_memory[inde]==1 and TroubledCells[inde]==0: #if Troubled in the past but not now
+            FinalTroubledCells[inde]=-1
+
+    #Second loop close to troubled
+    if DATA.N_limited_neighbours==0:
+        pass
+    else:
+        NLN=DATA.N_limited_neighbours
+        #We perform now a loop DATA.N_limited_neighbours times and each time we extend the stencil of limited cells by 1
+        for indl in range(NLN):
+
+            #Loop on the elements skipping boundaries
+            for inde in range(N_el):
+                if FinalTroubledCells[inde]==-(indl+1): 
+                    if inde!=0: #We have a left cell
+                        if FinalTroubledCells[inde-1]==0:
+                            FinalTroubledCells[inde-1]=-(indl+2)
+                    if inde!=N_el-1: #We have a right cell
+                        if FinalTroubledCells[inde+1]==0:
+                            FinalTroubledCells[inde+1]=-(indl+2)
+
+            #Periodic BCs
+            if DATA.periodic:
+                if FinalTroubledCells[0]==-(indl+1): #If first cell is troubled
+                    if FinalTroubledCells[N_el-1]==0:    
+                        FinalTroubledCells[N_el-1]=-(indl+2)
+
+                if FinalTroubledCells[N_el-1]==-(indl+1): #If last cell is troubled
+                    if FinalTroubledCells[0]==0:    
+                        FinalTroubledCells[0]=-(indl+2)
+
+
+    return FinalTroubledCells
