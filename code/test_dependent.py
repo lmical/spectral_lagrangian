@@ -9,7 +9,7 @@ import numpy as np
 # gravity
 #==============================================================
 class DATA_CLASS:
-    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing):
+    def __init__(self,test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,Artificial_Viscosity,folder,printing,plotting,storing):
 
         #Somhow it is better to store also the input paramters in DATA
         self.test                 = test
@@ -27,6 +27,7 @@ class DATA_CLASS:
         self.jump_CIP_in_v        = jump_CIP_in_v
         self.jump_eta_in_x        = jump_eta_in_x
         self.jump_eta_in_H        = jump_eta_in_H
+        self.Artificial_Viscosity = Artificial_Viscosity
         self.folder               = folder
         self.printing             = printing
         self.plotting             = plotting

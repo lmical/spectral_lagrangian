@@ -115,9 +115,22 @@ def rhs_v_function(H_field, v_field, x_v, B_field, w_v, local_derivatives_v, loc
     else:
         print("Stop in rhs_v_function in time_stepping module")
         print("Jump not available",DATA.jump_CIP_in_v)
+        quit()
 
 
-    return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i-phi_jump)/M_v
+    if DATA.Artificial_Viscosity=="Active":
+        AF_i=lagrangian_scheme.artificial_viscosity(w_v,v_field,x_v,local_derivatives_v,M_Local_to_Global,H_field,DATA)
+    elif DATA.Artificial_Viscosity=="Disabled":
+        AF_i=np.zeros(len(phi_v))
+    else:
+        print("Stop in rhs_v_function in time_stepping module")
+        print("Artificial viscosity parameter not available",DATA.Artificial_Viscosity)
+        quit()
+
+
+
+
+    return (-DATA.g*phi_v-DATA.g*CT_phi_v-ST_i-phi_jump-AF_i)/M_v
 #==============================================================
 #
 #

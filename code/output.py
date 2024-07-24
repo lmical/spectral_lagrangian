@@ -203,7 +203,7 @@ def plotting_ShockDetector(indt,x_H,H_field,B_field,x_v,v_field,H_in_x_v,M_Local
 
 
 
-    plt.show()
+    # plt.show()
 #==============================================================
 #
 #

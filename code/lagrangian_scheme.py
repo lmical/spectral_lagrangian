@@ -398,7 +398,7 @@ def Lax_Friedrichs_K(v_local,H_local,H_in_v_local,DATA):
     phi^K_i=alpha (Hv_i-Hvbar_K)
     """
     Hmax=np.max(H_local)
-    alpha=np.max(np.absolute(v_local))+np.sqrt(DATA.g*Hmax) 
+    alpha=np.max(np.absolute(v_local))+np.sqrt(DATA.g*Hmax) #ALERT
 
     #Option 1
     vbar=np.average(v_local)
@@ -1026,3 +1026,115 @@ def MergeTroubledCells(TroubledCells,TroubledCells_memory,DATA):
 
 
     return FinalTroubledCells
+#==============================================================
+#
+#
+#
+#==============================================================
+# Local artificial viscosity
+#==============================================================
+def artificial_viscosity_K(w_v,in_v_local_derivatives_v,v_local,x_v_local,H_local,DATA):
+                          #w_v,in_v_local_derivatives_v,v_local,x_v_local,H_local,DATA
+
+
+    Hmax=np.max(H_local)
+    alpha=np.max(np.absolute(v_local))#+np.sqrt(DATA.g*Hmax) #ALERT
+
+    #--------------
+    #SAFETY CHECK
+    #--------------
+    # v_local[0]=1
+    # v_local[1]=-10
+    # v_local[2]=5
+    # print(v_local)
+    # print(np.absolute(v_local))
+    # print(np.max(np.absolute(v_local)))
+    # print(H_local)
+    # print(np.max(H_local))
+    # quit()
+    #--------------
+
+    local_nodes_v=len(v_local)
+    AF_i_K=np.zeros(local_nodes_v)
+
+    mu=(x_v_local[-1]-x_v_local[0])*alpha
+
+    for indi in range(local_nodes_v):
+        for indq in range(len(w_v)):
+            J  = np.sum(in_v_local_derivatives_v[indq,:]*x_v_local)
+            dv = np.sum(in_v_local_derivatives_v[indq,:]*v_local)
+            AF_i_K[indi]=AF_i_K[indi]+w_v[indq]*in_v_local_derivatives_v[indq,indi]*dv/J*mu
+
+
+    return AF_i_K
+
+#==============================================================
+#
+#
+#
+#==============================================================
+# Artificial viscosity
+#==============================================================
+def artificial_viscosity(w_v,v_field,x_v,local_derivatives_v,M_Local_to_Global,H_field,DATA):
+    """
+    AF_i=mu sum_{K in K_i} int_K grad_x psi_i grad_x v 
+        =mu sum_{K in K_i} int_K grad_xi psihat_i [sum_{xj in K} grad_xi psihat_j v_j] det J^{-1} 
+    mu=delta x*alpha_{LxF}
+    """
+
+    N_el, N_local_nodes_v = M_Local_to_Global.shape
+    N_global_nodes_v=(N_local_nodes_v-1)*N_el+1
+
+
+    #In local_derivatives_v we have
+    #Rows basis functions
+    #Columns x_j_v
+    #I transpose it to have in each row a specifc x_i_v and in the columns the basis functions
+    in_v_local_derivatives_v=local_derivatives_v.transpose()
+
+    #---------------
+    #SAFETY CHECK
+    #---------------    
+    # print(N_el,N_local_nodes_v,N_global_nodes_v)
+    # print(local_derivatives_v)
+    # print(in_v_local_derivatives_v)
+    # quit()
+    #---------------
+
+    AF_i=np.zeros(N_global_nodes_v)
+
+    for inde in range(N_el):
+        global_indices_v=M_Local_to_Global[inde,:]
+        v_local=v_field[global_indices_v]
+        x_v_local=x_v[global_indices_v]
+        H_local=H_field[inde,:]
+
+
+        #---------------
+        #SAFETY CHECK
+        #---------------    
+        # print("cell",inde)
+        # print(global_indices_v)
+        # print(x_v_local)
+        # print(H_local)
+        # print()
+        #---------------
+
+
+
+
+        # Computation of local contribution
+
+        AF_i_in_K=artificial_viscosity_K(w_v,in_v_local_derivatives_v,v_local,x_v_local,H_local,DATA)
+
+        #Assembling
+        for indi in range(N_local_nodes_v):
+            
+            AF_i[global_indices_v[indi]]=AF_i[global_indices_v[indi]]+AF_i_in_K[indi] 
+
+    if DATA.periodic==True:
+        AF_i[0]=AF_i[0]+AF_i[-1]
+        AF_i[-1]=AF_i[0]
+
+
+    return AF_i

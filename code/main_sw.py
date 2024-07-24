@@ -13,7 +13,7 @@ import sys
 #==============================================================
 #INPUT PARAMETERS
 #==============================================================
-test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
+test               = "Sod"     #Test: "Sod", "Sod_smooth", "Smooth_periodic", 
                                                 #"Lake_At_Rest_Smooth", "Lake_At_Rest_Not_Smooth"
                                                 #"Supercritical_Smooth", "Supercritical_Not_Smooth"
                                                 #"Subcritical_Smooth", "Subcritical_Not_Smooth"
@@ -25,10 +25,10 @@ test               = "Supercritical_Smooth"     #Test: "Sod", "Sod_smooth", "Smo
 
 perturbation       = 0                          #Perturbation
 
-N_el               = 10                        #Number of elements
+N_el               = 50                        #Number of elements
 
 #Space
-order_space        = 5                        #Order in space
+order_space        = 1                        #Order in space
 
 #--------------------------------------------------------------
 #NB: PGLB basis functions are assumed,
@@ -49,13 +49,13 @@ time_scheme        = "DeC"             #Time scheme #"Euler" "DeC" "SSPRK4"
 order_time         = order_space       #Order, only important for arbitrary high order approached like DeC
 
 CFL                = 0.5               #CFL
-freq               = 1000                #Frequency for saving the solution
+freq               = 50                #Frequency for saving the solution
 N_max_iter         = 1000000             #Maximal number of iterations
 
 
 #Space discretization
 scheme               = "Galerkin"
-LaxFriedrichs        = "ShockDetector_divV_tn_memory"  #"Disabled" #"Active" 
+LaxFriedrichs        = "Disabled"  #"Disabled" #"Active" 
                                                        #"ShockDetector_divV" activated in troubled cells and neighbours 
                                                        #"ShockDetector_divV_tn" Same but detection only at time t_n
                                                        #"ShockDetector_divV_tn_memory" Analogous to ShockDetector_divV_tn but if one cell was flagged at the previous time step, it will be flagged also at the next one
@@ -66,9 +66,10 @@ WB                   = False
 jump_CIP_in_v        = "j0"               #j0,    jc
 jump_eta_in_x        = False #NB: KEEP FALSE #It does its job but not to be used: it spoils the order. Per se, it is not inconsistent (actually, it is HO consistent) but it breaks a bit the physics.       
 jump_eta_in_H        = False #NB: KEEP FALSE #Only available for Euler and it does not seem to work well.
+Artificial_Viscosity = "Disabled" #Active #Disabled
 
 #Folder where to store
-folder             = "Debug" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results" #New_Results
+folder             = "Artificial_Viscosity" #"Results_Conservative_Formulation" #"Results_Jump_H" #"Results" #New_Results
 printing           = True
 plotting           = False
 storing            = True
@@ -145,6 +146,7 @@ if LaxFriedrichs=="ShockDetector_divV" or LaxFriedrichs=="ShockDetector_divV_tn"
 print("CIP jump in in update of v: ", jump_CIP_in_v)
 print("Jump of eta in update of x: ", jump_eta_in_x)
 print("Jump of eta in update of H: ", jump_eta_in_H)
+print("Artificial viscosity      : ", Artificial_Viscosity)
 print("CFL: ", CFL)
 print("Frequency for storing the data: ", freq)
 print("Maximal number of iterations: ", N_max_iter)
@@ -300,7 +302,7 @@ if time_scheme=="DeC":
 #==============================================================
 print("------------------------------------------")
 print("Getting test information")
-DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,folder,printing,plotting,storing)
+DATA=test_dependent.DATA_CLASS(test,perturbation,N_el,order_space,time_scheme,order_time,CFL,freq,N_max_iter,scheme,LaxFriedrichs,K_limiter_divV,N_limited_neighbours,WB,jump_CIP_in_v,jump_eta_in_x,jump_eta_in_H,Artificial_Viscosity,folder,printing,plotting,storing)
 #--------------------------------------------------------------
 # print("test",DATA.test)
 # print("xL",DATA.xL)
